@@ -37,8 +37,8 @@ export default function AdminLoginPage() {
         return
       }
 
-      router.push('/admin')
-      router.refresh()
+      // Use full page navigation so the session cookie is read before rendering the admin page
+      window.location.href = '/admin'
     } catch {
       setError('An unexpected error occurred')
     } finally {

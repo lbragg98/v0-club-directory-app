@@ -96,11 +96,20 @@ function parseNumber(value: string | undefined): number {
 }
 
 function rowToClub(row: Record<string, string>, index: number): Club {
+  // Parse break as three states: 'yes', 'no', or null (empty/N/A)
+  const rawBreak = (row.break || '').trim().toLowerCase()
+  let breakState: 'yes' | 'no' | null = null
+  if (rawBreak === 'yes' || rawBreak === 'true' || rawBreak === '1' || rawBreak === 'y') {
+    breakState = 'yes'
+  } else if (rawBreak === 'no' || rawBreak === 'false' || rawBreak === '0' || rawBreak === 'n') {
+    breakState = 'no'
+  }
+
   let status: 'Open' | 'Closed' = 'Closed'
   if (row.is_open) {
     status = parseBoolean(row.is_open) ? 'Open' : 'Closed'
   }
-  if (parseBoolean(row.break)) {
+  if (breakState === 'yes') {
     status = 'Closed'
   }
   
@@ -137,7 +146,6 @@ function rowToClub(row: Record<string, string>, index: number): Club {
       : 0
   }
 
-  const hasBreak = parseBoolean(row.break)
   const rawBreakTime = (row.break_time || '').trim()
   const breakTime = rawBreakTime && rawBreakTime.toLowerCase() !== 'n/a' ? rawBreakTime : ''
 
@@ -156,7 +164,7 @@ function rowToClub(row: Record<string, string>, index: number): Club {
     doorScore,
     callsScore,
     notes: (row.comments || '').trim(),
-    break: hasBreak,
+    break: breakState,
     breakTime,
     quickLink: (row.quick_link || '').trim(),
     avgLbSpeed: (row.avg_lb_speed || '').trim(),

@@ -106,12 +106,13 @@ export function ClubDetailModal({
                 SFW Active
               </Badge>
             )}
-            {club.break ? (
+            {club.break === 'yes' && (
               <Badge variant="outline" className="bg-orange-50 text-orange-700 border-orange-200 gap-1.5 text-sm">
                 <Clock className="h-4 w-4" />
                 Has Break
               </Badge>
-            ) : (
+            )}
+            {club.break === 'no' && (
               <Badge variant="outline" className="bg-muted text-muted-foreground border-border gap-1.5 text-sm">
                 <Clock className="h-4 w-4" />
                 No Break
