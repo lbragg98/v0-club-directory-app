@@ -197,7 +197,12 @@ export async function GET() {
         normalizedHeaders.forEach((header, colIndex) => {
           if (header) rowObj[header] = (row[colIndex] || '').toString().trim()
         })
-        return rowToClub(rowObj, index)
+        const club = rowToClub(rowObj, index)
+        // Debug log first few clubs to see break values
+        if (index < 3) {
+          console.log(`[v0] Club ${club.name}: break="${rowObj.break}" -> ${club.break}`)
+        }
+        return club
       })
       .filter(club => club.name)
 
