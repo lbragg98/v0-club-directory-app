@@ -75,9 +75,10 @@ function parseNumber(value: string | undefined): number {
 function parseBreakState(value: string | undefined): 'yes' | 'no' | null {
   if (!value) return null
   const v = value.toString().toLowerCase().trim()
-  if (['yes', 'true', '1', 'y'].includes(v)) return 'yes'
-  if (['no', 'false', '0', 'n'].includes(v)) return 'no'
   if (v === '' || v === 'n/a') return null
+  // Check if starts with yes/no to handle values like "Yes (EST)" or "No (PST)"
+  if (v.startsWith('yes') || v.startsWith('y ') || ['true', '1', 'y'].includes(v)) return 'yes'
+  if (v.startsWith('no') || v.startsWith('n ') || ['false', '0', 'n'].includes(v)) return 'no'
   return null
 }
 
@@ -197,12 +198,7 @@ export async function GET() {
         normalizedHeaders.forEach((header, colIndex) => {
           if (header) rowObj[header] = (row[colIndex] || '').toString().trim()
         })
-        const club = rowToClub(rowObj, index)
-        // Debug log first few clubs to see break values
-        if (index < 3) {
-          console.log(`[v0] Club ${club.name}: break="${rowObj.break}" -> ${club.break}`)
-        }
-        return club
+        return rowToClub(rowObj, index)
       })
       .filter(club => club.name)
 
