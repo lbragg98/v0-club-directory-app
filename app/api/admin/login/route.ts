@@ -34,9 +34,9 @@ export async function POST(request: Request) {
     }
     const sessionValue = Buffer.from(JSON.stringify(session)).toString('base64')
 
-    // Return a redirect response with the session cookie attached so the
-    // browser navigates to /admin with the cookie already committed.
-    const response = NextResponse.redirect(new URL('/admin', request.url), 303)
+    // Success: Set the session cookie and return success JSON
+    // The client will then use router.replace('/admin') to navigate
+    const response = NextResponse.json({ success: true })
     response.cookies.set(SESSION_COOKIE_NAME, sessionValue, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',

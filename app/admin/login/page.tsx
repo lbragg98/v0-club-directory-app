@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -11,6 +12,7 @@ import { Lock, AlertCircle, ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
 
 export default function AdminLoginPage() {
+  const router = useRouter()
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
@@ -25,22 +27,22 @@ export default function AdminLoginPage() {
       const response = await fetch('/api/admin/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        // Do NOT follow the redirect in fetch — we want to handle it manually
-        redirect: 'manual',
         body: JSON.stringify({ username, password }),
       })
 
-      // 3xx means the server set the cookie and issued a redirect to /admin
-      if (response.type === 'opaqueredirect' || response.status === 303 || response.status === 302) {
-        window.location.href = '/admin'
+      const data = await response.json()
+
+      if (!response.ok) {
+        setError(data.error || 'Login failed')
         return
       }
 
-      // Non-redirect means an error JSON response
-      const data = await response.json()
-      setError(data.error || 'Login failed')
-    } catch {
+      // Success: API has set the cookie, now navigate to admin dashboard
+      // Use router.replace to prevent back button returning to login
+      router.replace('/admin')
+    } catch (err) {
       setError('An unexpected error occurred')
+      console.error('Login error:', err)
     } finally {
       setIsLoading(false)
     }
@@ -95,7 +97,7 @@ export default function AdminLoginPage() {
                   />
                 </Field>
                 <Button type="submit" className="w-full" disabled={isLoading}>
-                  {isLoading ? <><Spinner className="mr-2" />Signing in...</> : 'Sign In'}
+                  {isLoading ? <><Spinner className="mr-2 h-4 w-4" />Signing in...</> : 'Sign In'}
                 </Button>
               </FieldGroup>
             </form>
