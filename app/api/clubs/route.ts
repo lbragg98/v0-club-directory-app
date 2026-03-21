@@ -58,26 +58,32 @@ export async function GET() {
     const range = 'Sheet1!A2:L500'
     const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?key=${apiKey}`
     
+    console.log('[v0] Fetching from Google Sheets:', url.replace(apiKey, '***'))
+    
     const response = await fetch(url, {
       next: { revalidate: 300 }, // Cache for 5 minutes
     })
 
+    console.log('[v0] Response status:', response.status)
+
     if (!response.ok) {
       const errorText = await response.text()
-      console.error('Google Sheets API error:', errorText)
+      console.error('[v0] Google Sheets API error:', errorText)
       return NextResponse.json(
-        { error: 'Failed to fetch data from Google Sheets' },
+        { error: 'Failed to fetch data from Google Sheets', details: errorText },
         { status: response.status }
       )
     }
 
     const data = await response.json()
+    console.log('[v0] Data received, values count:', data.values?.length ?? 0)
     const rows: string[][] = data.values || []
     
     const clubs: Club[] = rows
       .filter((row) => row[COLUMN_MAP.name])
       .map((row, index) => rowToClub(row, index))
 
+    console.log('[v0] Parsed clubs count:', clubs.length)
     return NextResponse.json({ clubs })
   } catch (error) {
     console.error('Error fetching clubs:', error)

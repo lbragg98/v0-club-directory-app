@@ -7,7 +7,8 @@ import { ClubCardSkeleton } from '@/components/club-card-skeleton'
 import { FilterBar } from '@/components/filter-bar'
 import { ClubDetailModal } from '@/components/club-detail-modal'
 import { Button } from '@/components/ui/button'
-import { AlertCircle, RefreshCw, Users, Star, Sparkles } from 'lucide-react'
+import { AlertCircle, RefreshCw, Users, Star, Sparkles, Settings } from 'lucide-react'
+import Link from 'next/link'
 import type { Club, ClubFilters } from '@/lib/types'
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json())
@@ -95,9 +96,17 @@ export default function HomePage() {
         <div className="absolute inset-0 bg-gradient-to-r from-teal-500/5 via-cyan-500/5 to-blue-500/5" />
         <div className="relative container mx-auto px-4 py-12 md:py-16">
           <div className="max-w-3xl">
-            <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground text-balance">
-              Club Directory
-            </h1>
+            <div className="flex items-center justify-between">
+              <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground text-balance">
+                Club Directory
+              </h1>
+              <Link href="/admin">
+                <Button variant="outline" size="sm" className="gap-2">
+                  <Settings className="h-4 w-4" />
+                  Admin
+                </Button>
+              </Link>
+            </div>
             <p className="mt-4 text-lg text-muted-foreground text-pretty max-w-2xl">
               Discover and explore the best clubs with detailed ratings, reviews,
               and real-time status updates.
