@@ -52,17 +52,12 @@ function normalizeHeader(raw: string): string {
 }
 
 function isValidHeaderRow(row: string[]): boolean {
-  if (!row || row.length < 8) return false  // Must have at least 8 columns for club data
-  const cells = row.map(c => (c || '').toLowerCase().trim()).filter(c => c)  // Filter empty cells
-  if (cells.length < 8) return false  // At least 8 non-empty columns
-  
-  // Must contain at least 5 of these core headers
-  const coreHeaders = ['club name', 'name', 'type', 'platform', 'open', 'rating']
-  const coreMatches = cells.filter(c =>
-    coreHeaders.some(h => c.includes(h))
+  if (!row || row.length < 3) return false
+  const cells = row.map(c => (c || '').toLowerCase().trim())
+  const matches = cells.filter(c =>
+    HEADER_KEYWORDS.some(kw => c.includes(kw))
   ).length
-  
-  return coreMatches >= 5
+  return matches >= 3
 }
 
 function parseBoolean(value: string | undefined): boolean {
