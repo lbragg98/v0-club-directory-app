@@ -32,14 +32,19 @@ export default function AdminLoginPage() {
 
       const data = await response.json()
 
+      console.log('[v0] Login response:', response.status, data)
+
       if (!response.ok) {
         setError(data.error || 'Login failed')
         return
       }
 
-      // Success: API has set the cookie, now navigate to admin dashboard
-      // Use router.replace to prevent back button returning to login
-      router.replace('/admin')
+      console.log('[v0] Login successful, navigating to /admin')
+      // Small delay to ensure Set-Cookie is committed to the browser before navigation
+      setTimeout(() => {
+        console.log('[v0] Triggering router.replace to /admin')
+        router.replace('/admin')
+      }, 200)
     } catch (err) {
       setError('An unexpected error occurred')
       console.error('Login error:', err)
