@@ -5,6 +5,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
 } from '@/components/ui/dialog'
 import { Badge } from '@/components/ui/badge'
 import { StarRating } from '@/components/star-rating'
@@ -19,9 +20,9 @@ import {
   ShieldCheck,
   Coffee,
   Calendar,
-  ExternalLink,
   Clock,
   Zap,
+  User,
 } from 'lucide-react'
 import type { Club } from '@/lib/types'
 
@@ -76,6 +77,7 @@ export function ClubDetailModal({
               {club.status}
             </Badge>
           </div>
+          <DialogDescription>{club.type} Club • {club.platform} Platform</DialogDescription>
         </DialogHeader>
 
         <div className="space-y-5 pt-2">
@@ -147,6 +149,15 @@ export function ClubDetailModal({
                   <p>{club.avgLbSpeed}</p>
                 </div>
               )}
+              {club.quickLink && (
+                <div>
+                  <span className="font-medium text-foreground flex items-center gap-1">
+                    <User className="h-3.5 w-3.5" />
+                    Quick Link Contact
+                  </span>
+                  <p>{club.quickLink}</p>
+                </div>
+              )}
             </div>
           </div>
 
@@ -165,19 +176,6 @@ export function ClubDetailModal({
             <MiniRatingBar label="Door" value={club.doorScore} />
             <MiniRatingBar label="Calls" value={club.callsScore} />
           </div>
-
-          {/* Quick Link */}
-          {club.quickLink && (
-            <a
-              href={club.quickLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 text-sm text-primary hover:underline"
-            >
-              <ExternalLink className="h-4 w-4" />
-              Visit Club
-            </a>
-          )}
 
           {/* Last Updated */}
           <div className="flex items-center gap-2 text-xs text-muted-foreground pt-2 border-t border-border">
