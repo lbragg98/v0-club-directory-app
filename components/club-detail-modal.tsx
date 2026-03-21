@@ -106,10 +106,15 @@ export function ClubDetailModal({
                 SFW Active
               </Badge>
             )}
-            {club.break && (
+            {club.break ? (
               <Badge variant="outline" className="bg-orange-50 text-orange-700 border-orange-200 gap-1.5 text-sm">
                 <Clock className="h-4 w-4" />
-                Break{club.breakTime ? `: ${club.breakTime}` : ''}
+                Has Break
+              </Badge>
+            ) : (
+              <Badge variant="outline" className="bg-muted text-muted-foreground border-border gap-1.5 text-sm">
+                <Clock className="h-4 w-4" />
+                No Break
               </Badge>
             )}
           </div>
@@ -122,10 +127,15 @@ export function ClubDetailModal({
                 <span className="font-medium text-foreground">SFW Friendly</span>
                 <p>{club.sfwFriendly ? 'Yes' : 'No'}</p>
               </div>
-              <div>
-                <span className="font-medium text-foreground">Has Break</span>
-                <p>{club.break ? `Yes${club.breakTime ? ` — ${club.breakTime}` : ''}` : 'No'}</p>
-              </div>
+              {club.breakTime && (
+                <div>
+                  <span className="font-medium text-foreground flex items-center gap-1">
+                    <Clock className="h-3.5 w-3.5" />
+                    Break Time
+                  </span>
+                  <p>{club.breakTime}</p>
+                </div>
+              )}
               {club.avgLbSpeed && (
                 <div>
                   <span className="font-medium text-foreground flex items-center gap-1">
