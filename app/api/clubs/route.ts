@@ -11,8 +11,8 @@ import type { Club } from '@/lib/types'
  * - Row 2+ contains actual club data
  */
 
-// Change this to your actual sheet tab name (look at the tab at the bottom of Google Sheets)
-const SHEET_TAB_NAME = 'Sheet1'
+// The Google Sheet tab name. If the tab is ever renamed, update this value to match.
+const SHEET_TAB_NAME = 'MASTER'
 
 // Header name variants that map to our normalized keys
 // Add more variants here if your sheet uses different column names
