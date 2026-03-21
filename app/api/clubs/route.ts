@@ -55,7 +55,7 @@ export async function GET() {
   }
 
   try {
-    const range = 'Sheet1!A2:L'
+    const range = 'Sheet1!A2:L500'
     const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?key=${apiKey}`
     
     const response = await fetch(url, {
