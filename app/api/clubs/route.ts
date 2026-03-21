@@ -37,6 +37,7 @@ const HEADER_MAPPINGS: Record<string, string[]> = {
   door_score: ['door_score', 'door score', 'door', 'doors', 'doorscore', 'doors_score'],
   call_score: ['call_score', 'call score', 'calls', 'call', 'callscore', 'calls_score'],
   comments: ['comments', 'comment', 'notes', 'note', 'description', 'desc'],
+  avg_lb_speed: ['avg_lb_speed', 'avg lb speed', 'lb speed', 'lbspeed', 'avg_speed', 'avg speed', 'speed'],
 }
 
 function normalizeHeader(header: string): string {
@@ -124,6 +125,7 @@ function rowToClub(row: Record<string, string>, index: number): Club {
     break: parseBoolean(row.break),
     breakTime: (row.break_time || '').trim(),
     quickLink: (row.quick_link || '').trim(),
+    avgLbSpeed: (row.avg_lb_speed || '').trim(),
     lastUpdated: new Date().toISOString(),
   }
 }

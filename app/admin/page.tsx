@@ -33,7 +33,9 @@ import {
   Star,
   Sparkles,
   Eye,
+  ArrowLeft,
 } from 'lucide-react'
+import Link from 'next/link'
 import type { Club } from '@/lib/types'
 import { cn } from '@/lib/utils'
 
@@ -116,7 +118,13 @@ export default function AdminDashboardPage() {
       {/* Header */}
       <header className="border-b border-border/50 bg-card/50 backdrop-blur-sm sticky top-0 z-10">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <h1 className="text-xl font-bold text-foreground">Admin Dashboard</h1>
+          <div className="flex items-center gap-4">
+            <Link href="/" className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors">
+              <ArrowLeft className="h-4 w-4" />
+              Directory
+            </Link>
+            <h1 className="text-xl font-bold text-foreground">Admin Dashboard</h1>
+          </div>
           <div className="flex items-center gap-3">
             <Button
               variant="outline"
@@ -145,7 +153,7 @@ export default function AdminDashboardPage() {
               Logout
             </Button>
           </div>
-        </div>
+        </div>{/* end container */}
       </header>
 
       <div className="container mx-auto px-4 py-8">

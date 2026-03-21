@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { StarRating } from '@/components/star-rating'
 import { MiniRatingBar } from '@/components/mini-rating-bar'
-import { Cat, Dog, MessageCircle, Phone, Users, ShieldCheck, Zap, Coffee } from 'lucide-react'
+import { Cat, Dog, MessageCircle, Phone, Users, ShieldCheck, Coffee } from 'lucide-react'
 import type { Club } from '@/lib/types'
 
 interface ClubCardProps {
@@ -88,16 +88,10 @@ export function ClubCard({ club, onClick, className }: ClubCardProps) {
             {club.platform === 'Disc' && <Phone className="h-3 w-3 mr-1" />}
             {club.platform}
           </Badge>
-          {club.sfwFriendly && (
-            <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200 gap-1">
-              <ShieldCheck className="h-3 w-3" />
-              SFW Friendly
-            </Badge>
-          )}
           {club.sfwActive && (
             <Badge variant="outline" className="bg-cyan-50 text-cyan-700 border-cyan-200 gap-1">
-              <Zap className="h-3 w-3" />
-              Active SFW
+              <ShieldCheck className="h-3 w-3" />
+              SFW Active
             </Badge>
           )}
           {club.break && (

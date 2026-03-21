@@ -8,7 +8,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { FieldGroup, Field, FieldLabel } from '@/components/ui/field'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Spinner } from '@/components/ui/spinner'
-import { Lock, AlertCircle } from 'lucide-react'
+import { Lock, AlertCircle, ArrowLeft } from 'lucide-react'
+import Link from 'next/link'
 
 export default function AdminLoginPage() {
   const router = useRouter()
@@ -47,6 +48,11 @@ export default function AdminLoginPage() {
 
   return (
     <main className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-background to-muted/30 p-4">
+      <div className="w-full max-w-md">
+        <Link href="/" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-6">
+          <ArrowLeft className="h-4 w-4" />
+          Back to Directory
+        </Link>
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <div className="mx-auto mb-4 p-3 rounded-full bg-primary/10 w-fit">
@@ -107,6 +113,7 @@ export default function AdminLoginPage() {
           </form>
         </CardContent>
       </Card>
+      </div>
     </main>
   )
 }
