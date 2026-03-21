@@ -32,10 +32,12 @@ const HEADER_MAPPINGS: Record<string, string[]> = {
   sfw_active: ['sfw_active', 'sfw active', 'active sfw', 'sfwactive', 'active_sfw'],
   break: ['break', 'on break', 'break status', 'onbreak'],
   break_time: ['break_time', 'break time', 'breaktime', 'break_end', 'break end', 'break_time_(club_tz)', 'break time (club tz)'],
-  avg_rating: ['avg_rating', 'avg rating', 'rating', 'overall', 'overall_rating', 'overall rating', 'avgrating', 'average rating', 'average_rating'],
+  avg_rating: ['avg_rating', 'avg rating', 'avg. rating', 'avg._rating', 'rating', 'overall', 'overall_rating', 'overall rating', 'avgrating', 'average rating', 'average_rating'],
   invite_score: ['invite_score', 'invite score', 'invites', 'invite', 'invitescore', 'invites_score'],
   door_score: ['door_score', 'door score', 'door', 'doors', 'doorscore', 'doors_score'],
   call_score: ['call_score', 'call score', 'calls', 'call', 'callscore', 'calls_score'],
+  // "Invs?" column in the sheet — whether the club holds separate invite sessions
+  invite_parties: ['invite_parties', 'invite parties', 'invs?', 'invs', 'inv party', 'invite_party', 'invite party', 'inv?'],
   comments: ['comments', 'comment', 'notes', 'note', 'description', 'desc'],
   avg_lb_speed: ['avg_lb_speed', 'avg lb speed', 'lb speed', 'lbspeed', 'avg_speed', 'avg speed', 'speed'],
 }
@@ -44,12 +46,21 @@ function normalizeHeader(header: string): string {
   const cleaned = header.toLowerCase().trim()
   
   for (const [normalizedKey, variants] of Object.entries(HEADER_MAPPINGS)) {
+    // Direct match first
     if (variants.includes(cleaned)) {
       return normalizedKey
     }
-    // Also try matching without parentheses and special chars
+    // Match after stripping parentheses
     const cleanedNoParens = cleaned.replace(/[()]/g, ' ').replace(/\s+/g, ' ').trim()
     if (variants.some(v => v === cleanedNoParens || v.replace(/[()]/g, ' ').replace(/\s+/g, ' ').trim() === cleanedNoParens)) {
+      return normalizedKey
+    }
+    // Match after stripping all punctuation (handles "Avg. Rating" -> "avg rating", "Invs?" -> "invs")
+    const cleanedNoPunct = cleaned.replace(/[^a-z0-9\s]/g, ' ').replace(/\s+/g, ' ').trim()
+    if (variants.some(v => {
+      const vNoPunct = v.replace(/[^a-z0-9\s]/g, ' ').replace(/\s+/g, ' ').trim()
+      return v === cleanedNoPunct || vNoPunct === cleanedNoPunct
+    })) {
       return normalizedKey
     }
   }
@@ -113,6 +124,23 @@ function rowToClub(row: Record<string, string>, index: number): Club {
     platform = 'Line'
   }
   
+  const invitesScore = parseNumber(row.invite_score)
+  const doorScore = parseNumber(row.door_score)
+  const callsScore = parseNumber(row.call_score)
+
+  // Use sheet's avg_rating if present, otherwise compute average from individual scores
+  let overallRating = parseNumber(row.avg_rating)
+  if (overallRating === 0 && (invitesScore > 0 || doorScore > 0 || callsScore > 0)) {
+    const scores = [invitesScore, doorScore, callsScore].filter(s => s > 0)
+    overallRating = scores.length > 0
+      ? Math.round((scores.reduce((a, b) => a + b, 0) / scores.length) * 100) / 100
+      : 0
+  }
+
+  const hasBreak = parseBoolean(row.break)
+  const rawBreakTime = (row.break_time || '').trim()
+  const breakTime = rawBreakTime && rawBreakTime.toLowerCase() !== 'n/a' ? rawBreakTime : ''
+
   return {
     id: `club-${index}`,
     name: (row.club_name || row.name || '').trim(),
@@ -121,14 +149,15 @@ function rowToClub(row: Record<string, string>, index: number): Club {
     status,
     sfwFriendly: parseBoolean(row.sfw_friendly),
     sfwActive: parseBoolean(row.sfw_active),
-    inviteParties: parseBoolean(row.invite_score) || parseNumber(row.invite_score) > 0,
-    overallRating: parseNumber(row.avg_rating),
-    invitesScore: parseNumber(row.invite_score),
-    doorScore: parseNumber(row.door_score),
-    callsScore: parseNumber(row.call_score),
+    // invite_parties maps to the "Invs?" checkbox column in the sheet
+    inviteParties: parseBoolean(row.invite_parties),
+    overallRating,
+    invitesScore,
+    doorScore,
+    callsScore,
     notes: (row.comments || '').trim(),
-    break: parseBoolean(row.break),
-    breakTime: row.break_time && row.break_time !== 'N/A' ? (row.break_time || '').trim() : '',
+    break: hasBreak,
+    breakTime,
     quickLink: (row.quick_link || '').trim(),
     avgLbSpeed: (row.avg_lb_speed || '').trim(),
     lastUpdated: new Date().toISOString(),
@@ -151,13 +180,9 @@ export async function GET() {
     const range = `${SHEET_TAB_NAME}!A1:Z500`
     const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?key=${apiKey}`
     
-    console.log('[v0] Fetching from Google Sheets, range:', range)
-    
     const response = await fetch(url, {
       next: { revalidate: 300 },
     })
-
-    console.log('[v0] Response status:', response.status)
 
     if (!response.ok) {
       const errorText = await response.text()
@@ -170,8 +195,6 @@ export async function GET() {
 
     const data = await response.json()
     const rows: string[][] = data.values || []
-    
-    console.log('[v0] Raw rows received:', rows.length)
     
     if (rows.length === 0) {
       return NextResponse.json({ 
@@ -205,16 +228,11 @@ export async function GET() {
       }, { status: 400 })
     }
     
-    console.log('[v0] Detected header row at index:', headerRowIndex)
-    console.log('[v0] Raw header values:', headerRow)
-    
     // Normalize headers
     const normalizedHeaders = headerRow.map(h => normalizeHeader(h || ''))
-    console.log('[v0] Normalized headers:', normalizedHeaders)
     
     // Parse data rows (everything after header row)
     const dataRows = rows.slice(headerRowIndex + 1)
-    console.log('[v0] Data rows count:', dataRows.length)
     
     const clubs: Club[] = dataRows
       .filter(row => {
@@ -227,31 +245,11 @@ export async function GET() {
           rowObj[header] = (row[colIndex] || '').toString().trim()
         })
         
-        if (index === 0) {
-          console.log('[v0] First parsed row object:', rowObj)
-        }
-        
         return rowToClub(rowObj, index)
       })
       .filter(club => club.name)
 
-    console.log('[v0] Final parsed clubs count:', clubs.length)
-    
-    if (clubs.length > 0) {
-      console.log('[v0] First club (sample):', JSON.stringify(clubs[0], null, 2))
-    }
-
-    return NextResponse.json({ 
-      clubs,
-      debug: {
-        headerRowIndex,
-        headerValues: headerRow,
-        normalizedHeaders,
-        totalRows: rows.length,
-        dataRows: dataRows.length,
-        parsedClubs: clubs.length
-      }
-    })
+    return NextResponse.json({ clubs })
   } catch (error) {
     console.error('[v0] Error fetching clubs:', error)
     return NextResponse.json(
