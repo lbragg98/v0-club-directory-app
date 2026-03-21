@@ -37,8 +37,10 @@ export default function AdminLoginPage() {
         return
       }
 
-      // Use full page navigation so the session cookie is read before rendering the admin page
-      window.location.href = '/admin'
+      // Small delay ensures the browser stores the Set-Cookie header before navigating
+      setTimeout(() => {
+        window.location.replace('/admin')
+      }, 100)
     } catch {
       setError('An unexpected error occurred')
     } finally {

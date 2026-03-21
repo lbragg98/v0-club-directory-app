@@ -32,7 +32,7 @@ const HEADER_MAPPINGS: Record<string, string[]> = {
   sfw_active: ['sfw_active', 'sfw active', 'active sfw', 'sfwactive', 'active_sfw'],
   break: ['break', 'on break', 'break status', 'onbreak'],
   break_time: ['break_time', 'break time', 'breaktime', 'break_end', 'break end', 'break_time_(club_tz)', 'break time (club tz)'],
-  avg_rating: ['avg_rating', 'avg rating', 'avg. rating', 'avg._rating', 'rating', 'overall', 'overall_rating', 'overall rating', 'avgrating', 'average rating', 'average_rating'],
+  avg_rating: ['avg_rating', 'avg rating', 'avg. rating', 'avg._rating', 'avg. rating', 'rating', 'overall', 'overall_rating', 'overall rating', 'avgrating', 'average rating', 'average_rating', 'avg lb rating', 'avg lb. rating'],
   invite_score: ['invite_score', 'invite score', 'invites', 'invite', 'invitescore', 'invites_score'],
   door_score: ['door_score', 'door score', 'door', 'doors', 'doorscore', 'doors_score'],
   call_score: ['call_score', 'call score', 'calls', 'call', 'callscore', 'calls_score'],
@@ -44,28 +44,28 @@ const HEADER_MAPPINGS: Record<string, string[]> = {
 
 function normalizeHeader(header: string): string {
   const cleaned = header.toLowerCase().trim()
-  
+  // Also build a version where dots followed by space are collapsed (e.g. "Avg. Rating" -> "avg. rating" -> "avg rating")
+  const cleanedNoPunct = cleaned.replace(/[^a-z0-9\s]/g, ' ').replace(/\s+/g, ' ').trim()
+  // And a version with underscores instead of spaces
+  const cleanedUnderscored = cleaned.replace(/\s+/g, '_')
+
   for (const [normalizedKey, variants] of Object.entries(HEADER_MAPPINGS)) {
-    // Direct match first
-    if (variants.includes(cleaned)) {
-      return normalizedKey
-    }
-    // Match after stripping parentheses
-    const cleanedNoParens = cleaned.replace(/[()]/g, ' ').replace(/\s+/g, ' ').trim()
-    if (variants.some(v => v === cleanedNoParens || v.replace(/[()]/g, ' ').replace(/\s+/g, ' ').trim() === cleanedNoParens)) {
-      return normalizedKey
-    }
-    // Match after stripping all punctuation (handles "Avg. Rating" -> "avg rating", "Invs?" -> "invs")
-    const cleanedNoPunct = cleaned.replace(/[^a-z0-9\s]/g, ' ').replace(/\s+/g, ' ').trim()
-    if (variants.some(v => {
+    for (const v of variants) {
       const vNoPunct = v.replace(/[^a-z0-9\s]/g, ' ').replace(/\s+/g, ' ').trim()
-      return v === cleanedNoPunct || vNoPunct === cleanedNoPunct
-    })) {
-      return normalizedKey
+      if (
+        v === cleaned ||
+        v === cleanedNoPunct ||
+        v === cleanedUnderscored ||
+        vNoPunct === cleaned ||
+        vNoPunct === cleanedNoPunct ||
+        vNoPunct === cleanedUnderscored
+      ) {
+        return normalizedKey
+      }
     }
   }
-  
-  return cleaned.replace(/\s+/g, '_')
+
+  return cleanedUnderscored
 }
 
 function isValidHeaderRow(row: string[]): boolean {
@@ -189,7 +189,7 @@ export async function GET() {
     const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?key=${apiKey}`
     
     const response = await fetch(url, {
-      next: { revalidate: 300 },
+      cache: 'no-store',
     })
 
     if (!response.ok) {
