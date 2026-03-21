@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { StarRating } from '@/components/star-rating'
 import { MiniRatingBar } from '@/components/mini-rating-bar'
-import { Cat, Dog, MessageCircle, Phone, Users, ShieldCheck, Coffee } from 'lucide-react'
+import { Cat, Dog, MessageCircle, Phone, Users, ShieldCheck, Clock } from 'lucide-react'
 import type { Club } from '@/lib/types'
 
 interface ClubCardProps {
@@ -96,8 +96,8 @@ export function ClubCard({ club, onClick, className }: ClubCardProps) {
           )}
           {club.break && (
             <Badge variant="outline" className="bg-orange-50 text-orange-700 border-orange-200 gap-1">
-              <Coffee className="h-3 w-3" />
-              On Break
+              <Clock className="h-3 w-3" />
+              Break{club.breakTime ? `: ${club.breakTime}` : ''}
             </Badge>
           )}
         </div>
@@ -106,9 +106,6 @@ export function ClubCard({ club, onClick, className }: ClubCardProps) {
       <CardContent className="pt-0">
         {/* Description Section */}
         <div className="text-xs text-muted-foreground space-y-1 mb-3">
-          {club.breakTime && (
-            <p><span className="font-medium">Break Time:</span> {club.breakTime}</p>
-          )}
           {club.notes && (
             <p className="line-clamp-2">{club.notes}</p>
           )}

@@ -18,7 +18,6 @@ import {
   MessageCircle,
   Phone,
   ShieldCheck,
-  Coffee,
   Calendar,
   Clock,
   Zap,
@@ -109,8 +108,8 @@ export function ClubDetailModal({
             )}
             {club.break && (
               <Badge variant="outline" className="bg-orange-50 text-orange-700 border-orange-200 gap-1.5 text-sm">
-                <Coffee className="h-4 w-4" />
-                On Break
+                <Clock className="h-4 w-4" />
+                Break{club.breakTime ? `: ${club.breakTime}` : ''}
               </Badge>
             )}
           </div>
@@ -120,26 +119,13 @@ export function ClubDetailModal({
             <h4 className="font-semibold text-foreground">Details</h4>
             <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-muted-foreground">
               <div>
-                <span className="font-medium text-foreground">SFW Active</span>
-                <p>{club.sfwActive ? 'Yes' : 'No'}</p>
-              </div>
-              <div>
                 <span className="font-medium text-foreground">SFW Friendly</span>
                 <p>{club.sfwFriendly ? 'Yes' : 'No'}</p>
               </div>
               <div>
-                <span className="font-medium text-foreground">On Break</span>
-                <p>{club.break ? 'Yes' : 'No'}</p>
+                <span className="font-medium text-foreground">Has Break</span>
+                <p>{club.break ? `Yes${club.breakTime ? ` — ${club.breakTime}` : ''}` : 'No'}</p>
               </div>
-              {club.break && club.breakTime && (
-                <div>
-                  <span className="font-medium text-foreground flex items-center gap-1">
-                    <Clock className="h-3.5 w-3.5" />
-                    Break Time
-                  </span>
-                  <p>{club.breakTime}</p>
-                </div>
-              )}
               {club.avgLbSpeed && (
                 <div>
                   <span className="font-medium text-foreground flex items-center gap-1">
