@@ -31,7 +31,7 @@ const HEADER_MAPPINGS: Record<string, string[]> = {
   sfw_friendly: ['sfw_friendly', 'sfw friendly', 'sfw', 'sfwfriendly', 'safe for work'],
   sfw_active: ['sfw_active', 'sfw active', 'active sfw', 'sfwactive', 'active_sfw'],
   break: ['break', 'on break', 'break status', 'onbreak'],
-  break_time: ['break_time', 'break time', 'breaktime', 'break_end', 'break end'],
+  break_time: ['break_time', 'break time', 'breaktime', 'break_end', 'break end', 'break_time_(club_tz)', 'break time (club tz)'],
   avg_rating: ['avg_rating', 'avg rating', 'rating', 'overall', 'overall_rating', 'overall rating', 'avgrating', 'average rating', 'average_rating'],
   invite_score: ['invite_score', 'invite score', 'invites', 'invite', 'invitescore', 'invites_score'],
   door_score: ['door_score', 'door score', 'door', 'doors', 'doorscore', 'doors_score'],
@@ -45,6 +45,11 @@ function normalizeHeader(header: string): string {
   
   for (const [normalizedKey, variants] of Object.entries(HEADER_MAPPINGS)) {
     if (variants.includes(cleaned)) {
+      return normalizedKey
+    }
+    // Also try matching without parentheses and special chars
+    const cleanedNoParens = cleaned.replace(/[()]/g, ' ').replace(/\s+/g, ' ').trim()
+    if (variants.some(v => v === cleanedNoParens || v.replace(/[()]/g, ' ').replace(/\s+/g, ' ').trim() === cleanedNoParens)) {
       return normalizedKey
     }
   }
@@ -123,7 +128,7 @@ function rowToClub(row: Record<string, string>, index: number): Club {
     callsScore: parseNumber(row.call_score),
     notes: (row.comments || '').trim(),
     break: parseBoolean(row.break),
-    breakTime: (row.break_time || '').trim(),
+    breakTime: row.break_time && row.break_time !== 'N/A' ? (row.break_time || '').trim() : '',
     quickLink: (row.quick_link || '').trim(),
     avgLbSpeed: (row.avg_lb_speed || '').trim(),
     lastUpdated: new Date().toISOString(),

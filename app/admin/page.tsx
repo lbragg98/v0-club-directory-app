@@ -18,6 +18,7 @@ import {
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
@@ -312,6 +313,7 @@ export default function AdminDashboardPage() {
             <>
               <DialogHeader>
                 <DialogTitle>{selectedClub.name}</DialogTitle>
+                <DialogDescription>Club Details</DialogDescription>
               </DialogHeader>
               <div className="space-y-4 pt-4">
                 <div className="flex items-center gap-3">
