@@ -5,19 +5,24 @@ import type { Club } from '@/lib/types'
  * Google Sheets Club Data API
  * 
  * CONFIGURATION:
- * - Change SHEET_TAB_NAME to match your actual sheet tab name
+ * - Google Sheet tab name is "MASTER" - change here if tab is renamed
  * - The range A1:Z500 fetches all columns A-Z, rows 1-500
- * - Row 1 is expected to contain headers
- * - Row 2+ contains actual club data
+ * - This route auto-detects the header row by scanning first 15 rows
+ * - Only server-side: fetches use GOOGLE_SHEET_ID and GOOGLE_API_KEY env vars
  */
 
 // The Google Sheet tab name. If the tab is ever renamed, update this value to match.
 const SHEET_TAB_NAME = 'MASTER'
 
+// Expected header keywords to identify the actual table header row
+const HEADER_KEYWORDS = [
+  'club_name', 'club name', 'name', 'open', 'is_open', 'type', 'club type',
+  'platform', 'lbgc', 'sfw', 'rating', 'calls', 'invites', 'door', 'comment',
+  'break', 'link', 'url'
+]
+
 // Header name variants that map to our normalized keys
-// Add more variants here if your sheet uses different column names
 const HEADER_MAPPINGS: Record<string, string[]> = {
-  // Normalized key: [possible header names in sheet]
   club_name: ['club_name', 'club name', 'name', 'club', 'clubname'],
   quick_link: ['quick_link', 'quick link', 'link', 'url', 'quicklink'],
   is_open: ['is_open', 'is open', 'open', 'status', 'isopen', 'open?'],
@@ -43,8 +48,22 @@ function normalizeHeader(header: string): string {
     }
   }
   
-  // Return the cleaned header if no mapping found
   return cleaned.replace(/\s+/g, '_')
+}
+
+function isValidHeaderRow(row: string[]): boolean {
+  /**
+   * Check if a row looks like a header row by counting how many expected keywords it contains
+   * A valid header row should have at least 3 keywords
+   */
+  if (!row || row.length < 3) return false
+  
+  const cellsLower = row.map(cell => (cell || '').toLowerCase().trim())
+  const keywordMatches = cellsLower.filter(cell => 
+    HEADER_KEYWORDS.some(keyword => cell.includes(keyword) || keyword.includes(cell.replace(/\s+/g, '_')))
+  ).length
+  
+  return keywordMatches >= 3
 }
 
 function parseBoolean(value: string | undefined): boolean {
@@ -56,29 +75,18 @@ function parseBoolean(value: string | undefined): boolean {
 function parseNumber(value: string | undefined): number {
   if (!value) return 0
   const num = parseFloat(value.toString().replace(/[^0-9.-]/g, ''))
-  return isNaN(num) ? 0 : Math.min(5, Math.max(0, num)) // Clamp to 0-5
+  return isNaN(num) ? 0 : Math.min(5, Math.max(0, num))
 }
 
 function rowToClub(row: Record<string, string>, index: number): Club {
-  /**
-   * Transform a row object into a Club object
-   * The row object has normalized keys from the header mapping
-   * 
-   * DEBUG: Add console.log here to inspect individual row transformations
-   */
-  
-  // Determine status: check is_open first, then break status
   let status: 'Open' | 'Closed' = 'Closed'
   if (row.is_open) {
     status = parseBoolean(row.is_open) ? 'Open' : 'Closed'
   }
-  
-  // If on break, mark as closed
   if (parseBoolean(row.break)) {
     status = 'Closed'
   }
   
-  // Determine type: Cat, Dog, or Hybrid
   let type: 'Cat' | 'Dog' | 'Hybrid' = 'Cat'
   const rawType = (row.club_type || '').toLowerCase().trim()
   if (rawType.includes('dog')) {
@@ -89,12 +97,11 @@ function rowToClub(row: Record<string, string>, index: number): Club {
     type = 'Cat'
   }
   
-  // Determine platform: Line, Disc, or Both
   let platform: 'Line' | 'Disc' | 'Both' = 'Line'
   const rawPlatform = (row.platform || '').toLowerCase().trim()
   if (rawPlatform.includes('disc') || rawPlatform.includes('discord')) {
     platform = 'Disc'
-  } else if (rawPlatform.includes('both') || rawPlatform.includes('line') && rawPlatform.includes('disc')) {
+  } else if (rawPlatform.includes('both') || (rawPlatform.includes('line') && rawPlatform.includes('disc'))) {
     platform = 'Both'
   } else if (rawPlatform.includes('line')) {
     platform = 'Line'
@@ -108,7 +115,7 @@ function rowToClub(row: Record<string, string>, index: number): Club {
     status,
     sfwFriendly: parseBoolean(row.sfw_friendly),
     sfwActive: parseBoolean(row.sfw_active),
-    inviteParties: parseBoolean(row.invite_score) || parseNumber(row.invite_score) > 0, // Has invite parties if score > 0
+    inviteParties: parseBoolean(row.invite_score) || parseNumber(row.invite_score) > 0,
     overallRating: parseNumber(row.avg_rating),
     invitesScore: parseNumber(row.invite_score),
     doorScore: parseNumber(row.door_score),
@@ -134,14 +141,13 @@ export async function GET() {
   }
 
   try {
-    // Fetch from row 1 to include headers
     const range = `${SHEET_TAB_NAME}!A1:Z500`
     const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?key=${apiKey}`
     
     console.log('[v0] Fetching from Google Sheets, range:', range)
     
     const response = await fetch(url, {
-      next: { revalidate: 300 }, // Cache for 5 minutes
+      next: { revalidate: 300 },
     })
 
     console.log('[v0] Response status:', response.status)
@@ -161,48 +167,69 @@ export async function GET() {
     console.log('[v0] Raw rows received:', rows.length)
     
     if (rows.length === 0) {
-      console.log('[v0] No data in sheet')
-      return NextResponse.json({ clubs: [], debug: { message: 'No data in sheet' } })
+      return NextResponse.json({ 
+        error: 'No data found in sheet',
+        clubs: [],
+        debug: { message: 'Sheet is empty' }
+      })
     }
 
-    // First row is headers
-    const rawHeaders = rows[0]
-    console.log('[v0] Raw headers:', rawHeaders)
+    // Scan first 15 rows to find the header row
+    let headerRowIndex = -1
+    let headerRow: string[] = []
     
-    // Normalize headers to our standard keys
-    const normalizedHeaders = rawHeaders.map(h => normalizeHeader(h || ''))
+    for (let i = 0; i < Math.min(15, rows.length); i++) {
+      if (isValidHeaderRow(rows[i])) {
+        headerRowIndex = i
+        headerRow = rows[i]
+        break
+      }
+    }
+    
+    if (headerRowIndex === -1) {
+      console.error('[v0] Could not find valid header row in first 15 rows')
+      return NextResponse.json({
+        error: 'Could not detect table header row. Please ensure the MASTER sheet has a proper header row with column names like: Club Name, Open, Type, Platform, SFW, Rating, Calls, Invites, Door, Comments, etc.',
+        clubs: [],
+        debug: { 
+          message: 'Invalid header row',
+          firstRows: rows.slice(0, 5)
+        }
+      }, { status: 400 })
+    }
+    
+    console.log('[v0] Detected header row at index:', headerRowIndex)
+    console.log('[v0] Raw header values:', headerRow)
+    
+    // Normalize headers
+    const normalizedHeaders = headerRow.map(h => normalizeHeader(h || ''))
     console.log('[v0] Normalized headers:', normalizedHeaders)
     
-    // Data rows start from index 1
-    const dataRows = rows.slice(1)
+    // Parse data rows (everything after header row)
+    const dataRows = rows.slice(headerRowIndex + 1)
     console.log('[v0] Data rows count:', dataRows.length)
     
-    // Convert each row to an object with normalized keys
     const clubs: Club[] = dataRows
       .filter(row => {
-        // Filter out empty rows - check if club_name or any cell in first 3 cols has content
         const hasContent = row.some((cell, idx) => idx < 5 && cell && cell.trim())
         return hasContent
       })
       .map((row, index) => {
-        // Create object mapping normalized headers to values
         const rowObj: Record<string, string> = {}
         normalizedHeaders.forEach((header, colIndex) => {
           rowObj[header] = (row[colIndex] || '').toString().trim()
         })
         
-        // Debug: log first row object to verify mapping
         if (index === 0) {
-          console.log('[v0] First row object (for debugging):', rowObj)
+          console.log('[v0] First parsed row object:', rowObj)
         }
         
         return rowToClub(rowObj, index)
       })
-      .filter(club => club.name) // Final filter: must have a name
+      .filter(club => club.name)
 
     console.log('[v0] Final parsed clubs count:', clubs.length)
     
-    // Log first club for debugging
     if (clubs.length > 0) {
       console.log('[v0] First club (sample):', JSON.stringify(clubs[0], null, 2))
     }
@@ -210,11 +237,12 @@ export async function GET() {
     return NextResponse.json({ 
       clubs,
       debug: {
+        headerRowIndex,
+        headerValues: headerRow,
+        normalizedHeaders,
         totalRows: rows.length,
         dataRows: dataRows.length,
-        parsedClubs: clubs.length,
-        headers: rawHeaders,
-        normalizedHeaders
+        parsedClubs: clubs.length
       }
     })
   } catch (error) {
