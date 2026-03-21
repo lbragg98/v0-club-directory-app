@@ -7,7 +7,7 @@ import { ClubCardSkeleton } from '@/components/club-card-skeleton'
 import { FilterBar } from '@/components/filter-bar'
 import { ClubDetailModal } from '@/components/club-detail-modal'
 import { Button } from '@/components/ui/button'
-import { AlertCircle, RefreshCw, Users, Star, Sparkles, Settings } from 'lucide-react'
+import { AlertCircle, RefreshCw, Users, Star, Sparkles, Settings, ChevronDown, ChevronUp, Bug } from 'lucide-react'
 import Link from 'next/link'
 import type { Club, ClubFilters } from '@/lib/types'
 
@@ -26,8 +26,9 @@ export default function HomePage() {
   const [filters, setFilters] = useState<ClubFilters>(defaultFilters)
   const [selectedClub, setSelectedClub] = useState<Club | null>(null)
   const [modalOpen, setModalOpen] = useState(false)
+  const [debugOpen, setDebugOpen] = useState(false)
 
-  const { data, error, isLoading, mutate } = useSWR<{ clubs: Club[] }>(
+  const { data, error, isLoading, mutate } = useSWR<{ clubs: Club[]; debug?: Record<string, unknown> }>(
     '/api/clubs',
     fetcher
   )
@@ -237,6 +238,32 @@ export default function HomePage() {
         open={modalOpen}
         onOpenChange={setModalOpen}
       />
+
+      {/* Debug Panel - Collapsible */}
+      <div className="fixed bottom-4 right-4 z-50">
+        <div className="bg-background border border-border rounded-lg shadow-lg overflow-hidden max-w-md">
+          <button
+            onClick={() => setDebugOpen(!debugOpen)}
+            className="w-full flex items-center justify-between gap-2 px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+          >
+            <span className="flex items-center gap-2">
+              <Bug className="h-4 w-4" />
+              Debug Panel
+            </span>
+            {debugOpen ? <ChevronDown className="h-4 w-4" /> : <ChevronUp className="h-4 w-4" />}
+          </button>
+          {debugOpen && (
+            <div className="px-4 pb-4 max-h-80 overflow-auto">
+              <div className="text-xs font-mono">
+                <p className="font-semibold mb-2">API Response:</p>
+                <pre className="bg-muted p-2 rounded text-[10px] overflow-auto max-h-60 whitespace-pre-wrap break-all">
+                  {data ? JSON.stringify(data, null, 2) : (error ? `Error: ${error}` : 'Loading...')}
+                </pre>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
     </main>
   )
 }

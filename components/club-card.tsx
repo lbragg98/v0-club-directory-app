@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { StarRating } from '@/components/star-rating'
 import { MiniRatingBar } from '@/components/mini-rating-bar'
-import { Cat, Dog, MessageCircle, Phone, Users, ShieldCheck, PartyPopper } from 'lucide-react'
+import { Cat, Dog, MessageCircle, Phone, Users, ShieldCheck, Zap, Coffee } from 'lucide-react'
 import type { Club } from '@/lib/types'
 
 interface ClubCardProps {
@@ -33,7 +33,7 @@ const platformColors = {
 }
 
 export function ClubCard({ club, onClick, className }: ClubCardProps) {
-  const TypeIcon = typeIcons[club.type]
+  const TypeIcon = typeIcons[club.type] || Users
 
   return (
     <Card
@@ -49,10 +49,11 @@ export function ClubCard({ club, onClick, className }: ClubCardProps) {
       <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-teal-400 via-cyan-500 to-blue-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
       
       <CardHeader className="pb-3">
+        {/* Club Name and Overall Rating */}
         <div className="flex items-start justify-between gap-3">
           <div className="flex-1 min-w-0">
             <h3 className="font-semibold text-lg truncate text-foreground group-hover:text-primary transition-colors">
-              {club.name}
+              {club.name || 'Unnamed Club'}
             </h3>
             <div className="flex items-center gap-1.5 mt-1">
               <StarRating rating={club.overallRating} size="sm" />
@@ -62,6 +63,7 @@ export function ClubCard({ club, onClick, className }: ClubCardProps) {
             </div>
           </div>
           
+          {/* Open/Closed Badge */}
           <Badge
             variant={club.status === 'Open' ? 'default' : 'secondary'}
             className={cn(
@@ -89,32 +91,42 @@ export function ClubCard({ club, onClick, className }: ClubCardProps) {
           {club.sfwFriendly && (
             <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200 gap-1">
               <ShieldCheck className="h-3 w-3" />
-              SFW
+              SFW Friendly
             </Badge>
           )}
-          {club.inviteParties && (
+          {club.sfwActive && (
+            <Badge variant="outline" className="bg-cyan-50 text-cyan-700 border-cyan-200 gap-1">
+              <Zap className="h-3 w-3" />
+              Active SFW
+            </Badge>
+          )}
+          {club.break && (
             <Badge variant="outline" className="bg-orange-50 text-orange-700 border-orange-200 gap-1">
-              <PartyPopper className="h-3 w-3" />
-              Parties
+              <Coffee className="h-3 w-3" />
+              On Break
             </Badge>
           )}
         </div>
       </CardHeader>
 
       <CardContent className="pt-0">
-        {/* Mini Rating Bars */}
-        <div className="space-y-2">
+        {/* Description Section */}
+        <div className="text-xs text-muted-foreground space-y-1 mb-3">
+          {club.breakTime && (
+            <p><span className="font-medium">Break Time:</span> {club.breakTime}</p>
+          )}
+          {club.notes && (
+            <p className="line-clamp-2">{club.notes}</p>
+          )}
+        </div>
+
+        {/* Rankings Section - Separate from description */}
+        <div className="space-y-2 pt-2 border-t border-border/50">
+          <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Rankings</p>
           <MiniRatingBar label="Invites" value={club.invitesScore} />
           <MiniRatingBar label="Door" value={club.doorScore} />
           <MiniRatingBar label="Calls" value={club.callsScore} />
         </div>
-
-        {/* Notes preview */}
-        {club.notes && (
-          <p className="mt-3 text-xs text-muted-foreground line-clamp-2">
-            {club.notes}
-          </p>
-        )}
       </CardContent>
 
       {/* Hover glow effect */}

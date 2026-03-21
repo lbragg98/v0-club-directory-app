@@ -17,8 +17,10 @@ import {
   MessageCircle,
   Phone,
   ShieldCheck,
-  PartyPopper,
+  Zap,
+  Coffee,
   Calendar,
+  ExternalLink,
 } from 'lucide-react'
 import type { Club } from '@/lib/types'
 
@@ -53,7 +55,7 @@ export function ClubDetailModal({
 }: ClubDetailModalProps) {
   if (!club) return null
 
-  const TypeIcon = typeIcons[club.type]
+  const TypeIcon = typeIcons[club.type] || Users
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -112,41 +114,69 @@ export function ClubDetailModal({
                 SFW Friendly
               </Badge>
             )}
-            {club.inviteParties && (
+            {club.sfwActive && (
+              <Badge
+                variant="outline"
+                className="bg-cyan-50 text-cyan-700 border-cyan-200 gap-1.5 text-sm"
+              >
+                <Zap className="h-4 w-4" />
+                Active SFW
+              </Badge>
+            )}
+            {club.break && (
               <Badge
                 variant="outline"
                 className="bg-orange-50 text-orange-700 border-orange-200 gap-1.5 text-sm"
               >
-                <PartyPopper className="h-4 w-4" />
-                Invite Parties
+                <Coffee className="h-4 w-4" />
+                On Break
               </Badge>
             )}
           </div>
 
-          {/* Detailed Ratings */}
+          {/* Description Section */}
+          <div className="space-y-2 text-sm">
+            <h4 className="font-medium text-foreground">Details</h4>
+            <div className="space-y-1 text-muted-foreground">
+              <p><span className="font-medium text-foreground">Club Type:</span> {club.type}</p>
+              <p><span className="font-medium text-foreground">Platform:</span> {club.platform}</p>
+              <p><span className="font-medium text-foreground">SFW Status:</span> {club.sfwFriendly ? 'SFW Friendly' : 'Not SFW'}</p>
+              {club.break && (
+                <p><span className="font-medium text-foreground">Break:</span> Yes{club.breakTime ? ` - ${club.breakTime}` : ''}</p>
+              )}
+              {club.notes && (
+                <p><span className="font-medium text-foreground">Comments:</span> {club.notes}</p>
+              )}
+            </div>
+          </div>
+
+          {/* Rankings Section - Separate from description */}
           <div className="space-y-3 bg-muted/50 rounded-xl p-4">
             <h4 className="text-sm font-medium text-foreground mb-3">
-              Detailed Scores
+              Rankings
             </h4>
             <MiniRatingBar label="Invites" value={club.invitesScore} />
             <MiniRatingBar label="Door" value={club.doorScore} />
             <MiniRatingBar label="Calls" value={club.callsScore} />
           </div>
 
-          {/* Notes */}
-          {club.notes && (
-            <div>
-              <h4 className="text-sm font-medium text-foreground mb-2">Notes</h4>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                {club.notes}
-              </p>
-            </div>
+          {/* Quick Link */}
+          {club.quickLink && (
+            <a
+              href={club.quickLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 text-sm text-primary hover:underline"
+            >
+              <ExternalLink className="h-4 w-4" />
+              Visit Club
+            </a>
           )}
 
           {/* Last Updated */}
           <div className="flex items-center gap-2 text-xs text-muted-foreground pt-2 border-t border-border">
             <Calendar className="h-3.5 w-3.5" />
-            <span>Last updated: {club.lastUpdated}</span>
+            <span>Last updated: {new Date(club.lastUpdated).toLocaleDateString()}</span>
           </div>
         </div>
       </DialogContent>

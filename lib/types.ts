@@ -5,12 +5,16 @@ export interface Club {
   platform: 'Line' | 'Disc' | 'Both'
   status: 'Open' | 'Closed'
   sfwFriendly: boolean
+  sfwActive: boolean
   inviteParties: boolean
   overallRating: number
   invitesScore: number
   doorScore: number
   callsScore: number
   notes: string
+  break: boolean
+  breakTime: string
+  quickLink: string
   lastUpdated: string
 }
 
