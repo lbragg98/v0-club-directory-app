@@ -107,15 +107,6 @@ export default function HomePage() {
                     <p className="text-sm text-muted-foreground">Open Now</p>
                   </div>
                 </div>
-                <div className="flex items-center gap-3">
-                  <div className="p-2.5 rounded-xl bg-[var(--gold)]/10 ring-1 ring-[var(--gold)]/20">
-                    <Star className="h-5 w-5 text-[var(--gold)]" />
-                  </div>
-                  <div>
-                    <p className="text-2xl font-bold text-foreground">{stats.avgRating.toFixed(1)}</p>
-                    <p className="text-sm text-muted-foreground">Avg. Rating</p>
-                  </div>
-                </div>
               </div>
             )}
           </div>
