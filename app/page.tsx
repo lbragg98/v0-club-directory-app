@@ -75,7 +75,7 @@ export default function HomePage() {
       {/* Subtle gradient overlay */}
       <div className="fixed inset-0 bg-gradient-to-br from-primary/[0.02] via-transparent to-[var(--gold)]/[0.02] pointer-events-none" />
       
-      {/* Hero Section */}
+      {/* Hero */}
       <section className="relative border-b border-border/40">
         <div className="container mx-auto px-4 py-16 md:py-20">
           <div className="max-w-3xl space-y-6">
