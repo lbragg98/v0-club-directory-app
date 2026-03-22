@@ -46,9 +46,6 @@ export function ClubCard({ club, onClick }: ClubCardProps) {
             <h3 className="text-lg font-semibold text-foreground truncate">
               {club.name}
             </h3>
-            <p className="text-sm text-muted-foreground">
-              {club.type} Club on {club.platform}
-            </p>
           </div>
 
           <Badge
