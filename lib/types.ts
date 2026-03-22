@@ -4,7 +4,7 @@ export interface Club {
   type: 'Cat' | 'Dog' | 'Hybrid' | 'Invite'
   platform: 'Line' | 'Disc' | 'Both'
   status: 'Open' | 'Closed'
-  sfwFriendly: boolean
+  sfwFriendly: 'yes' | 'no' | 'cbc'
   sfwActive: boolean
   inviteParties: boolean
   overallRating: number
@@ -26,6 +26,7 @@ export interface ClubFilters {
   breakFilter: 'All' | 'Has Break' | 'No Break'
   openOnly: boolean
   sfwOnly: 'All Clubs' | 'Active SFW' | 'No Active SFW'
+  sfwFriendlyFilter: 'All Clubs' | 'SFW Friendly' | 'Not Friendly' | 'Case by Case'
   ratingFilter: 'All Clubs' | '1+' | '2+' | '3+' | '4+' | '5'
   invitePartiesOnly: boolean
 }
