@@ -141,7 +141,7 @@ export function FilterBar({ filters, onFiltersChange, className }: FilterBarProp
             }
           >
             <SelectTrigger className="w-[150px] h-10 bg-secondary/50 border-border/50 rounded-xl hover:bg-secondary/70 transition-colors">
-              <SelectValue placeholder="All Clubs" />
+              <SelectValue />
             </SelectTrigger>
             <SelectContent className="rounded-xl border-border/50">
               <SelectItem value="All Clubs">All Clubs</SelectItem>
