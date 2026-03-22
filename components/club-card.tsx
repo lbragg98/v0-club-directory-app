@@ -161,11 +161,8 @@ export function ClubCard({ club, onClick }: ClubCardProps) {
           {club.notes && (
             <div className="pt-1">
               <span className="text-xs uppercase tracking-wide text-foreground font-medium">
-                Comments
+                Click To See More Bitch
               </span>
-              <p className="text-xs text-primary mt-1">
-                Click to see more
-              </p>
             </div>
           )}
         </div>
