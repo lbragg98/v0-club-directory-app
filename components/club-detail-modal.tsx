@@ -84,9 +84,6 @@ export function ClubDetailModal({
               {club.status}
             </Badge>
           </div>
-          <DialogDescription className="text-muted-foreground">
-            {club.type} Club on {club.platform}
-          </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-6 pt-2">
