@@ -24,13 +24,16 @@ export default function AdminLoginPage() {
     setIsLoading(true)
 
     try {
+      console.log('[v0] Login: submitting credentials')
       const response = await fetch('/api/admin/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password }),
       })
 
+      console.log('[v0] Login: response status:', response.status)
       const data = await response.json()
+      console.log('[v0] Login: response data:', data)
 
       if (!response.ok) {
         setError(data.error || 'Login failed')
@@ -39,8 +42,10 @@ export default function AdminLoginPage() {
       }
 
       // Success - cookie is set, navigate to admin dashboard
+      console.log('[v0] Login: success, navigating to /admin')
       router.replace('/admin')
     } catch (err) {
+      console.error('[v0] Login: error:', err)
       setError('An unexpected error occurred')
       setIsLoading(false)
     }
