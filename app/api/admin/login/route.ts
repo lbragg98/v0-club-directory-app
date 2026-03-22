@@ -10,10 +10,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
     const { username, password } = body
 
-    console.log('[v0] Login attempt with username:', username)
-
     if (!username || !password) {
-      console.log('[v0] Login failed: missing username or password')
       return NextResponse.json(
         { error: 'Username and password are required' },
         { status: 400 }
@@ -22,10 +19,8 @@ export async function POST(request: NextRequest) {
 
     // Validate credentials (server-side only)
     const isValid = validateCredentials(username, password)
-    console.log('[v0] Login credentials valid:', isValid)
     
     if (!isValid) {
-      console.log('[v0] Login failed: invalid credentials')
       return NextResponse.json(
         { error: 'Invalid username or password' },
         { status: 401 }
@@ -33,7 +28,6 @@ export async function POST(request: NextRequest) {
     }
 
     // Create response and set cookie directly on it
-    console.log('[v0] Login successful, setting cookie')
     const response = NextResponse.json({ success: true })
     response.cookies.set(COOKIE_NAME, 'authenticated', {
       httpOnly: true,
@@ -42,7 +36,6 @@ export async function POST(request: NextRequest) {
       maxAge: COOKIE_MAX_AGE,
       path: '/',
     })
-    console.log('[v0] Cookie set, responding with success')
 
     return response
   } catch (error) {
