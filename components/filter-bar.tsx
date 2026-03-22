@@ -138,7 +138,7 @@ export function FilterBar({ filters, onFiltersChange, className }: FilterBarProp
               className="data-[state=checked]:bg-primary"
             />
             <Label htmlFor="sfw-only" className="text-sm cursor-pointer text-foreground/80 hover:text-foreground transition-colors">
-              SFW Friendly
+              Active SFW
             </Label>
           </div>
 

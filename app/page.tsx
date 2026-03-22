@@ -46,7 +46,7 @@ export default function HomePage() {
       if (filters.openOnly && club.status !== 'Open') {
         return false
       }
-      if (filters.sfwOnly && !club.sfwFriendly) {
+      if (filters.sfwOnly && !club.sfwActive) {
         return false
       }
       if (filters.invitePartiesOnly && !club.inviteParties) {
@@ -114,10 +114,6 @@ export default function HomePage() {
                   <div>
                     <p className="text-2xl font-bold text-foreground">{stats.avgRating.toFixed(1)}</p>
                     <p className="text-sm text-muted-foreground">Avg. Rating</p>
-                  </div>
-                </div>
-              </div>
-            )}
           </div>
         </div>
       </section>
