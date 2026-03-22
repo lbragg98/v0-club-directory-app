@@ -32,23 +32,16 @@ export default function AdminLoginPage() {
 
       const data = await response.json()
 
-      console.log('[v0] Login response:', response.status, data)
-
       if (!response.ok) {
         setError(data.error || 'Login failed')
+        setIsLoading(false)
         return
       }
 
-      console.log('[v0] Login successful, navigating to /admin')
-      // Small delay to ensure Set-Cookie is committed to the browser before navigation
-      setTimeout(() => {
-        console.log('[v0] Triggering router.replace to /admin')
-        router.replace('/admin')
-      }, 200)
+      // Success - cookie is set, navigate to admin dashboard
+      router.replace('/admin')
     } catch (err) {
       setError('An unexpected error occurred')
-      console.error('Login error:', err)
-    } finally {
       setIsLoading(false)
     }
   }
@@ -60,23 +53,26 @@ export default function AdminLoginPage() {
           <ArrowLeft className="h-4 w-4" />
           Back to Directory
         </Link>
+        
         <Card>
           <CardHeader className="text-center">
             <div className="mx-auto mb-4 p-3 rounded-full bg-primary/10 w-fit">
               <Lock className="h-6 w-6 text-primary" />
             </div>
-            <CardTitle className="text-2xl">Admin Login</CardTitle>
-            <CardDescription>Sign in to access the admin dashboard</CardDescription>
+            <CardTitle className="text-2xl">Master Admin Sign In</CardTitle>
+            <CardDescription>Enter your credentials to access the admin panel</CardDescription>
           </CardHeader>
+          
           <CardContent>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              {error && (
+                <Alert variant="destructive">
+                  <AlertCircle className="h-4 w-4" />
+                  <AlertDescription>{error}</AlertDescription>
+                </Alert>
+              )}
+              
               <FieldGroup>
-                {error && (
-                  <Alert variant="destructive">
-                    <AlertCircle className="h-4 w-4" />
-                    <AlertDescription>{error}</AlertDescription>
-                  </Alert>
-                )}
                 <Field>
                   <FieldLabel htmlFor="username">Username</FieldLabel>
                   <Input
@@ -87,8 +83,10 @@ export default function AdminLoginPage() {
                     placeholder="Enter username"
                     required
                     disabled={isLoading}
+                    autoComplete="username"
                   />
                 </Field>
+
                 <Field>
                   <FieldLabel htmlFor="password">Password</FieldLabel>
                   <Input
@@ -99,10 +97,19 @@ export default function AdminLoginPage() {
                     placeholder="Enter password"
                     required
                     disabled={isLoading}
+                    autoComplete="current-password"
                   />
                 </Field>
+
                 <Button type="submit" className="w-full" disabled={isLoading}>
-                  {isLoading ? <><Spinner className="mr-2 h-4 w-4" />Signing in...</> : 'Sign In'}
+                  {isLoading ? (
+                    <>
+                      <Spinner className="mr-2 h-4 w-4" />
+                      Signing in...
+                    </>
+                  ) : (
+                    'Sign In'
+                  )}
                 </Button>
               </FieldGroup>
             </form>

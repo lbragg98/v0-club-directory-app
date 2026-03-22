@@ -1,82 +1,50 @@
 import { cookies } from 'next/headers'
 
-const SESSION_COOKIE_NAME = 'admin_session'
-const SESSION_DURATION = 24 * 60 * 60 * 1000 // 24 hours
+// Cookie configuration
+const COOKIE_NAME = 'admin_auth'
+const COOKIE_MAX_AGE = 24 * 60 * 60 // 24 hours in seconds
 
-// In-memory store for additional admins (note: resets on server restart)
-// For persistence, integrate a database like Supabase or Neon
-const additionalAdmins: Map<string, string> = new Map()
-
-export function addAdmin(username: string, password: string): boolean {
-  if (!username || !password) return false
-  additionalAdmins.set(username, password)
-  return true
-}
-
-export function getAdminCount(): number {
-  // Primary admin from env + additional admins
-  return 1 + additionalAdmins.size
-}
-
-export async function createSession(): Promise<string> {
-  const expiresAt = Date.now() + SESSION_DURATION
-  const sessionData = JSON.stringify({ isAuthenticated: true, expiresAt })
-  const encoded = Buffer.from(sessionData).toString('base64')
-  
+export async function setAuthCookie(value: string) {
   const cookieStore = await cookies()
-  cookieStore.set(SESSION_COOKIE_NAME, encoded, {
+  cookieStore.set(COOKIE_NAME, value, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'lax',
-    expires: new Date(expiresAt),
+    maxAge: COOKIE_MAX_AGE,
     path: '/',
   })
-  
-  return encoded
 }
 
-export async function getSession(): Promise<{ isAuthenticated: boolean; expiresAt: number } | null> {
+export async function getAuthCookie() {
   const cookieStore = await cookies()
-  const sessionCookie = cookieStore.get(SESSION_COOKIE_NAME)
-  
-  if (!sessionCookie?.value) {
-    return null
-  }
-  
-  try {
-    const decoded = Buffer.from(sessionCookie.value, 'base64').toString('utf-8')
-    const session = JSON.parse(decoded)
-    
-    if (session.expiresAt < Date.now()) {
-      await destroySession()
-      return null
-    }
-    
-    return session
-  } catch {
-    return null
-  }
+  return cookieStore.get(COOKIE_NAME)?.value || null
 }
 
-export async function destroySession(): Promise<void> {
+export async function clearAuthCookie() {
   const cookieStore = await cookies()
-  cookieStore.delete(SESSION_COOKIE_NAME)
+  cookieStore.delete(COOKIE_NAME)
 }
 
 export function validateCredentials(username: string, password: string): boolean {
-  // Check primary admin from environment
+  // Validate against environment variables only
+  // Server-side validation only - credentials never sent to client
   const validUsername = process.env.ADMIN_USERNAME
   const validPassword = process.env.ADMIN_PASSWORD
-  
-  if (validUsername && validPassword && username === validUsername && password === validPassword) {
-    return true
+
+  if (!validUsername || !validPassword) {
+    console.error('[v0] Admin credentials not configured in environment')
+    return false
   }
+
+  const isValid = username === validUsername && password === validPassword
   
-  // Check additional admins stored in memory
-  const storedPassword = additionalAdmins.get(username)
-  if (storedPassword && storedPassword === password) {
-    return true
+  if (process.env.NODE_ENV === 'development') {
+    if (!isValid) {
+      console.log('[v0] Login failed: invalid credentials')
+    } else {
+      console.log('[v0] Login successful for admin user')
+    }
   }
-  
-  return false
+
+  return isValid
 }

@@ -1,11 +1,8 @@
 import { NextResponse } from 'next/server'
-import { validateCredentials } from '@/lib/auth'
-import { cookies } from 'next/headers'
+import type { NextRequest } from 'next/server'
+import { validateCredentials, setAuthCookie } from '@/lib/auth'
 
-const SESSION_COOKIE_NAME = 'admin_session'
-const SESSION_DURATION = 24 * 60 * 60 * 1000 // 24 hours
-
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
     const { username, password } = body
@@ -17,37 +14,20 @@ export async function POST(request: Request) {
       )
     }
 
-    const isValid = validateCredentials(username, password)
-
-    if (!isValid) {
+    // Validate credentials (server-side only)
+    if (!validateCredentials(username, password)) {
       return NextResponse.json(
-        { error: 'Invalid credentials' },
+        { error: 'Invalid username or password' },
         { status: 401 }
       )
     }
 
-    // Build session payload
-    const session = {
-      username,
-      createdAt: Date.now(),
-      expiresAt: Date.now() + SESSION_DURATION,
-    }
-    const sessionValue = Buffer.from(JSON.stringify(session)).toString('base64')
+    // Set auth cookie
+    await setAuthCookie('authenticated')
 
-    // Success: Set the session cookie and return success JSON
-    // The client will then use router.replace('/admin') to navigate
-    const response = NextResponse.json({ success: true })
-    response.cookies.set(SESSION_COOKIE_NAME, sessionValue, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      maxAge: SESSION_DURATION / 1000,
-      path: '/',
-    })
-
-    return response
+    return NextResponse.json({ success: true })
   } catch (error) {
-    console.error('Login error:', error)
+    console.error('[v0] Login error:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
