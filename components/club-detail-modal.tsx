@@ -1,5 +1,7 @@
 'use client'
 
+import { useState } from 'react'
+
 import {
   Dialog,
   DialogContent,
@@ -22,6 +24,8 @@ import {
   Clock,
   Zap,
   User,
+  Copy,
+  Check,
 } from 'lucide-react'
 import type { Club } from '@/lib/types'
 
@@ -42,6 +46,23 @@ export function ClubDetailModal({
   open,
   onOpenChange,
 }: ClubDetailModalProps) {
+  const [copiedLink, setCopiedLink] = useState(false)
+
+  async function handleCopyLink() {
+    if (!club?.quickLink) return
+
+    try {
+      await navigator.clipboard.writeText(club.quickLink)
+      setCopiedLink(true)
+
+      setTimeout(() => {
+        setCopiedLink(false)
+      }, 1500)
+    } catch (error) {
+      console.error('Failed to copy link:', error)
+    }
+  }
+
   if (!club) return null
 
   const TypeIcon = typeIcons[club.type] || Users
@@ -80,15 +101,15 @@ export function ClubDetailModal({
 
           {/* Type / Platform badges */}
           <div className="flex flex-wrap gap-2">
-            <Badge 
-              variant="outline" 
+            <Badge
+              variant="outline"
               className="gap-1.5 text-sm rounded-lg bg-secondary/50 border-border/50 text-secondary-foreground"
             >
               <TypeIcon className="h-4 w-4" />
               {club.type}
             </Badge>
-            <Badge 
-              variant="outline" 
+            <Badge
+              variant="outline"
               className="gap-1.5 text-sm rounded-lg bg-secondary/50 border-border/50 text-secondary-foreground"
             >
               {club.platform === 'Line' && <MessageCircle className="h-4 w-4" />}
@@ -96,8 +117,8 @@ export function ClubDetailModal({
               {club.platform}
             </Badge>
             {club.sfwActive && (
-              <Badge 
-                variant="outline" 
+              <Badge
+                variant="outline"
                 className="gap-1.5 text-sm rounded-lg bg-primary/10 border-primary/20 text-primary"
               >
                 <ShieldCheck className="h-4 w-4" />
@@ -105,8 +126,8 @@ export function ClubDetailModal({
               </Badge>
             )}
             {club.break === 'yes' && (
-              <Badge 
-                variant="outline" 
+              <Badge
+                variant="outline"
                 className="gap-1.5 text-sm rounded-lg bg-[var(--gold)]/10 border-[var(--gold)]/20 text-[var(--gold)]"
               >
                 <Clock className="h-4 w-4" />
@@ -114,8 +135,8 @@ export function ClubDetailModal({
               </Badge>
             )}
             {club.break === 'no' && (
-              <Badge 
-                variant="outline" 
+              <Badge
+                variant="outline"
                 className="gap-1.5 text-sm rounded-lg bg-muted/50 border-border/50 text-muted-foreground"
               >
                 <Clock className="h-4 w-4" />
