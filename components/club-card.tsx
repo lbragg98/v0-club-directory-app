@@ -158,29 +158,26 @@ export function ClubCard({ club, onClick }: ClubCardProps) {
               <p>{club.sfwFriendly ? 'Friendly' : 'Not Friendly'}</p>
             </div>
           </div>
-
           {club.notes && (
             <div className="pt-1">
               <span className="text-xs uppercase tracking-wide text-foreground font-medium">
-                Comments
+                Click to See More Bitch
               </span>
-              <p className="text-xs text-foreground/80 leading-relaxed mt-1 line-clamp-3">
-                {club.notes}
-              </p>
-            </div>
-          )}
-        </div>
-
-        {/* Rankings */}
-        <div className="space-y-2.5 pt-4 mt-4 border-t border-border/50 bg-secondary/20 rounded-lg px-3 pb-3">
-          <h4 className="text-sm font-semibold text-foreground pt-3">
-            Rankings
-          </h4>
-          <MiniRatingBar label="Invites" value={club.invitesScore} />
-          <MiniRatingBar label="Door" value={club.doorScore} />
-          <MiniRatingBar label="Calls" value={club.callsScore} />
-        </div>
+            </p>
+          </div>
+        )}
       </div>
-    </button>
+
+      {/* Rankings */}
+      <div className="space-y-2.5 pt-4 mt-4 border-t border-border/50 bg-secondary/20 rounded-lg px-3 pb-3">
+        <h4 className="text-sm font-semibold text-foreground pt-3">
+          Rankings
+        </h4>
+        <MiniRatingBar label="Invites" value={club.invitesScore} />
+        <MiniRatingBar label="Door" value={club.doorScore} />
+        <MiniRatingBar label="Calls" value={club.callsScore} />
+      </div>
+    </div>
+    </button >
   )
 }
