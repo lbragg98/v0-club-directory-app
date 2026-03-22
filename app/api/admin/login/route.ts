@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-import { validateCredentials, setAuthCookie } from '@/lib/auth'
+import { validateCredentials } from '@/lib/auth'
+
+const COOKIE_NAME = 'admin_auth'
+const COOKIE_MAX_AGE = 24 * 60 * 60 // 24 hours
 
 export async function POST(request: NextRequest) {
   try {
@@ -22,10 +25,17 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Set auth cookie
-    await setAuthCookie('authenticated')
+    // Create response and set cookie directly on it
+    const response = NextResponse.json({ success: true })
+    response.cookies.set(COOKIE_NAME, 'authenticated', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: COOKIE_MAX_AGE,
+      path: '/',
+    })
 
-    return NextResponse.json({ success: true })
+    return response
   } catch (error) {
     console.error('[v0] Login error:', error)
     return NextResponse.json(
