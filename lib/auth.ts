@@ -26,25 +26,12 @@ export async function clearAuthCookie() {
 }
 
 export function validateCredentials(username: string, password: string): boolean {
-  // Validate against environment variables only
-  // Server-side validation only - credentials never sent to client
   const validUsername = process.env.ADMIN_USERNAME
   const validPassword = process.env.ADMIN_PASSWORD
 
   if (!validUsername || !validPassword) {
-    console.error('[v0] Admin credentials not configured in environment')
     return false
   }
 
-  const isValid = username === validUsername && password === validPassword
-  
-  if (process.env.NODE_ENV === 'development') {
-    if (!isValid) {
-      console.log('[v0] Login failed: invalid credentials')
-    } else {
-      console.log('[v0] Login successful for admin user')
-    }
-  }
-
-  return isValid
+  return username === validUsername && password === validPassword
 }

@@ -5,33 +5,17 @@ const COOKIE_NAME = 'admin_auth'
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
+  const authCookie = request.cookies.get(COOKIE_NAME)
+  const isAuthenticated = !!authCookie?.value
 
-  // Only protect /admin routes (not /admin/login)
-  if (pathname.startsWith('/admin') && !pathname.startsWith('/admin/login')) {
-    const authCookie = request.cookies.get(COOKIE_NAME)
-
-    if (!authCookie?.value) {
-      // No auth cookie - redirect to login
-      if (process.env.NODE_ENV === 'development') {
-        console.log('[v0] Middleware: No auth cookie, redirecting to login')
-      }
-      return NextResponse.redirect(new URL('/admin/login', request.url))
-    }
-
-    if (process.env.NODE_ENV === 'development') {
-      console.log('[v0] Middleware: Auth cookie found, allowing access')
-    }
+  // If accessing /admin/login while already authenticated, redirect to dashboard
+  if (pathname === '/admin/login' && isAuthenticated) {
+    return NextResponse.redirect(new URL('/admin', request.url))
   }
 
-  // Allow /admin/login to redirect to /admin if already authenticated
-  if (pathname === '/admin/login') {
-    const authCookie = request.cookies.get(COOKIE_NAME)
-    if (authCookie?.value) {
-      if (process.env.NODE_ENV === 'development') {
-        console.log('[v0] Middleware: Already authenticated, redirecting from login to admin')
-      }
-      return NextResponse.redirect(new URL('/admin', request.url))
-    }
+  // If accessing /admin (not login) without auth, redirect to login
+  if (pathname.startsWith('/admin') && pathname !== '/admin/login' && !isAuthenticated) {
+    return NextResponse.redirect(new URL('/admin/login', request.url))
   }
 
   return NextResponse.next()
