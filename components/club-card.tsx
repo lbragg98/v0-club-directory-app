@@ -161,23 +161,25 @@ export function ClubCard({ club, onClick }: ClubCardProps) {
           {club.notes && (
             <div className="pt-1">
               <span className="text-xs uppercase tracking-wide text-foreground font-medium">
-                Click to See More Bitch
+                Comments
               </span>
-            </p>
-          </div>
-        )}
-      </div>
+              <p className="text-xs text-primary mt-1">
+                Click to see more
+              </p>
+            </div>
+          )}
+        </div>
 
-      {/* Rankings */}
-      <div className="space-y-2.5 pt-4 mt-4 border-t border-border/50 bg-secondary/20 rounded-lg px-3 pb-3">
-        <h4 className="text-sm font-semibold text-foreground pt-3">
-          Rankings
-        </h4>
-        <MiniRatingBar label="Invites" value={club.invitesScore} />
-        <MiniRatingBar label="Door" value={club.doorScore} />
-        <MiniRatingBar label="Calls" value={club.callsScore} />
+        {/* Rankings */}
+        <div className="space-y-2.5 pt-4 mt-4 border-t border-border/50 bg-secondary/20 rounded-lg px-3 pb-3">
+          <h4 className="text-sm font-semibold text-foreground pt-3">
+            Rankings
+          </h4>
+          <MiniRatingBar label="Invites" value={club.invitesScore} />
+          <MiniRatingBar label="Door" value={club.doorScore} />
+          <MiniRatingBar label="Calls" value={club.callsScore} />
+        </div>
       </div>
-    </div>
     </button >
   )
 }
