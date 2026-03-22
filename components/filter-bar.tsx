@@ -36,6 +36,7 @@ export function FilterBar({ filters, onFiltersChange, className }: FilterBarProp
       platform: 'All',
       breakFilter: 'All',
       sfwFilter: 'All Clubs',
+      ratingFilter: 'All Clubs'
       openOnly: false,
       invitePartiesOnly: false,
     })
@@ -47,6 +48,7 @@ export function FilterBar({ filters, onFiltersChange, className }: FilterBarProp
     filters.platform !== 'All' ||
     filters.breakFilter !== 'All' ||
     filters.sfwFilter !== 'All Clubs' ||
+    filters.ratingFilter !== 'All Clubs' ||
     filters.openOnly ||
     filters.invitePartiesOnly
 
@@ -147,6 +149,24 @@ export function FilterBar({ filters, onFiltersChange, className }: FilterBarProp
               <SelectItem value="All Clubs">All Clubs</SelectItem>
               <SelectItem value="Active SFW">Active SFW</SelectItem>
               <SelectItem value="No Active SFW">No Active SFW</SelectItem>
+            </SelectContent>
+          </Select>
+          <Select
+            value={filters.ratingFilter}
+            onValueChange={(value) =>
+              updateFilter('ratingFilter', value as ClubFilters['ratingFilter'])
+            }
+          >
+            <SelectTrigger className="w-[140px] h-10 bg-secondary/50 border-border/50 rounded-xl hover:bg-secondary/70 transition-colors">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent className="rounded-xl border-border/50">
+              <SelectItem value="All Clubs">All Clubs</SelectItem>
+              <SelectItem value="1+">1+</SelectItem>
+              <SelectItem value="2+">2+</SelectItem>
+              <SelectItem value="3+">3+</SelectItem>
+              <SelectItem value="4+">4+</SelectItem>
+              <SelectItem value="5">5</SelectItem>
             </SelectContent>
           </Select>
         </div>
