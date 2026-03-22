@@ -79,14 +79,9 @@ export default function HomePage() {
       <section className="relative border-b border-border/40">
         <div className="container mx-auto px-4 py-16 md:py-20">
           <div className="max-w-3xl space-y-6">
-            <div className="space-y-2">
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-foreground">
-                EC Club Database
-              </h1>
-              <p className="text-sm text-muted-foreground/70">
-                created by IGN Luc and Humble
-              </p>
-            </div>
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-foreground">
+              EC Club Database
+            </h1>
             <p className="text-lg md:text-xl text-muted-foreground leading-relaxed max-w-2xl">
               Discover and explore the best clubs with detailed ratings, reviews, and real-time status updates.
             </p>
