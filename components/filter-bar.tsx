@@ -40,6 +40,7 @@ export function FilterBar({ filters, onFiltersChange, className }: FilterBarProp
       breakFilter: 'All',
       sfwFilter: 'All Clubs',
       ratingFilter: 'All Clubs',
+      sfwFriendlyFilter: 'All Clubs',
       openOnly: false,
       invitePartiesOnly: false,
     })
@@ -52,6 +53,7 @@ export function FilterBar({ filters, onFiltersChange, className }: FilterBarProp
     filters.breakFilter !== 'All' ||
     filters.sfwFilter !== 'All Clubs' ||
     filters.ratingFilter !== 'All Clubs' ||
+    filters.sfwFriendlyFilter !== 'All Clubs' ||
     filters.openOnly ||
     filters.invitePartiesOnly
 
@@ -185,6 +187,23 @@ export function FilterBar({ filters, onFiltersChange, className }: FilterBarProp
                   <SelectItem value="All Clubs">SFW Status</SelectItem>
                   <SelectItem value="Active SFW">Active SFW</SelectItem>
                   <SelectItem value="No Active SFW">No Active SFW</SelectItem>
+                </SelectContent>
+              </Select>
+
+              <Select
+                value={filters.sfwFriendlyFilter}
+                onValueChange={(value) =>
+                  updateFilter('sfwFriendlyFilter', value as ClubFilters['sfwFriendlyFilter'])
+                }
+              >
+                <SelectTrigger className="w-full sm:w-[160px] h-10 bg-secondary/50 border-border/50 rounded-xl hover:bg-secondary/70 transition-colors">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="rounded-xl border-border/50">
+                  <SelectItem value="All Clubs">SFW Friendly</SelectItem>
+                  <SelectItem value="SFW Friendly">SFW Friendly</SelectItem>
+                  <SelectItem value="Not Friendly">Not Friendly</SelectItem>
+                  <SelectItem value="Case by Case">Case by Case</SelectItem>
                 </SelectContent>
               </Select>
             </div>
