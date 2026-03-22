@@ -53,7 +53,7 @@ export function FilterBar({ filters, onFiltersChange, className }: FilterBarProp
   return (
     <div
       className={cn(
-        'bg-card/90 backdrop-blur-xl',
+        'bg-[#2f3136] sm:bg-card backdrop-blur-xl',
         'border border-border/50 rounded-2xl',
         'p-5 shadow-lg shadow-black/5',
         className
