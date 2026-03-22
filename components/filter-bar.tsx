@@ -160,7 +160,7 @@ export function FilterBar({ filters, onFiltersChange, className }: FilterBarProp
               <SelectValue />
             </SelectTrigger>
             <SelectContent className="rounded-xl border-border/50">
-              <SelectItem value="All Clubs">All Clubs</SelectItem>
+              <SelectItem value="All Clubs">All Ratings</SelectItem>
               <SelectItem value="1+">1+</SelectItem>
               <SelectItem value="2+">2+</SelectItem>
               <SelectItem value="3+">3+</SelectItem>
