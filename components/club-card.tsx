@@ -88,17 +88,14 @@ export function ClubCard({ club, onClick }: ClubCardProps) {
             {club.platform}
           </Badge>
 
-          <Badge
-            variant="outline"
-            className={cn(
-              'rounded-lg border',
-              club.sfwFriendly
-                ? 'bg-secondary/70 border-border text-secondary-foreground'
-                : 'bg-muted/70 border-border text-muted-foreground'
-            )}
-          >
-            SFW Friendly
-          </Badge>
+          {club.sfwFriendly && (
+            <Badge
+              variant="outline"
+              className="rounded-lg border bg-secondary/70 border-border text-secondary-foreground"
+            >
+              SFW Friendly
+            </Badge>
+          )}
 
           {club.sfwActive && (
             <Badge
