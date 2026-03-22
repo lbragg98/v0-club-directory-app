@@ -36,7 +36,7 @@ export function FilterBar({ filters, onFiltersChange, className }: FilterBarProp
       platform: 'All',
       breakFilter: 'All',
       sfwFilter: 'All Clubs',
-      ratingFilter: 'All Clubs'
+      ratingFilter: 'All Clubs',
       openOnly: false,
       invitePartiesOnly: false,
     })
@@ -62,7 +62,6 @@ export function FilterBar({ filters, onFiltersChange, className }: FilterBarProp
       )}
     >
       <div className="flex flex-col gap-5">
-        {/* Search Input */}
         <div className="relative">
           <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
@@ -87,7 +86,6 @@ export function FilterBar({ filters, onFiltersChange, className }: FilterBarProp
           )}
         </div>
 
-        {/* Dropdowns */}
         <div className="flex flex-wrap gap-3">
           <Select
             value={filters.type}
@@ -143,7 +141,7 @@ export function FilterBar({ filters, onFiltersChange, className }: FilterBarProp
             }
           >
             <SelectTrigger className="w-[150px] h-10 bg-secondary/50 border-border/50 rounded-xl hover:bg-secondary/70 transition-colors">
-              <SelectValue placeholder="SFW Status" />
+              <SelectValue />
             </SelectTrigger>
             <SelectContent className="rounded-xl border-border/50">
               <SelectItem value="All Clubs">All Clubs</SelectItem>
@@ -151,6 +149,7 @@ export function FilterBar({ filters, onFiltersChange, className }: FilterBarProp
               <SelectItem value="No Active SFW">No Active SFW</SelectItem>
             </SelectContent>
           </Select>
+
           <Select
             value={filters.ratingFilter}
             onValueChange={(value) =>
@@ -171,7 +170,6 @@ export function FilterBar({ filters, onFiltersChange, className }: FilterBarProp
           </Select>
         </div>
 
-        {/* Toggle Switches */}
         <div className="flex flex-wrap items-center gap-x-8 gap-y-3">
           <div className="flex items-center gap-2.5">
             <Switch

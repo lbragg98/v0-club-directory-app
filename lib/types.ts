@@ -26,6 +26,7 @@ export interface ClubFilters {
   breakFilter: 'All' | 'Has Break' | 'No Break'
   openOnly: boolean
   sfwOnly: 'All Clubs' | 'Active SFW' | 'No Active SFW'
+  ratingFilter: 'All Clubs' | '1+' | '2+' | '3+' | '4+' | '5'
   invitePartiesOnly: boolean
 }
 
