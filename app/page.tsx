@@ -7,7 +7,7 @@ import { ClubCardSkeleton } from '@/components/club-card-skeleton'
 import { FilterBar } from '@/components/filter-bar'
 import { ClubDetailModal } from '@/components/club-detail-modal'
 import { Button } from '@/components/ui/button'
-import { AlertCircle, RefreshCw, Users, Star, Sparkles, Settings, RotateCcw } from 'lucide-react'
+import { AlertCircle, RefreshCw, Users, Star, Sparkles, Settings } from 'lucide-react'
 import Link from 'next/link'
 import type { Club, ClubFilters } from '@/lib/types'
 
@@ -30,20 +30,6 @@ export default function HomePage() {
     '/api/clubs',
     fetcher
   )
-  const { data: adminData } = useSWR<{ isAdmin: boolean }>('/api/admin/me', fetcher)
-  const isAdmin = adminData?.isAdmin ?? false
-
-  const [isRefreshing, setIsRefreshing] = useState(false)
-
-  const handleRefresh = async () => {
-    setIsRefreshing(true)
-    try {
-      await fetch('/api/clubs/refresh', { method: 'POST' })
-      await mutate()
-    } finally {
-      setIsRefreshing(false)
-    }
-  }
 
   const clubs = data?.clubs ?? []
 
@@ -114,18 +100,6 @@ export default function HomePage() {
                 Club Directory
               </h1>
               <div className="flex items-center gap-2">
-                {isAdmin && (
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="gap-2"
-                    onClick={handleRefresh}
-                    disabled={isRefreshing}
-                  >
-                    <RotateCcw className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
-                    {isRefreshing ? 'Refreshing...' : 'Refresh'}
-                  </Button>
-                )}
                 <Link href="/admin">
                   <Button variant="outline" size="sm" className="gap-2">
                     <Settings className="h-4 w-4" />
