@@ -95,7 +95,7 @@ export function FilterBar({ filters, onFiltersChange, className }: FilterBarProp
           onClick={() => setFiltersOpen((prev) => !prev)}
           className="w-full sm:w-auto rounded-xl border-border/50 bg-secondary/50 hover:bg-secondary/70"
         >
-          Filter
+          Filters
         </Button>
 
         <div
