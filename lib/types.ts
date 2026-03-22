@@ -25,7 +25,7 @@ export interface ClubFilters {
   platform: 'All' | 'Line' | 'Disc' | 'Both'
   breakFilter: 'All' | 'Has Break' | 'No Break'
   openOnly: boolean
-  sfwOnly: boolean
+  sfwOnly: 'All Clubs' | 'Active SFW' | 'No Active SFW'
   invitePartiesOnly: boolean
 }
 

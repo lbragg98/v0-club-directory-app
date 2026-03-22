@@ -35,8 +35,8 @@ export function FilterBar({ filters, onFiltersChange, className }: FilterBarProp
       type: 'All',
       platform: 'All',
       breakFilter: 'All',
+      sfwFilter: 'All Clubs',
       openOnly: false,
-      sfwOnly: false,
       invitePartiesOnly: false,
     })
   }
@@ -46,8 +46,8 @@ export function FilterBar({ filters, onFiltersChange, className }: FilterBarProp
     filters.type !== 'All' ||
     filters.platform !== 'All' ||
     filters.breakFilter !== 'All' ||
+    filters.sfwFilter !== 'All Clubs' ||
     filters.openOnly ||
-    filters.sfwOnly ||
     filters.invitePartiesOnly
 
   return (
@@ -133,6 +133,22 @@ export function FilterBar({ filters, onFiltersChange, className }: FilterBarProp
               <SelectItem value="No Break">No Break</SelectItem>
             </SelectContent>
           </Select>
+
+          <Select
+            value={filters.sfwFilter}
+            onValueChange={(value) =>
+              updateFilter('sfwFilter', value as ClubFilters['sfwFilter'])
+            }
+          >
+            <SelectTrigger className="w-[150px] h-10 bg-secondary/50 border-border/50 rounded-xl hover:bg-secondary/70 transition-colors">
+              <SelectValue placeholder="SFW Status" />
+            </SelectTrigger>
+            <SelectContent className="rounded-xl border-border/50">
+              <SelectItem value="All Clubs">All Clubs</SelectItem>
+              <SelectItem value="Active SFW">Active SFW</SelectItem>
+              <SelectItem value="No Active SFW">No Active SFW</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
 
         {/* Toggle Switches */}
@@ -146,18 +162,6 @@ export function FilterBar({ filters, onFiltersChange, className }: FilterBarProp
             />
             <Label htmlFor="open-only" className="text-sm cursor-pointer text-foreground/80 hover:text-foreground transition-colors">
               Open Only
-            </Label>
-          </div>
-
-          <div className="flex items-center gap-2.5">
-            <Switch
-              id="sfw-only"
-              checked={filters.sfwOnly}
-              onCheckedChange={(checked) => updateFilter('sfwOnly', checked)}
-              className="data-[state=checked]:bg-primary"
-            />
-            <Label htmlFor="sfw-only" className="text-sm cursor-pointer text-foreground/80 hover:text-foreground transition-colors">
-              Active SFW
             </Label>
           </div>
 

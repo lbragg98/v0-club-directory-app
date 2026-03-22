@@ -18,7 +18,7 @@ const defaultFilters: ClubFilters = {
   platform: 'All',
   breakFilter: 'All',
   openOnly: false,
-  sfwOnly: false,
+  sfwOnly: 'All Clubs',
   invitePartiesOnly: false,
 }
 
@@ -59,7 +59,10 @@ export default function HomePage() {
       if (filters.openOnly && club.status !== 'Open') {
         return false
       }
-      if (filters.sfwOnly && !club.sfwActive) {
+      if (filters.sfwFilter === 'Active SFW' && !club.sfwActive) {
+        return false
+      }
+      if (filters.sfwFilter === 'No Active SFW' && club.sfwActive) {
         return false
       }
       if (filters.invitePartiesOnly && !club.inviteParties) {
