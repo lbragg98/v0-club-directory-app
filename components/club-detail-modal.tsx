@@ -181,13 +181,13 @@ export function ClubDetailModal({
                     <p className="text-sm text-muted-foreground break-all">{club.quickLink}</p>
                     <button
                       onClick={handleCopyLink}
-                      className="shrink-0 flex items-center gap-1 px-2 py-0.5 rounded-md bg-secondary/60 ring-1 ring-border/40 text-xs text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
+                      className="shrink-0 flex items-center justify-center px-2 py-1 rounded-md bg-secondary/60 ring-1 ring-border/40 text-xs text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
                       title="Copy to clipboard"
                     >
                       {copiedLink ? (
-                        <><Check className="h-3 w-3 text-success" /><span className="text-success">Copied</span></>
+                        <Check className="h-3 w-3 text-success" />
                       ) : (
-                        <><Copy className="h-3 w-3" /><span>Copy</span></>
+                        <Copy className="h-3 w-3" />
                       )}
                     </button>
                   </div>
