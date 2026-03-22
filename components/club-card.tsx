@@ -1,17 +1,23 @@
 'use client'
 
-import { cn } from '@/lib/utils'
-import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { StarRating } from '@/components/star-rating'
 import { MiniRatingBar } from '@/components/mini-rating-bar'
-import { Cat, Dog, MessageCircle, Phone, Users, ShieldCheck, Clock } from 'lucide-react'
+import { cn } from '@/lib/utils'
+import {
+  Cat,
+  Dog,
+  Users,
+  MessageCircle,
+  Phone,
+  ShieldCheck,
+  Clock,
+} from 'lucide-react'
 import type { Club } from '@/lib/types'
 
 interface ClubCardProps {
   club: Club
   onClick?: () => void
-  className?: string
 }
 
 const typeIcons = {
@@ -20,125 +26,167 @@ const typeIcons = {
   Hybrid: Users,
 }
 
-export function ClubCard({ club, onClick, className }: ClubCardProps) {
+export function ClubCard({ club, onClick }: ClubCardProps) {
   const TypeIcon = typeIcons[club.type] || Users
 
   return (
-    <Card
+    <button
       onClick={onClick}
       className={cn(
-        'group relative overflow-hidden cursor-pointer',
-        'bg-card/80 backdrop-blur-sm',
-        'border-border/50 hover:border-primary/30',
-        'rounded-2xl',
-        'shadow-lg shadow-black/5 hover:shadow-xl hover:shadow-primary/5',
-        'transition-all duration-300 ease-out',
-        'hover:-translate-y-1',
-        className
+        'w-full text-left rounded-2xl border p-5 transition-all duration-200',
+        'bg-card backdrop-blur-sm',
+        'border-border hover:border-primary/40',
+        'hover:shadow-lg hover:shadow-black/20 hover:-translate-y-0.5'
       )}
     >
-      {/* Subtle gradient overlay on hover */}
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/[0.03] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
-      
-      {/* Top accent line */}
-      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-      
-      <CardHeader className="pb-3 relative">
-        {/* Club Name and Status */}
+      <div className="space-y-4">
+        {/* Top row */}
         <div className="flex items-start justify-between gap-3">
-          <div className="flex-1 min-w-0">
-            <h3 className="font-semibold text-lg truncate text-foreground group-hover:text-primary transition-colors duration-200">
-              {club.name || 'Unnamed Club'}
+          <div className="min-w-0">
+            <h3 className="text-lg font-semibold text-foreground truncate">
+              {club.name}
             </h3>
-            <div className="flex items-center gap-2 mt-1.5">
-              <StarRating rating={club.overallRating} size="sm" />
-              <span className="text-sm font-medium text-[var(--gold)]">
-                {club.overallRating.toFixed(1)}
-              </span>
-            </div>
+            <p className="text-sm text-muted-foreground">
+              {club.type} Club on {club.platform}
+            </p>
           </div>
-          
-          {/* Status Badge */}
+
           <Badge
             className={cn(
-              'shrink-0 font-medium px-2.5 py-0.5 rounded-lg border-0',
+              'shrink-0 rounded-lg px-2.5 py-0.5 border-0 font-medium',
               club.status === 'Open'
-                ? 'bg-success/15 text-success'
-                : 'bg-muted text-muted-foreground'
+                ? 'bg-green-500/15 text-green-400'
+                : 'bg-muted/70 text-muted-foreground'
             )}
           >
             {club.status}
           </Badge>
         </div>
 
-        {/* Type & Platform Badges */}
-        <div className="flex flex-wrap items-center gap-1.5 mt-4">
-          <Badge 
-            variant="outline" 
-            className={cn(
-              'gap-1.5 rounded-lg bg-secondary/50 border-border/50 text-secondary-foreground',
-              'hover:bg-secondary/70 transition-colors'
-            )}
+        {/* Overall rating */}
+        <div className="flex items-center gap-3">
+          <StarRating rating={club.overallRating} size="md" />
+          <span className="text-lg font-bold text-[var(--gold)]">
+            {club.overallRating.toFixed(1)}
+          </span>
+          <span className="text-sm text-muted-foreground">/ 5.0</span>
+        </div>
+
+        {/* Badges */}
+        <div className="flex flex-wrap gap-2">
+          <Badge
+            variant="outline"
+            className="gap-1.5 rounded-lg bg-secondary/70 border-border text-secondary-foreground"
           >
             <TypeIcon className="h-3 w-3" />
             {club.type}
           </Badge>
-          <Badge 
-            variant="outline" 
-            className="gap-1.5 rounded-lg bg-secondary/50 border-border/50 text-secondary-foreground hover:bg-secondary/70 transition-colors"
+
+          <Badge
+            variant="outline"
+            className="gap-1.5 rounded-lg bg-secondary/70 border-border text-secondary-foreground"
           >
             {club.platform === 'Line' && <MessageCircle className="h-3 w-3" />}
             {club.platform === 'Disc' && <Phone className="h-3 w-3" />}
             {club.platform}
           </Badge>
+
+          <Badge
+            variant="outline"
+            className={cn(
+              'rounded-lg border',
+              club.sfwFriendly
+                ? 'bg-secondary/70 border-border text-secondary-foreground'
+                : 'bg-muted/70 border-border text-muted-foreground'
+            )}
+          >
+            SFW Friendly
+          </Badge>
+
           {club.sfwActive && (
-            <Badge 
-              variant="outline" 
-              className="gap-1.5 rounded-lg bg-primary/10 border-primary/20 text-primary hover:bg-primary/15 transition-colors"
+            <Badge
+              variant="outline"
+              className="gap-1.5 rounded-lg bg-primary/10 border-primary/20 text-primary"
             >
               <ShieldCheck className="h-3 w-3" />
-              SFW
+              Active SFW
             </Badge>
           )}
+
           {club.break === 'yes' && (
-            <Badge 
-              variant="outline" 
-              className="gap-1.5 rounded-lg bg-[var(--gold)]/10 border-[var(--gold)]/20 text-[var(--gold)] hover:bg-[var(--gold)]/15 transition-colors"
+            <Badge
+              variant="outline"
+              className="gap-1.5 rounded-lg bg-secondary/70 border-border text-secondary-foreground"
             >
               <Clock className="h-3 w-3" />
               Break
             </Badge>
           )}
-          {club.break === 'no' && (
-            <Badge 
-              variant="outline" 
-              className="gap-1.5 rounded-lg bg-muted/50 border-border/50 text-muted-foreground"
-            >
-              <Clock className="h-3 w-3" />
-              No Break
-            </Badge>
+        </div>
+
+        {/* Description */}
+        <div className="space-y-2 text-sm">
+          <div className="grid grid-cols-2 gap-3 text-muted-foreground">
+            <div>
+              <span className="text-xs uppercase tracking-wide text-foreground font-medium">
+                Break
+              </span>
+              <p>{club.break === 'yes' ? 'Yes' : 'No'}</p>
+            </div>
+
+            {club.breakTime && (
+              <div>
+                <span className="text-xs uppercase tracking-wide text-foreground font-medium">
+                  Break Time
+                </span>
+                <p>{club.breakTime}</p>
+              </div>
+            )}
+
+            <div>
+              <span className="text-xs uppercase tracking-wide text-foreground font-medium">
+                Club Type
+              </span>
+              <p>{club.type}</p>
+            </div>
+
+            <div>
+              <span className="text-xs uppercase tracking-wide text-foreground font-medium">
+                LBGC
+              </span>
+              <p>{club.platform}</p>
+            </div>
+
+            <div>
+              <span className="text-xs uppercase tracking-wide text-foreground font-medium">
+                SFW
+              </span>
+              <p>{club.sfwFriendly ? 'Friendly' : 'Not Friendly'}</p>
+            </div>
+          </div>
+
+          {club.notes && (
+            <div className="pt-1">
+              <span className="text-xs uppercase tracking-wide text-foreground font-medium">
+                Comments
+              </span>
+              <p className="text-xs text-foreground/80 leading-relaxed mt-1 line-clamp-3">
+                {club.notes}
+              </p>
+            </div>
           )}
         </div>
-      </CardHeader>
-
-      <CardContent className="pt-0 relative">
-        {/* Notes */}
-        {club.notes && (
-          <p className="text-xs text-muted-foreground line-clamp-2 mb-4 leading-relaxed">
-            {club.notes}
-          </p>
-        )}
 
         {/* Rankings */}
-        <div className="space-y-2.5 pt-4 border-t border-border/40">
-          <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-widest">
+        <div className="space-y-2.5 pt-4 mt-4 border-t border-border/50 bg-secondary/20 rounded-lg px-3 pb-3">
+          <h4 className="text-sm font-semibold text-foreground pt-3">
             Rankings
-          </p>
+          </h4>
           <MiniRatingBar label="Invites" value={club.invitesScore} />
           <MiniRatingBar label="Door" value={club.doorScore} />
           <MiniRatingBar label="Calls" value={club.callsScore} />
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </button>
   )
 }
