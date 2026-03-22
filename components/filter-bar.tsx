@@ -1,6 +1,6 @@
 'use client'
 
-import { Search } from 'lucide-react'
+import { Search, X } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import {
@@ -51,34 +51,48 @@ export function FilterBar({ filters, onFiltersChange, className }: FilterBarProp
   return (
     <div
       className={cn(
-        'bg-card/80 backdrop-blur-sm border border-border/50 rounded-2xl p-4 shadow-sm',
+        'bg-card/90 backdrop-blur-xl',
+        'border border-border/50 rounded-2xl',
+        'p-5 shadow-lg shadow-black/5',
         className
       )}
     >
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-5">
         {/* Search Input */}
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
             placeholder="Search clubs..."
             value={filters.search}
             onChange={(e) => updateFilter('search', e.target.value)}
-            className="pl-9 bg-background"
+            className={cn(
+              'pl-10 h-11 bg-secondary/50 border-border/50',
+              'rounded-xl',
+              'placeholder:text-muted-foreground/60',
+              'focus:bg-secondary/80 focus:border-primary/30',
+              'transition-all duration-200'
+            )}
           />
+          {filters.search && (
+            <button
+              onClick={() => updateFilter('search', '')}
+              className="absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-md hover:bg-muted transition-colors"
+            >
+              <X className="h-3.5 w-3.5 text-muted-foreground" />
+            </button>
+          )}
         </div>
 
         {/* Dropdowns */}
         <div className="flex flex-wrap gap-3">
           <Select
             value={filters.type}
-            onValueChange={(value) =>
-              updateFilter('type', value as ClubFilters['type'])
-            }
+            onValueChange={(value) => updateFilter('type', value as ClubFilters['type'])}
           >
-            <SelectTrigger className="w-[130px] bg-background">
+            <SelectTrigger className="w-[140px] h-10 bg-secondary/50 border-border/50 rounded-xl hover:bg-secondary/70 transition-colors">
               <SelectValue placeholder="Type" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="rounded-xl border-border/50">
               <SelectItem value="All">All Types</SelectItem>
               <SelectItem value="Cat">Cat</SelectItem>
               <SelectItem value="Dog">Dog</SelectItem>
@@ -88,14 +102,12 @@ export function FilterBar({ filters, onFiltersChange, className }: FilterBarProp
 
           <Select
             value={filters.platform}
-            onValueChange={(value) =>
-              updateFilter('platform', value as ClubFilters['platform'])
-            }
+            onValueChange={(value) => updateFilter('platform', value as ClubFilters['platform'])}
           >
-            <SelectTrigger className="w-[130px] bg-background">
+            <SelectTrigger className="w-[140px] h-10 bg-secondary/50 border-border/50 rounded-xl hover:bg-secondary/70 transition-colors">
               <SelectValue placeholder="Platform" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="rounded-xl border-border/50">
               <SelectItem value="All">All Platforms</SelectItem>
               <SelectItem value="Line">Line</SelectItem>
               <SelectItem value="Disc">Disc</SelectItem>
@@ -105,38 +117,39 @@ export function FilterBar({ filters, onFiltersChange, className }: FilterBarProp
         </div>
 
         {/* Toggle Switches */}
-        <div className="flex flex-wrap items-center gap-6">
-          <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-x-8 gap-y-3">
+          <div className="flex items-center gap-2.5">
             <Switch
               id="open-only"
               checked={filters.openOnly}
               onCheckedChange={(checked) => updateFilter('openOnly', checked)}
+              className="data-[state=checked]:bg-primary"
             />
-            <Label htmlFor="open-only" className="text-sm cursor-pointer">
+            <Label htmlFor="open-only" className="text-sm cursor-pointer text-foreground/80 hover:text-foreground transition-colors">
               Open Only
             </Label>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2.5">
             <Switch
               id="sfw-only"
               checked={filters.sfwOnly}
               onCheckedChange={(checked) => updateFilter('sfwOnly', checked)}
+              className="data-[state=checked]:bg-primary"
             />
-            <Label htmlFor="sfw-only" className="text-sm cursor-pointer">
+            <Label htmlFor="sfw-only" className="text-sm cursor-pointer text-foreground/80 hover:text-foreground transition-colors">
               SFW Friendly
             </Label>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2.5">
             <Switch
               id="parties-only"
               checked={filters.invitePartiesOnly}
-              onCheckedChange={(checked) =>
-                updateFilter('invitePartiesOnly', checked)
-              }
+              onCheckedChange={(checked) => updateFilter('invitePartiesOnly', checked)}
+              className="data-[state=checked]:bg-primary"
             />
-            <Label htmlFor="parties-only" className="text-sm cursor-pointer">
+            <Label htmlFor="parties-only" className="text-sm cursor-pointer text-foreground/80 hover:text-foreground transition-colors">
               Invite Parties
             </Label>
           </div>
@@ -146,7 +159,7 @@ export function FilterBar({ filters, onFiltersChange, className }: FilterBarProp
               variant="ghost"
               size="sm"
               onClick={clearFilters}
-              className="text-muted-foreground hover:text-foreground"
+              className="text-muted-foreground hover:text-foreground hover:bg-secondary/50 rounded-lg ml-auto"
             >
               Clear All
             </Button>

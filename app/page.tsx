@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useMemo, useEffect } from 'react'
+import { useState, useMemo } from 'react'
 import useSWR from 'swr'
 import { ClubCard } from '@/components/club-card'
 import { ClubCardSkeleton } from '@/components/club-card-skeleton'
@@ -34,39 +34,24 @@ export default function HomePage() {
 
   const filteredClubs = useMemo(() => {
     return clubs.filter((club) => {
-      // Search filter
-      if (
-        filters.search &&
-        !club.name.toLowerCase().includes(filters.search.toLowerCase())
-      ) {
+      if (filters.search && !club.name.toLowerCase().includes(filters.search.toLowerCase())) {
         return false
       }
-
-      // Type filter
       if (filters.type !== 'All' && club.type !== filters.type) {
         return false
       }
-
-      // Platform filter
       if (filters.platform !== 'All' && club.platform !== filters.platform) {
         return false
       }
-
-      // Open only filter
       if (filters.openOnly && club.status !== 'Open') {
         return false
       }
-
-      // SFW only filter
       if (filters.sfwOnly && !club.sfwFriendly) {
         return false
       }
-
-      // Invite parties filter
       if (filters.invitePartiesOnly && !club.inviteParties) {
         return false
       }
-
       return true
     })
   }, [clubs, filters])
@@ -74,11 +59,9 @@ export default function HomePage() {
   const stats = useMemo(() => {
     const totalClubs = clubs.length
     const openClubs = clubs.filter((c) => c.status === 'Open').length
-    const avgRating =
-      clubs.length > 0
-        ? clubs.reduce((sum, c) => sum + c.overallRating, 0) / clubs.length
-        : 0
-
+    const avgRating = clubs.length > 0
+      ? clubs.reduce((sum, c) => sum + c.overallRating, 0) / clubs.length
+      : 0
     return { totalClubs, openClubs, avgRating }
   }, [clubs])
 
@@ -88,54 +71,48 @@ export default function HomePage() {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-background via-background to-muted/30">
+    <main className="min-h-screen bg-background">
+      {/* Subtle gradient overlay */}
+      <div className="fixed inset-0 bg-gradient-to-br from-primary/[0.02] via-transparent to-[var(--gold)]/[0.02] pointer-events-none" />
+      
       {/* Hero Section */}
-      <section className="relative overflow-hidden border-b border-border/50">
-        <div className="absolute inset-0 bg-gradient-to-r from-teal-500/5 via-cyan-500/5 to-blue-500/5" />
-        <div className="relative container mx-auto px-4 py-12 md:py-16">
-          <div className="max-w-3xl">
-          <div>
-            <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground text-balance">
+      <section className="relative border-b border-border/40">
+        <div className="container mx-auto px-4 py-16 md:py-20">
+          <div className="max-w-3xl space-y-6">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-foreground">
               Club Directory
             </h1>
-            <p className="mt-4 text-lg text-muted-foreground text-pretty max-w-2xl">
-              Discover and explore the best clubs with detailed ratings, reviews,
-              and real-time status updates.
+            <p className="text-lg md:text-xl text-muted-foreground leading-relaxed max-w-2xl">
+              Discover and explore the best clubs with detailed ratings, reviews, and real-time status updates.
             </p>
 
             {/* Stats */}
             {!isLoading && !error && (
-              <div className="flex flex-wrap gap-6 mt-8">
-                <div className="flex items-center gap-2">
-                  <div className="p-2 rounded-lg bg-teal-500/10">
-                    <Users className="h-5 w-5 text-teal-600" />
+              <div className="flex flex-wrap gap-8 pt-4">
+                <div className="flex items-center gap-3">
+                  <div className="p-2.5 rounded-xl bg-primary/10 ring-1 ring-primary/20">
+                    <Users className="h-5 w-5 text-primary" />
                   </div>
                   <div>
-                    <p className="text-2xl font-bold text-foreground">
-                      {stats.totalClubs}
-                    </p>
+                    <p className="text-2xl font-bold text-foreground">{stats.totalClubs}</p>
                     <p className="text-sm text-muted-foreground">Total Clubs</p>
                   </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <div className="p-2 rounded-lg bg-green-500/10">
-                    <Sparkles className="h-5 w-5 text-green-600" />
+                <div className="flex items-center gap-3">
+                  <div className="p-2.5 rounded-xl bg-success/10 ring-1 ring-success/20">
+                    <Sparkles className="h-5 w-5 text-success" />
                   </div>
                   <div>
-                    <p className="text-2xl font-bold text-foreground">
-                      {stats.openClubs}
-                    </p>
+                    <p className="text-2xl font-bold text-foreground">{stats.openClubs}</p>
                     <p className="text-sm text-muted-foreground">Open Now</p>
                   </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <div className="p-2 rounded-lg bg-amber-500/10">
-                    <Star className="h-5 w-5 text-amber-600" />
+                <div className="flex items-center gap-3">
+                  <div className="p-2.5 rounded-xl bg-[var(--gold)]/10 ring-1 ring-[var(--gold)]/20">
+                    <Star className="h-5 w-5 text-[var(--gold)]" />
                   </div>
                   <div>
-                    <p className="text-2xl font-bold text-foreground">
-                      {stats.avgRating.toFixed(1)}
-                    </p>
+                    <p className="text-2xl font-bold text-foreground">{stats.avgRating.toFixed(1)}</p>
                     <p className="text-sm text-muted-foreground">Avg. Rating</p>
                   </div>
                 </div>
@@ -143,25 +120,27 @@ export default function HomePage() {
             )}
           </div>
         </div>
+        </div>
       </section>
 
       {/* Main Content */}
-      <section className="container mx-auto px-4 py-8">
+      <section className="relative container mx-auto px-4 py-8">
         {/* Sticky Filter Bar */}
-        <div className="sticky top-0 z-10 -mx-4 px-4 py-4 bg-background/80 backdrop-blur-lg">
+        <div className="sticky top-0 z-10 -mx-4 px-4 py-4 bg-background/80 backdrop-blur-xl">
           <FilterBar filters={filters} onFiltersChange={setFilters} />
         </div>
 
         {/* Results Count */}
         {!isLoading && !error && (
-          <p className="text-sm text-muted-foreground mt-4 mb-6">
-            Showing {filteredClubs.length} of {clubs.length} clubs
+          <p className="text-sm text-muted-foreground mt-6 mb-8">
+            Showing <span className="text-foreground font-medium">{filteredClubs.length}</span> of{' '}
+            <span className="text-foreground font-medium">{clubs.length}</span> clubs
           </p>
         )}
 
         {/* Loading State */}
         {isLoading && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mt-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-8">
             {Array.from({ length: 8 }).map((_, i) => (
               <ClubCardSkeleton key={i} />
             ))}
@@ -170,14 +149,12 @@ export default function HomePage() {
 
         {/* Error State */}
         {error && (
-          <div className="flex flex-col items-center justify-center py-16 text-center">
-            <div className="p-3 rounded-full bg-destructive/10 mb-4">
-              <AlertCircle className="h-8 w-8 text-destructive" />
+          <div className="flex flex-col items-center justify-center py-20 text-center">
+            <div className="p-4 rounded-2xl bg-destructive/10 ring-1 ring-destructive/20 mb-6">
+              <AlertCircle className="h-10 w-10 text-destructive" />
             </div>
-            <h3 className="text-lg font-semibold text-foreground">
-              Failed to load clubs
-            </h3>
-            <p className="text-muted-foreground mt-1 mb-4">
+            <h3 className="text-xl font-semibold text-foreground">Failed to load clubs</h3>
+            <p className="text-muted-foreground mt-2 mb-6 max-w-sm">
               There was an error fetching the club data. Please try again.
             </p>
             <Button onClick={() => mutate()} variant="outline" className="gap-2">
@@ -189,20 +166,15 @@ export default function HomePage() {
 
         {/* Empty State */}
         {!isLoading && !error && filteredClubs.length === 0 && (
-          <div className="flex flex-col items-center justify-center py-16 text-center">
-            <div className="p-3 rounded-full bg-muted mb-4">
-              <Users className="h-8 w-8 text-muted-foreground" />
+          <div className="flex flex-col items-center justify-center py-20 text-center">
+            <div className="p-4 rounded-2xl bg-muted ring-1 ring-border mb-6">
+              <Users className="h-10 w-10 text-muted-foreground" />
             </div>
-            <h3 className="text-lg font-semibold text-foreground">
-              No clubs found
-            </h3>
-            <p className="text-muted-foreground mt-1 mb-4">
+            <h3 className="text-xl font-semibold text-foreground">No clubs found</h3>
+            <p className="text-muted-foreground mt-2 mb-6 max-w-sm">
               Try adjusting your filters to find more clubs.
             </p>
-            <Button
-              onClick={() => setFilters(defaultFilters)}
-              variant="outline"
-            >
+            <Button onClick={() => setFilters(defaultFilters)} variant="outline">
               Clear Filters
             </Button>
           </div>
@@ -210,26 +182,16 @@ export default function HomePage() {
 
         {/* Club Grid */}
         {!isLoading && !error && filteredClubs.length > 0 && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {filteredClubs.map((club) => (
-              <ClubCard
-                key={club.id}
-                club={club}
-                onClick={() => handleClubClick(club)}
-              />
+              <ClubCard key={club.id} club={club} onClick={() => handleClubClick(club)} />
             ))}
           </div>
         )}
       </section>
 
       {/* Club Detail Modal */}
-      <ClubDetailModal
-        club={selectedClub}
-        open={modalOpen}
-        onOpenChange={setModalOpen}
-      />
-
-
+      <ClubDetailModal club={selectedClub} open={modalOpen} onOpenChange={setModalOpen} />
     </main>
   )
 }

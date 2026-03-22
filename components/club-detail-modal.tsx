@@ -37,18 +37,6 @@ const typeIcons = {
   Hybrid: Users,
 }
 
-const typeColors = {
-  Cat: 'bg-pink-100 text-pink-700 border-pink-200',
-  Dog: 'bg-blue-100 text-blue-700 border-blue-200',
-  Hybrid: 'bg-purple-100 text-purple-700 border-purple-200',
-}
-
-const platformColors = {
-  Line: 'bg-emerald-100 text-emerald-700 border-emerald-200',
-  Disc: 'bg-indigo-100 text-indigo-700 border-indigo-200',
-  Both: 'bg-amber-100 text-amber-700 border-amber-200',
-}
-
 export function ClubDetailModal({
   club,
   open,
@@ -60,30 +48,31 @@ export function ClubDetailModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-lg max-h-[90vh] overflow-y-auto">
+      <DialogContent className="sm:max-w-lg max-h-[90vh] overflow-y-auto rounded-2xl border-border/50 bg-card">
         <DialogHeader>
           <div className="flex items-start justify-between gap-3">
             <DialogTitle className="text-xl">{club.name}</DialogTitle>
             <Badge
-              variant={club.status === 'Open' ? 'default' : 'secondary'}
               className={cn(
-                'shrink-0',
+                'shrink-0 font-medium px-2.5 py-0.5 rounded-lg border-0',
                 club.status === 'Open'
-                  ? 'bg-green-500 hover:bg-green-600 text-white'
+                  ? 'bg-success/15 text-success'
                   : 'bg-muted text-muted-foreground'
               )}
             >
               {club.status}
             </Badge>
           </div>
-          <DialogDescription>{club.type} Club • {club.platform} Platform</DialogDescription>
+          <DialogDescription className="text-muted-foreground">
+            {club.type} Club on {club.platform}
+          </DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-5 pt-2">
+        <div className="space-y-6 pt-2">
           {/* Overall Rating */}
           <div className="flex items-center gap-3">
             <StarRating rating={club.overallRating} size="lg" />
-            <span className="text-2xl font-bold text-foreground">
+            <span className="text-2xl font-bold text-[var(--gold)]">
               {club.overallRating.toFixed(1)}
             </span>
             <span className="text-muted-foreground">/ 5.0</span>
@@ -91,29 +80,44 @@ export function ClubDetailModal({
 
           {/* Type / Platform badges */}
           <div className="flex flex-wrap gap-2">
-            <Badge variant="outline" className={cn('gap-1.5 text-sm', typeColors[club.type])}>
+            <Badge 
+              variant="outline" 
+              className="gap-1.5 text-sm rounded-lg bg-secondary/50 border-border/50 text-secondary-foreground"
+            >
               <TypeIcon className="h-4 w-4" />
               {club.type}
             </Badge>
-            <Badge variant="outline" className={cn('text-sm', platformColors[club.platform])}>
-              {club.platform === 'Line' && <MessageCircle className="h-4 w-4 mr-1.5" />}
-              {club.platform === 'Disc' && <Phone className="h-4 w-4 mr-1.5" />}
+            <Badge 
+              variant="outline" 
+              className="gap-1.5 text-sm rounded-lg bg-secondary/50 border-border/50 text-secondary-foreground"
+            >
+              {club.platform === 'Line' && <MessageCircle className="h-4 w-4" />}
+              {club.platform === 'Disc' && <Phone className="h-4 w-4" />}
               {club.platform}
             </Badge>
             {club.sfwActive && (
-              <Badge variant="outline" className="bg-cyan-50 text-cyan-700 border-cyan-200 gap-1.5 text-sm">
+              <Badge 
+                variant="outline" 
+                className="gap-1.5 text-sm rounded-lg bg-primary/10 border-primary/20 text-primary"
+              >
                 <ShieldCheck className="h-4 w-4" />
                 SFW Active
               </Badge>
             )}
             {club.break === 'yes' && (
-              <Badge variant="outline" className="bg-orange-50 text-orange-700 border-orange-200 gap-1.5 text-sm">
+              <Badge 
+                variant="outline" 
+                className="gap-1.5 text-sm rounded-lg bg-[var(--gold)]/10 border-[var(--gold)]/20 text-[var(--gold)]"
+              >
                 <Clock className="h-4 w-4" />
                 Has Break
               </Badge>
             )}
             {club.break === 'no' && (
-              <Badge variant="outline" className="bg-muted text-muted-foreground border-border gap-1.5 text-sm">
+              <Badge 
+                variant="outline" 
+                className="gap-1.5 text-sm rounded-lg bg-muted/50 border-border/50 text-muted-foreground"
+              >
                 <Clock className="h-4 w-4" />
                 No Break
               </Badge>
@@ -121,36 +125,36 @@ export function ClubDetailModal({
           </div>
 
           {/* Details */}
-          <div className="space-y-2 text-sm">
+          <div className="space-y-3 text-sm">
             <h4 className="font-semibold text-foreground">Details</h4>
-            <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-muted-foreground">
-              <div>
-                <span className="font-medium text-foreground">SFW Friendly</span>
+            <div className="grid grid-cols-2 gap-4 text-muted-foreground">
+              <div className="space-y-1">
+                <span className="font-medium text-foreground text-xs uppercase tracking-wide">SFW Friendly</span>
                 <p>{club.sfwFriendly ? 'Yes' : 'No'}</p>
               </div>
               {club.breakTime && (
-                <div>
-                  <span className="font-medium text-foreground flex items-center gap-1">
-                    <Clock className="h-3.5 w-3.5" />
+                <div className="space-y-1">
+                  <span className="font-medium text-foreground text-xs uppercase tracking-wide flex items-center gap-1">
+                    <Clock className="h-3 w-3" />
                     Break Time
                   </span>
                   <p>{club.breakTime}</p>
                 </div>
               )}
               {club.avgLbSpeed && (
-                <div>
-                  <span className="font-medium text-foreground flex items-center gap-1">
-                    <Zap className="h-3.5 w-3.5" />
+                <div className="space-y-1">
+                  <span className="font-medium text-foreground text-xs uppercase tracking-wide flex items-center gap-1">
+                    <Zap className="h-3 w-3" />
                     Avg LB Speed
                   </span>
                   <p>{club.avgLbSpeed}</p>
                 </div>
               )}
               {club.quickLink && (
-                <div>
-                  <span className="font-medium text-foreground flex items-center gap-1">
-                    <User className="h-3.5 w-3.5" />
-                    Quick Link Contact
+                <div className="space-y-1">
+                  <span className="font-medium text-foreground text-xs uppercase tracking-wide flex items-center gap-1">
+                    <User className="h-3 w-3" />
+                    Quick Link
                   </span>
                   <p>{club.quickLink}</p>
                 </div>
@@ -160,14 +164,14 @@ export function ClubDetailModal({
 
           {/* Notes */}
           {club.notes && (
-            <div className="space-y-1 text-sm">
+            <div className="space-y-2 text-sm">
               <h4 className="font-semibold text-foreground">Comments</h4>
-              <p className="text-muted-foreground">{club.notes}</p>
+              <p className="text-muted-foreground leading-relaxed">{club.notes}</p>
             </div>
           )}
 
           {/* Rankings */}
-          <div className="space-y-3 bg-muted/50 rounded-xl p-4">
+          <div className="space-y-3 bg-secondary/30 rounded-xl p-4 ring-1 ring-border/30">
             <h4 className="text-sm font-semibold text-foreground">Rankings</h4>
             <MiniRatingBar label="Invites" value={club.invitesScore} />
             <MiniRatingBar label="Door" value={club.doorScore} />
@@ -175,7 +179,7 @@ export function ClubDetailModal({
           </div>
 
           {/* Last Updated */}
-          <div className="flex items-center gap-2 text-xs text-muted-foreground pt-2 border-t border-border">
+          <div className="flex items-center gap-2 text-xs text-muted-foreground pt-4 border-t border-border/40">
             <Calendar className="h-3.5 w-3.5" />
             <span>Last updated: {new Date(club.lastUpdated).toLocaleDateString()}</span>
           </div>

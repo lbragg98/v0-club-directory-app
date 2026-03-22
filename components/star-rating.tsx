@@ -19,7 +19,7 @@ export function StarRating({
   className,
 }: StarRatingProps) {
   const sizeClasses = {
-    sm: 'h-3 w-3',
+    sm: 'h-3.5 w-3.5',
     md: 'h-4 w-4',
     lg: 'h-5 w-5',
   }
@@ -30,22 +30,22 @@ export function StarRating({
 
   return (
     <div className={cn('flex items-center gap-0.5', className)}>
-      {/* Full stars */}
+      {/* Full stars - gold color */}
       {Array.from({ length: fullStars }).map((_, i) => (
         <Star
           key={`full-${i}`}
-          className={cn(sizeClasses[size], 'fill-amber-400 text-amber-400')}
+          className={cn(sizeClasses[size], 'fill-[var(--gold)] text-[var(--gold)] drop-shadow-sm')}
         />
       ))}
       
       {/* Half star */}
       {hasHalfStar && (
         <div className="relative">
-          <Star className={cn(sizeClasses[size], 'text-muted-foreground/30')} />
+          <Star className={cn(sizeClasses[size], 'text-border')} />
           <StarHalf
             className={cn(
               sizeClasses[size],
-              'absolute left-0 top-0 fill-amber-400 text-amber-400'
+              'absolute left-0 top-0 fill-[var(--gold)] text-[var(--gold)] drop-shadow-sm'
             )}
           />
         </div>
@@ -55,12 +55,12 @@ export function StarRating({
       {Array.from({ length: emptyStars }).map((_, i) => (
         <Star
           key={`empty-${i}`}
-          className={cn(sizeClasses[size], 'text-muted-foreground/30')}
+          className={cn(sizeClasses[size], 'text-border')}
         />
       ))}
       
       {showValue && (
-        <span className="ml-1.5 text-sm font-medium text-muted-foreground">
+        <span className="ml-1.5 text-sm font-medium text-[var(--gold)]">
           {rating.toFixed(1)}
         </span>
       )}
