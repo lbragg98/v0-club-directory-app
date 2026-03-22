@@ -32,7 +32,9 @@ export default function HomePage() {
     fetcher
   )
 
-  const clubs = data?.clubs ?? []
+  const clubs = useMemo(() => {
+    return [...(data?.clubs ?? [])].sort((a, b) => b.overallRating - a.overallRating)
+  }, [data?.clubs])
 
   const filteredClubs = useMemo(() => {
     return clubs.filter((club) => {
