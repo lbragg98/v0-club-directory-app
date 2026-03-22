@@ -176,7 +176,7 @@ export function FilterBar({ filters, onFiltersChange, className }: FilterBarProp
               id="open-only"
               checked={filters.openOnly}
               onCheckedChange={(checked) => updateFilter('openOnly', checked)}
-              className="data-[state=checked]:bg-primary"
+              className="data-[state=checked]:bg-white data-[state=unchecked]:bg-white/20"
             />
             <Label htmlFor="open-only" className="text-sm cursor-pointer text-foreground/80 hover:text-foreground transition-colors">
               Open Only
@@ -188,7 +188,7 @@ export function FilterBar({ filters, onFiltersChange, className }: FilterBarProp
               id="parties-only"
               checked={filters.invitePartiesOnly}
               onCheckedChange={(checked) => updateFilter('invitePartiesOnly', checked)}
-              className="data-[state=checked]:bg-primary"
+              className="data-[state=checked]:bg-white data-[state=unchecked]:bg-white/20"
             />
             <Label htmlFor="parties-only" className="text-sm cursor-pointer text-foreground/80 hover:text-foreground transition-colors">
               Invite Parties
