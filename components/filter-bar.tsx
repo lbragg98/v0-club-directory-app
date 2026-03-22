@@ -117,23 +117,23 @@ export function FilterBar({ filters, onFiltersChange, className }: FilterBarProp
               <SelectItem value="Both">Both</SelectItem>
             </SelectContent>
           </Select>
-        </div>
 
-        <Select
-          value={filters.breakFilter}
-          onValueChange={(value) =>
-            updateFilter('breakFilter', value as ClubFilters['breakFilter'])
-          }
-        >
-          <SelectTrigger className="w-[140px] h-10 bg-secondary/50 border-border/50 rounded-xl hover:bg-secondary/70 transition-colors">
-            <SelectValue placeholder="Break" />
-          </SelectTrigger>
-          <SelectContent className="rounded-xl border-border/50">
-            <SelectItem value="All">All Breaks</SelectItem>
-            <SelectItem value="Has Break">Has Break</SelectItem>
-            <SelectItem value="No Break">No Break</SelectItem>
-          </SelectContent>
-        </Select>
+          <Select
+            value={filters.breakFilter}
+            onValueChange={(value) =>
+              updateFilter('breakFilter', value as ClubFilters['breakFilter'])
+            }
+          >
+            <SelectTrigger className="w-[140px] h-10 bg-secondary/50 border-border/50 rounded-xl hover:bg-secondary/70 transition-colors">
+              <SelectValue placeholder="Break" />
+            </SelectTrigger>
+            <SelectContent className="rounded-xl border-border/50">
+              <SelectItem value="All">All Breaks</SelectItem>
+              <SelectItem value="Has Break">Has Break</SelectItem>
+              <SelectItem value="No Break">No Break</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
 
         {/* Toggle Switches */}
         <div className="flex flex-wrap items-center gap-x-8 gap-y-3">
