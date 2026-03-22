@@ -135,22 +135,6 @@ export function FilterBar({ filters, onFiltersChange, className }: FilterBarProp
           </Select>
 
           <Select
-            value={filters.sfwFilter}
-            onValueChange={(value) =>
-              updateFilter('sfwFilter', value as ClubFilters['sfwFilter'])
-            }
-          >
-            <SelectTrigger className="w-full sm:w-[150px] h-10 bg-secondary/50 border-border/50 rounded-xl hover:bg-secondary/70 transition-colors">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent className="rounded-xl border-border/50">
-              <SelectItem value="All Clubs">All SFW Status</SelectItem>
-              <SelectItem value="Active SFW">Active SFW</SelectItem>
-              <SelectItem value="No Active SFW">No Active SFW</SelectItem>
-            </SelectContent>
-          </Select>
-
-          <Select
             value={filters.ratingFilter}
             onValueChange={(value) =>
               updateFilter('ratingFilter', value as ClubFilters['ratingFilter'])
@@ -166,6 +150,22 @@ export function FilterBar({ filters, onFiltersChange, className }: FilterBarProp
               <SelectItem value="3+">3+</SelectItem>
               <SelectItem value="4+">4+</SelectItem>
               <SelectItem value="5">5</SelectItem>
+            </SelectContent>
+          </Select>
+
+          <Select
+            value={filters.sfwFilter}
+            onValueChange={(value) =>
+              updateFilter('sfwFilter', value as ClubFilters['sfwFilter'])
+            }
+          >
+            <SelectTrigger className="w-full sm:w-[150px] h-10 bg-secondary/50 border-border/50 rounded-xl hover:bg-secondary/70 transition-colors">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent className="rounded-xl border-border/50">
+              <SelectItem value="All Clubs">All SFW Status</SelectItem>
+              <SelectItem value="Active SFW">Active SFW</SelectItem>
+              <SelectItem value="No Active SFW">No Active SFW</SelectItem>
             </SelectContent>
           </Select>
         </div>
