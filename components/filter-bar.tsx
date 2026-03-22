@@ -86,12 +86,12 @@ export function FilterBar({ filters, onFiltersChange, className }: FilterBarProp
           )}
         </div>
 
-        <div className="flex flex-wrap gap-3">
+        <div className="grid grid-cols-2 gap-3 sm:flex sm:flex-wrap">
           <Select
             value={filters.type}
             onValueChange={(value) => updateFilter('type', value as ClubFilters['type'])}
           >
-            <SelectTrigger className="w-[140px] h-10 bg-secondary/50 border-border/50 rounded-xl hover:bg-secondary/70 transition-colors">
+            <SelectTrigger className="w-full sm:w-[140px] h-10 bg-secondary/50 border-border/50 rounded-xl hover:bg-secondary/70 transition-colors">
               <SelectValue placeholder="Type" />
             </SelectTrigger>
             <SelectContent className="rounded-xl border-border/50">
@@ -107,7 +107,7 @@ export function FilterBar({ filters, onFiltersChange, className }: FilterBarProp
             value={filters.platform}
             onValueChange={(value) => updateFilter('platform', value as ClubFilters['platform'])}
           >
-            <SelectTrigger className="w-[140px] h-10 bg-secondary/50 border-border/50 rounded-xl hover:bg-secondary/70 transition-colors">
+            <SelectTrigger className="w-full sm:w-[140px] h-10 bg-secondary/50 border-border/50 rounded-xl hover:bg-secondary/70 transition-colors">
               <SelectValue placeholder="Platform" />
             </SelectTrigger>
             <SelectContent className="rounded-xl border-border/50">
@@ -124,7 +124,7 @@ export function FilterBar({ filters, onFiltersChange, className }: FilterBarProp
               updateFilter('breakFilter', value as ClubFilters['breakFilter'])
             }
           >
-            <SelectTrigger className="w-[140px] h-10 bg-secondary/50 border-border/50 rounded-xl hover:bg-secondary/70 transition-colors">
+            <SelectTrigger className="w-full sm:w-[140px] h-10 bg-secondary/50 border-border/50 rounded-xl hover:bg-secondary/70 transition-colors">
               <SelectValue placeholder="Break" />
             </SelectTrigger>
             <SelectContent className="rounded-xl border-border/50">
@@ -140,7 +140,7 @@ export function FilterBar({ filters, onFiltersChange, className }: FilterBarProp
               updateFilter('sfwFilter', value as ClubFilters['sfwFilter'])
             }
           >
-            <SelectTrigger className="w-[150px] h-10 bg-secondary/50 border-border/50 rounded-xl hover:bg-secondary/70 transition-colors">
+            <SelectTrigger className="w-full sm:w-[150px] h-10 bg-secondary/50 border-border/50 rounded-xl hover:bg-secondary/70 transition-colors">
               <SelectValue />
             </SelectTrigger>
             <SelectContent className="rounded-xl border-border/50">
@@ -156,7 +156,7 @@ export function FilterBar({ filters, onFiltersChange, className }: FilterBarProp
               updateFilter('ratingFilter', value as ClubFilters['ratingFilter'])
             }
           >
-            <SelectTrigger className="w-[140px] h-10 bg-secondary/50 border-border/50 rounded-xl hover:bg-secondary/70 transition-colors">
+            <SelectTrigger className="w-full sm:w-[140px] h-10 bg-secondary/50 border-border/50 rounded-xl hover:bg-secondary/70 transition-colors">
               <SelectValue />
             </SelectTrigger>
             <SelectContent className="rounded-xl border-border/50">
