@@ -1,7 +1,7 @@
 export interface Club {
   id: string
   name: string
-  type: 'Cat' | 'Dog' | 'Hybrid'
+  type: 'Cat' | 'Dog' | 'Hybrid' | 'Invite'
   platform: 'Line' | 'Disc' | 'Both'
   status: 'Open' | 'Closed'
   sfwFriendly: boolean
@@ -21,8 +21,9 @@ export interface Club {
 
 export interface ClubFilters {
   search: string
-  type: 'All' | 'Cat' | 'Dog' | 'Hybrid'
+  type: 'All' | 'Cat' | 'Dog' | 'Hybrid' | 'Invite'
   platform: 'All' | 'Line' | 'Disc' | 'Both'
+  breakFilter: 'All' | 'Has Break' | 'No Break'
   openOnly: boolean
   sfwOnly: boolean
   invitePartiesOnly: boolean

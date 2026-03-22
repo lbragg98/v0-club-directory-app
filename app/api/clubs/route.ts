@@ -15,27 +15,26 @@ const HEADER_KEYWORDS = [
 ]
 
 const HEADER_MAPPINGS: Record<string, string[]> = {
-  club_name:      ['club_name', 'club name', 'name', 'club', 'clubname'],
-  quick_link:     ['quick_link', 'quick link', 'link', 'url', 'quicklink'],
-  is_open:        ['is_open', 'is open', 'open', 'status', 'open?'],
-  club_type:      ['club_type', 'club type', 'type', 'clubtype', 'category'],
-  platform:       ['platform', 'lbgc', 'line', 'disc', 'app'],
-  sfw_friendly:   ['sfw_friendly', 'sfw friendly', 'sfw', 'sfwfriendly', 'safe for work'],
-  sfw_active:     ['sfw_active', 'sfw active', 'active sfw', 'sfwactive'],
-  break:          ['break', 'on break', 'break status', 'onbreak', 'has break'],
-  break_time:     ['break_time', 'break time', 'breaktime', 'break time (club tz)', 'break_time_(club_tz)', 'break time club tz'],
-  avg_rating:     ['avg_rating', 'avg rating', 'avg. rating', 'rating', 'overall rating', 'average rating', 'avgrating'],
-  invite_score:   ['invite_score', 'invite score', 'invites', 'invite', 'invitescore'],
-  door_score:     ['door_score', 'door score', 'door', 'doorscore'],
-  call_score:     ['call_score', 'call score', 'calls', 'call', 'callscore'],
+  club_name: ['club_name', 'club name', 'name', 'club', 'clubname'],
+  quick_link: ['quick_link', 'quick link', 'link', 'url', 'quicklink'],
+  is_open: ['is_open', 'is open', 'open', 'status', 'open?'],
+  club_type: ['club_type', 'club type', 'type', 'clubtype', 'category'],
+  platform: ['platform', 'lbgc', 'line', 'disc', 'app'],
+  sfw_friendly: ['sfw_friendly', 'sfw friendly', 'sfw', 'sfwfriendly', 'safe for work'],
+  sfw_active: ['sfw_active', 'sfw active', 'active sfw', 'sfwactive'],
+  break: ['break', 'on break', 'break status', 'onbreak', 'has break'],
+  break_time: ['break_time', 'break time', 'breaktime', 'break time (club tz)', 'break_time_(club_tz)', 'break time club tz'],
+  avg_rating: ['avg_rating', 'avg rating', 'avg. rating', 'rating', 'overall rating', 'average rating', 'avgrating'],
+  invite_score: ['invite_score', 'invite score', 'invites', 'invite', 'invitescore'],
+  door_score: ['door_score', 'door score', 'door', 'doorscore'],
+  call_score: ['call_score', 'call score', 'calls', 'call', 'callscore'],
   invite_parties: ['invite_parties', 'invite parties', 'invs?', 'invs', 'inv party', 'inv?'],
-  comments:       ['comments', 'comment', 'notes', 'note', 'description'],
-  avg_lb_speed:   ['avg_lb_speed', 'avg lb speed', 'lb speed', 'lbspeed', 'avg speed', 'speed'],
+  comments: ['comments', 'comment', 'notes', 'note', 'description'],
+  avg_lb_speed: ['avg_lb_speed', 'avg lb speed', 'lb speed', 'lbspeed', 'avg speed', 'speed'],
 }
 
 function normalizeHeader(raw: string): string {
   const lower = raw.toLowerCase().trim()
-  // Strip all non-alphanumeric characters to a single space for fuzzy matching
   const stripped = lower.replace(/[^a-z0-9]+/g, ' ').replace(/\s+/g, ' ').trim()
 
   for (const [key, variants] of Object.entries(HEADER_MAPPINGS)) {
@@ -47,7 +46,6 @@ function normalizeHeader(raw: string): string {
     }
   }
 
-  // Fallback: underscored version of the stripped string
   return stripped.replace(/\s+/g, '_')
 }
 
@@ -76,7 +74,6 @@ function parseBreakState(value: string | undefined): 'yes' | 'no' | null {
   if (!value) return null
   const v = value.toString().toLowerCase().trim()
   if (v === '' || v === 'n/a') return null
-  // Check if starts with yes/no to handle values like "Yes (EST)" or "No (PST)"
   if (v.startsWith('yes') || v.startsWith('y ') || ['true', '1', 'y'].includes(v)) return 'yes'
   if (v.startsWith('no') || v.startsWith('n ') || ['false', '0', 'n'].includes(v)) return 'no'
   return null
@@ -85,15 +82,15 @@ function parseBreakState(value: string | undefined): 'yes' | 'no' | null {
 function rowToClub(row: Record<string, string>, index: number): Club {
   const breakState = parseBreakState(row.break)
 
-  // Open/Closed status is independent of break status
   let status: 'Open' | 'Closed' = 'Closed'
   if (row.is_open) {
     status = parseBoolean(row.is_open) ? 'Open' : 'Closed'
   }
 
-  let type: 'Cat' | 'Dog' | 'Hybrid' = 'Cat'
-  const rawType = (row.club_type || '').toLowerCase()
-  if (rawType.includes('dog')) type = 'Dog'
+  let type: 'Cat' | 'Dog' | 'Hybrid' | 'Invite' = 'Cat'
+  const rawType = (row.club_type || '').toLowerCase().trim()
+  if (rawType.includes('invite')) type = 'Invite'
+  else if (rawType.includes('dog')) type = 'Dog'
   else if (rawType.includes('hybrid') || rawType.includes('both')) type = 'Hybrid'
   else if (rawType.includes('cat')) type = 'Cat'
 
@@ -104,10 +101,9 @@ function rowToClub(row: Record<string, string>, index: number): Club {
   else if (rawPlatform.includes('line')) platform = 'Line'
 
   const invitesScore = parseNumber(row.invite_score)
-  const doorScore   = parseNumber(row.door_score)
-  const callsScore  = parseNumber(row.call_score)
+  const doorScore = parseNumber(row.door_score)
+  const callsScore = parseNumber(row.call_score)
 
-  // Use sheet avg_rating if present; otherwise compute mean of individual scores
   let overallRating = parseNumber(row.avg_rating)
   if (overallRating === 0 && (invitesScore > 0 || doorScore > 0 || callsScore > 0)) {
     const scores = [invitesScore, doorScore, callsScore].filter(s => s > 0)
@@ -123,25 +119,25 @@ function rowToClub(row: Record<string, string>, index: number): Club {
     type,
     platform,
     status,
-    sfwFriendly:    parseBoolean(row.sfw_friendly),
-    sfwActive:      parseBoolean(row.sfw_active),
-    inviteParties:  parseBoolean(row.invite_parties),
+    sfwFriendly: parseBoolean(row.sfw_friendly),
+    sfwActive: parseBoolean(row.sfw_active),
+    inviteParties: parseBoolean(row.invite_parties),
     overallRating,
     invitesScore,
     doorScore,
     callsScore,
-    notes:          (row.comments || '').trim(),
-    break:          breakState,
+    notes: (row.comments || '').trim(),
+    break: breakState,
     breakTime,
-    quickLink:      (row.quick_link || '').trim(),
-    avgLbSpeed:     (row.avg_lb_speed || '').trim(),
-    lastUpdated:    new Date().toISOString(),
+    quickLink: (row.quick_link || '').trim(),
+    avgLbSpeed: (row.avg_lb_speed || '').trim(),
+    lastUpdated: new Date().toISOString(),
   }
 }
 
 export async function GET() {
   const sheetId = process.env.GOOGLE_SHEET_ID
-  const apiKey  = process.env.GOOGLE_API_KEY
+  const apiKey = process.env.GOOGLE_API_KEY
 
   if (!sheetId || !apiKey) {
     return NextResponse.json({ error: 'Missing Google Sheets configuration' }, { status: 500 })
@@ -161,14 +157,13 @@ export async function GET() {
       )
     }
 
-    const data   = await response.json()
+    const data = await response.json()
     const rows: string[][] = data.values || []
 
     if (rows.length === 0) {
       return NextResponse.json({ clubs: [], error: 'Sheet appears to be empty' })
     }
 
-    // Auto-detect the header row by scanning the first 15 rows
     let headerRowIndex = -1
     let headerRow: string[] = []
 

@@ -34,6 +34,7 @@ export function FilterBar({ filters, onFiltersChange, className }: FilterBarProp
       search: '',
       type: 'All',
       platform: 'All',
+      breakFilter: 'All',
       openOnly: false,
       sfwOnly: false,
       invitePartiesOnly: false,
@@ -44,6 +45,7 @@ export function FilterBar({ filters, onFiltersChange, className }: FilterBarProp
     filters.search ||
     filters.type !== 'All' ||
     filters.platform !== 'All' ||
+    filters.breakFilter !== 'All' ||
     filters.openOnly ||
     filters.sfwOnly ||
     filters.invitePartiesOnly
@@ -97,6 +99,7 @@ export function FilterBar({ filters, onFiltersChange, className }: FilterBarProp
               <SelectItem value="Cat">Cat</SelectItem>
               <SelectItem value="Dog">Dog</SelectItem>
               <SelectItem value="Hybrid">Hybrid</SelectItem>
+              <SelectItem value="Invite">Invite</SelectItem>
             </SelectContent>
           </Select>
 
@@ -115,6 +118,22 @@ export function FilterBar({ filters, onFiltersChange, className }: FilterBarProp
             </SelectContent>
           </Select>
         </div>
+
+        <Select
+          value={filters.breakFilter}
+          onValueChange={(value) =>
+            updateFilter('breakFilter', value as ClubFilters['breakFilter'])
+          }
+        >
+          <SelectTrigger className="w-[140px] h-10 bg-secondary/50 border-border/50 rounded-xl hover:bg-secondary/70 transition-colors">
+            <SelectValue placeholder="Break" />
+          </SelectTrigger>
+          <SelectContent className="rounded-xl border-border/50">
+            <SelectItem value="All">All Breaks</SelectItem>
+            <SelectItem value="Has Break">Has Break</SelectItem>
+            <SelectItem value="No Break">No Break</SelectItem>
+          </SelectContent>
+        </Select>
 
         {/* Toggle Switches */}
         <div className="flex flex-wrap items-center gap-x-8 gap-y-3">

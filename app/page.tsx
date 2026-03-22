@@ -16,6 +16,7 @@ const defaultFilters: ClubFilters = {
   search: '',
   type: 'All',
   platform: 'All',
+  breakFilter: 'All',
   openOnly: false,
   sfwOnly: false,
   invitePartiesOnly: false,
@@ -41,6 +42,18 @@ export default function HomePage() {
         return false
       }
       if (filters.platform !== 'All' && club.platform !== filters.platform) {
+        return false
+      }
+      if (
+        filters.breakFilter === 'Has Break' &&
+        club.break !== 'yes'
+      ) {
+        return false
+      }
+      if (
+        filters.breakFilter === 'No Break' &&
+        club.break !== 'no'
+      ) {
         return false
       }
       if (filters.openOnly && club.status !== 'Open') {
