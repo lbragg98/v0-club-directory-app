@@ -1,11 +1,10 @@
 import { NextResponse } from 'next/server'
-import type { NextRequest } from 'next/server'
 
 const COOKIE_NAME = 'admin_auth'
 
-export async function POST(request: NextRequest) {
+export async function POST() {
   try {
-    // Create response and clear cookie by setting maxAge to 0
+    // Clear auth cookie by setting maxAge to 0
     const response = NextResponse.json({ success: true })
     response.cookies.set(COOKIE_NAME, '', {
       httpOnly: true,
@@ -15,9 +14,13 @@ export async function POST(request: NextRequest) {
       path: '/',
     })
 
+    if (process.env.NODE_ENV === 'development') {
+      console.log('[auth] Logout: cookie cleared')
+    }
+
     return response
   } catch (error) {
-    console.error('[v0] Logout error:', error)
+    console.error('[auth] Logout error:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

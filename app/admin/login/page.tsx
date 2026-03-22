@@ -38,9 +38,12 @@ export default function AdminLoginPage() {
         return
       }
 
-      // Success - cookie is set, navigate to admin dashboard
+      // Success: cookie is set in the response, now navigate
+      // Use replace to avoid back button returning to login, then refresh to revalidate auth
       router.replace('/admin')
+      router.refresh()
     } catch (err) {
+      console.error('Login error:', err)
       setError('An unexpected error occurred')
       setIsLoading(false)
     }

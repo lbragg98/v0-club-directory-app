@@ -21,13 +21,16 @@ export async function POST(request: NextRequest) {
     const isValid = validateCredentials(username, password)
     
     if (!isValid) {
+      if (process.env.NODE_ENV === 'development') {
+        console.log('[auth] Login failed: invalid credentials for user', username)
+      }
       return NextResponse.json(
         { error: 'Invalid username or password' },
         { status: 401 }
       )
     }
 
-    // Create response and set cookie directly on it
+    // Set auth cookie on response
     const response = NextResponse.json({ success: true })
     response.cookies.set(COOKIE_NAME, 'authenticated', {
       httpOnly: true,
@@ -37,9 +40,13 @@ export async function POST(request: NextRequest) {
       path: '/',
     })
 
+    if (process.env.NODE_ENV === 'development') {
+      console.log('[auth] Login successful, cookie set for user', username)
+    }
+
     return response
   } catch (error) {
-    console.error('[v0] Login error:', error)
+    console.error('[auth] Login error:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
