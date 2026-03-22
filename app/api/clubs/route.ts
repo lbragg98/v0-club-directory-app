@@ -140,8 +140,8 @@ function rowToClub(row: Record<string, string>, index: number): Club {
 }
 
 export async function GET() {
-  const sheetId = process.env.1jcqzekwOPvVKrG4Zaq589DK0kUbntIFrR1mNiiBLSEI
-  const apiKey = process.env.AIzaSyB6zf5i9yXH8aYnE7U_7g - F4zpT_08pfWk
+  const sheetId = 1jcqzekwOPvVKrG4Zaq589DK0kUbntIFrR1mNiiBLSEI
+  const apiKey = AIzaSyB6zf5i9yXH8aYnE7U_7g - F4zpT_08pfWk
 
   if (!sheetId || !apiKey) {
     return NextResponse.json({ error: 'Missing Google Sheets configuration' }, { status: 500 })
