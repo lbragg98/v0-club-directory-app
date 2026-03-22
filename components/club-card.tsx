@@ -34,7 +34,7 @@ export function ClubCard({ club, onClick }: ClubCardProps) {
       onClick={onClick}
       className={cn(
         'w-full text-left rounded-2xl border p-5 transition-all duration-200',
-        'bg-card backdrop-blur-sm',
+        'bg-[#2f3136] sm:bg-card backdrop-blur-sm',
         'border-border hover:border-primary/40',
         'hover:shadow-lg hover:shadow-black/20 hover:-translate-y-0.5'
       )}
@@ -42,10 +42,13 @@ export function ClubCard({ club, onClick }: ClubCardProps) {
       <div className="space-y-4">
         {/* Top row */}
         <div className="flex items-start justify-between gap-3">
-          <div className="min-w-0">
+          <div className="min-w-0 min-h-[56px]">
             <h3 className="text-lg font-semibold text-foreground truncate">
               {club.name}
             </h3>
+            <p className="text-sm text-muted-foreground">
+              {club.type} Club on {club.platform}
+            </p>
           </div>
 
           <Badge
