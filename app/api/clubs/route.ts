@@ -85,12 +85,11 @@ function parseBreakState(value: string | undefined): 'yes' | 'no' | null {
 function rowToClub(row: Record<string, string>, index: number): Club {
   const breakState = parseBreakState(row.break)
 
+  // Open/Closed status is independent of break status
   let status: 'Open' | 'Closed' = 'Closed'
   if (row.is_open) {
     status = parseBoolean(row.is_open) ? 'Open' : 'Closed'
   }
-  // A club with an active break is always closed
-  if (breakState === 'yes') status = 'Closed'
 
   let type: 'Cat' | 'Dog' | 'Hybrid' = 'Cat'
   const rawType = (row.club_type || '').toLowerCase()
