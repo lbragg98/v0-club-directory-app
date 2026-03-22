@@ -158,10 +158,10 @@ export function ClubCard({ club, onClick }: ClubCardProps) {
               <p>{club.sfwFriendly ? 'Friendly' : 'Not Friendly'}</p>
             </div>
           </div>
-          {club.notes && (
+          {(
             <div className="pt-1">
               <span className="text-xs uppercase tracking-wide text-foreground font-medium">
-                Click To See More Bitch
+                Click To See More
               </span>
             </div>
           )}
