@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import { Search, X } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
@@ -22,6 +23,8 @@ interface FilterBarProps {
 }
 
 export function FilterBar({ filters, onFiltersChange, className }: FilterBarProps) {
+  const [filtersOpen, setFiltersOpen] = useState(false)
+
   const updateFilter = <K extends keyof ClubFilters>(
     key: K,
     value: ClubFilters[K]
@@ -86,125 +89,143 @@ export function FilterBar({ filters, onFiltersChange, className }: FilterBarProp
           )}
         </div>
 
-        <div className="grid grid-cols-2 gap-3 sm:flex sm:flex-wrap">
-          <Select
-            value={filters.type}
-            onValueChange={(value) => updateFilter('type', value as ClubFilters['type'])}
-          >
-            <SelectTrigger className="w-full sm:w-[140px] h-10 bg-secondary/50 border-border/50 rounded-xl hover:bg-secondary/70 transition-colors">
-              <SelectValue placeholder="Type" />
-            </SelectTrigger>
-            <SelectContent className="rounded-xl border-border/50">
-              <SelectItem value="All">All Types</SelectItem>
-              <SelectItem value="Cat">Cat</SelectItem>
-              <SelectItem value="Dog">Dog</SelectItem>
-              <SelectItem value="Hybrid">Hybrid</SelectItem>
-              <SelectItem value="Invite">Invite</SelectItem>
-            </SelectContent>
-          </Select>
+        <Button
+          type="button"
+          variant="outline"
+          onClick={() => setFiltersOpen((prev) => !prev)}
+          className="w-full sm:w-auto rounded-xl border-border/50 bg-secondary/50 hover:bg-secondary/70"
+        >
+          Filter
+        </Button>
 
-          <Select
-            value={filters.platform}
-            onValueChange={(value) => updateFilter('platform', value as ClubFilters['platform'])}
-          >
-            <SelectTrigger className="w-full sm:w-[140px] h-10 bg-secondary/50 border-border/50 rounded-xl hover:bg-secondary/70 transition-colors">
-              <SelectValue placeholder="Platform" />
-            </SelectTrigger>
-            <SelectContent className="rounded-xl border-border/50">
-              <SelectItem value="All">All Platforms</SelectItem>
-              <SelectItem value="Line">Line</SelectItem>
-              <SelectItem value="Disc">Disc</SelectItem>
-              <SelectItem value="Both">Both</SelectItem>
-            </SelectContent>
-          </Select>
-
-          <Select
-            value={filters.breakFilter}
-            onValueChange={(value) =>
-              updateFilter('breakFilter', value as ClubFilters['breakFilter'])
-            }
-          >
-            <SelectTrigger className="w-full sm:w-[140px] h-10 bg-secondary/50 border-border/50 rounded-xl hover:bg-secondary/70 transition-colors">
-              <SelectValue placeholder="Break" />
-            </SelectTrigger>
-            <SelectContent className="rounded-xl border-border/50">
-              <SelectItem value="All">All Breaks</SelectItem>
-              <SelectItem value="Has Break">Has Break</SelectItem>
-              <SelectItem value="No Break">No Break</SelectItem>
-            </SelectContent>
-          </Select>
-
-          <Select
-            value={filters.ratingFilter}
-            onValueChange={(value) =>
-              updateFilter('ratingFilter', value as ClubFilters['ratingFilter'])
-            }
-          >
-            <SelectTrigger className="w-full sm:w-[140px] h-10 bg-secondary/50 border-border/50 rounded-xl hover:bg-secondary/70 transition-colors">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent className="rounded-xl border-border/50">
-              <SelectItem value="All Clubs">All Ratings</SelectItem>
-              <SelectItem value="1+">1+</SelectItem>
-              <SelectItem value="2+">2+</SelectItem>
-              <SelectItem value="3+">3+</SelectItem>
-              <SelectItem value="4+">4+</SelectItem>
-              <SelectItem value="5">5</SelectItem>
-            </SelectContent>
-          </Select>
-
-          <Select
-            value={filters.sfwFilter}
-            onValueChange={(value) =>
-              updateFilter('sfwFilter', value as ClubFilters['sfwFilter'])
-            }
-          >
-            <SelectTrigger className="w-full sm:w-[150px] h-10 bg-secondary/50 border-border/50 rounded-xl hover:bg-secondary/70 transition-colors">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent className="rounded-xl border-border/50">
-              <SelectItem value="All Clubs">SFW Status</SelectItem>
-              <SelectItem value="Active SFW">Active SFW</SelectItem>
-              <SelectItem value="No Active SFW">No Active SFW</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div className="flex flex-wrap items-center gap-x-8 gap-y-3">
-          <div className="flex items-center gap-2.5">
-            <Switch
-              id="open-only"
-              checked={filters.openOnly}
-              onCheckedChange={(checked) => updateFilter('openOnly', checked)}
-              className="data-[state=checked]:bg-white data-[state=unchecked]:bg-white/20"
-            />
-            <Label htmlFor="open-only" className="text-sm cursor-pointer text-foreground/80 hover:text-foreground transition-colors">
-              Open Only
-            </Label>
-          </div>
-
-          <div className="flex items-center gap-2.5">
-            <Switch
-              id="parties-only"
-              checked={filters.invitePartiesOnly}
-              onCheckedChange={(checked) => updateFilter('invitePartiesOnly', checked)}
-              className="data-[state=checked]:bg-white data-[state=unchecked]:bg-white/20"
-            />
-            <Label htmlFor="parties-only" className="text-sm cursor-pointer text-foreground/80 hover:text-foreground transition-colors">
-              Invite Parties
-            </Label>
-          </div>
-
-          {hasActiveFilters && (
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={clearFilters}
-              className="text-muted-foreground hover:text-foreground hover:bg-secondary/50 rounded-lg ml-auto"
-            >
-              Clear All
-            </Button>
+        <div
+          className={cn(
+            'overflow-hidden transition-all duration-300 ease-in-out',
+            filtersOpen ? 'max-h-[1000px] opacity-100' : 'max-h-0 opacity-0'
           )}
+        >
+          <div className="flex flex-col gap-5 pt-1">
+            <div className="grid grid-cols-2 gap-3 sm:flex sm:flex-wrap">
+              <Select
+                value={filters.type}
+                onValueChange={(value) => updateFilter('type', value as ClubFilters['type'])}
+              >
+                <SelectTrigger className="w-full sm:w-[140px] h-10 bg-secondary/50 border-border/50 rounded-xl hover:bg-secondary/70 transition-colors">
+                  <SelectValue placeholder="Type" />
+                </SelectTrigger>
+                <SelectContent className="rounded-xl border-border/50">
+                  <SelectItem value="All">All Types</SelectItem>
+                  <SelectItem value="Cat">Cat</SelectItem>
+                  <SelectItem value="Dog">Dog</SelectItem>
+                  <SelectItem value="Hybrid">Hybrid</SelectItem>
+                  <SelectItem value="Invite">Invite</SelectItem>
+                </SelectContent>
+              </Select>
+
+              <Select
+                value={filters.platform}
+                onValueChange={(value) => updateFilter('platform', value as ClubFilters['platform'])}
+              >
+                <SelectTrigger className="w-full sm:w-[140px] h-10 bg-secondary/50 border-border/50 rounded-xl hover:bg-secondary/70 transition-colors">
+                  <SelectValue placeholder="Platform" />
+                </SelectTrigger>
+                <SelectContent className="rounded-xl border-border/50">
+                  <SelectItem value="All">All Platforms</SelectItem>
+                  <SelectItem value="Line">Line</SelectItem>
+                  <SelectItem value="Disc">Disc</SelectItem>
+                  <SelectItem value="Both">Both</SelectItem>
+                </SelectContent>
+              </Select>
+
+              <Select
+                value={filters.breakFilter}
+                onValueChange={(value) =>
+                  updateFilter('breakFilter', value as ClubFilters['breakFilter'])
+                }
+              >
+                <SelectTrigger className="w-full sm:w-[140px] h-10 bg-secondary/50 border-border/50 rounded-xl hover:bg-secondary/70 transition-colors">
+                  <SelectValue placeholder="Break" />
+                </SelectTrigger>
+                <SelectContent className="rounded-xl border-border/50">
+                  <SelectItem value="All">All Breaks</SelectItem>
+                  <SelectItem value="Has Break">Has Break</SelectItem>
+                  <SelectItem value="No Break">No Break</SelectItem>
+                </SelectContent>
+              </Select>
+
+              <Select
+                value={filters.ratingFilter}
+                onValueChange={(value) =>
+                  updateFilter('ratingFilter', value as ClubFilters['ratingFilter'])
+                }
+              >
+                <SelectTrigger className="w-full sm:w-[140px] h-10 bg-secondary/50 border-border/50 rounded-xl hover:bg-secondary/70 transition-colors">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="rounded-xl border-border/50">
+                  <SelectItem value="All Clubs">All Ratings</SelectItem>
+                  <SelectItem value="1+">1+</SelectItem>
+                  <SelectItem value="2+">2+</SelectItem>
+                  <SelectItem value="3+">3+</SelectItem>
+                  <SelectItem value="4+">4+</SelectItem>
+                  <SelectItem value="5">5</SelectItem>
+                </SelectContent>
+              </Select>
+
+              <Select
+                value={filters.sfwFilter}
+                onValueChange={(value) =>
+                  updateFilter('sfwFilter', value as ClubFilters['sfwFilter'])
+                }
+              >
+                <SelectTrigger className="w-full sm:w-[150px] h-10 bg-secondary/50 border-border/50 rounded-xl hover:bg-secondary/70 transition-colors">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="rounded-xl border-border/50">
+                  <SelectItem value="All Clubs">SFW Status</SelectItem>
+                  <SelectItem value="Active SFW">Active SFW</SelectItem>
+                  <SelectItem value="No Active SFW">No Active SFW</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-x-8 gap-y-3">
+              <div className="flex items-center gap-2.5">
+                <Switch
+                  id="open-only"
+                  checked={filters.openOnly}
+                  onCheckedChange={(checked) => updateFilter('openOnly', checked)}
+                  className="data-[state=checked]:bg-white data-[state=unchecked]:bg-white/20"
+                />
+                <Label htmlFor="open-only" className="text-sm cursor-pointer text-foreground/80 hover:text-foreground transition-colors">
+                  Open Only
+                </Label>
+              </div>
+
+              <div className="flex items-center gap-2.5">
+                <Switch
+                  id="parties-only"
+                  checked={filters.invitePartiesOnly}
+                  onCheckedChange={(checked) => updateFilter('invitePartiesOnly', checked)}
+                  className="data-[state=checked]:bg-white data-[state=unchecked]:bg-white/20"
+                />
+                <Label htmlFor="parties-only" className="text-sm cursor-pointer text-foreground/80 hover:text-foreground transition-colors">
+                  Invite Parties
+                </Label>
+              </div>
+
+              {hasActiveFilters && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={clearFilters}
+                  className="text-muted-foreground hover:text-foreground hover:bg-secondary/50 rounded-lg ml-auto"
+                >
+                  Clear All
+                </Button>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </div>
