@@ -234,6 +234,7 @@ export default function HomePage() {
               >
                 Favorites
               </button>
+
               <button
                 type="button"
                 onClick={() => setActiveTab('forms')}
@@ -248,13 +249,15 @@ export default function HomePage() {
               </button>
             </div>
 
-            <p className="text-sm text-muted-foreground mb-8">
-              Showing <span className="text-foreground font-medium">{displayedClubs.length}</span> of{' '}
-              <span className="text-foreground font-medium">
-                {activeTab === 'favorites' ? favoriteIds.length : clubs.length}
-              </span>{' '}
-              {activeTab === 'favorites' ? 'favorite clubs' : 'clubs'}
-            </p>
+            {activeTab !== 'forms' && (
+              <p className="text-sm text-muted-foreground mb-8">
+                Showing <span className="text-foreground font-medium">{displayedClubs.length}</span> of{' '}
+                <span className="text-foreground font-medium">
+                  {activeTab === 'favorites' ? favoriteIds.length : clubs.length}
+                </span>{' '}
+                {activeTab === 'favorites' ? 'favorite clubs' : 'clubs'}
+              </p>
+            )}
           </>
         )}
 
@@ -282,7 +285,54 @@ export default function HomePage() {
           </div>
         )}
 
-        {!isLoading && !error && displayedClubs.length === 0 && (
+        {!isLoading && !error && activeTab === 'forms' && (
+          <section className="space-y-8">
+            <div>
+              <h2 className="text-2xl font-semibold text-foreground">Forms</h2>
+              <p className="text-sm text-muted-foreground mt-1">
+                Submit updates or reviews directly here.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
+              <div className="rounded-2xl border border-border/50 bg-card p-4">
+                <h3 className="text-lg font-semibold text-foreground mb-4">
+                  Request Updated Information / Re-evaluation
+                </h3>
+                <iframe
+                  src="https://docs.google.com/forms/d/e/1FAIpQLSdYa4JH_j5ZVemT8GNHV4GE9R86609gaWOkbxGw9NbjwvJSYQ/viewform?usp=sharing&ouid=109003824222569830188/viewform?embedded=true"
+                  width="100%"
+                  height="900"
+                  frameBorder="0"
+                  marginHeight={0}
+                  marginWidth={0}
+                  className="rounded-xl"
+                >
+                  Loading…
+                </iframe>
+              </div>
+
+              <div className="rounded-2xl border border-border/50 bg-card p-4">
+                <h3 className="text-lg font-semibold text-foreground mb-4">
+                  Submit a Club Review
+                </h3>
+                <iframe
+                  src="https://docs.google.com/forms/d/e/1FAIpQLSdYa4JH_j5ZVemT8GNHV4GE9R86609gaWOkbxGw9NbjwvJSYQ/viewform?usp=sharing&ouid=109003824222569830188embedded=true"
+                  width="100%"
+                  height="900"
+                  frameBorder="0"
+                  marginHeight={0}
+                  marginWidth={0}
+                  className="rounded-xl"
+                >
+                  Loading…
+                </iframe>
+              </div>
+            </div>
+          </section>
+        )}
+
+        {!isLoading && !error && activeTab !== 'forms' && displayedClubs.length === 0 && (
           <div className="flex flex-col items-center justify-center py-20 text-center">
             <div className="p-4 rounded-2xl bg-muted ring-1 ring-border mb-6">
               <Users className="h-10 w-10 text-muted-foreground" />
@@ -301,7 +351,7 @@ export default function HomePage() {
           </div>
         )}
 
-        {!isLoading && !error && displayedClubs.length > 0 && (
+        {!isLoading && !error && activeTab !== 'forms' && displayedClubs.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {displayedClubs.map((club) => (
               <ClubCard
