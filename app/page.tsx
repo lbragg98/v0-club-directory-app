@@ -296,37 +296,71 @@ export default function HomePage() {
 
             <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
               <div className="rounded-2xl border border-border/50 bg-card p-4">
-                <h3 className="text-lg font-semibold text-foreground mb-4">
-                  Request Updated Information / Re-evaluation
-                </h3>
-                <iframe
-                  src="https://docs.google.com/forms/d/e/1FAIpQLSdYa4JH_j5ZVemT8GNHV4GE9R86609gaWOkbxGw9NbjwvJSYQ/viewform?usp=sharing&ouid=109003824222569830188/viewform?embedded=true"
-                  width="100%"
-                  height="900"
-                  frameBorder="0"
-                  marginHeight={0}
-                  marginWidth={0}
-                  className="rounded-xl"
+                <div className="flex items-center justify-between gap-4 mb-4">
+                  <h3 className="text-lg font-semibold text-foreground">
+                    Request Updated Information / Re-evaluation
+                  </h3>
+                  <button
+                    type="button"
+                    onClick={() => setShowUpdateForm((prev) => !prev)}
+                    className="px-4 py-2 rounded-xl bg-secondary/50 hover:bg-secondary/70 transition-colors text-sm font-medium"
+                  >
+                    {showUpdateForm ? 'Hide Form' : 'Show Form'}
+                  </button>
+                </div>
+
+                <div
+                  className={cn(
+                    'overflow-hidden transition-all duration-300 ease-in-out',
+                    showUpdateForm ? 'max-h-[1000px] opacity-100' : 'max-h-0 opacity-0'
+                  )}
                 >
-                  Loading…
-                </iframe>
+                  <iframe
+                    src="https://docs.google.com/forms/d/e/1FAIpQLSdYa4JH_j5ZVemT8GNHV4GE9R86609gaWOkbxGw9NbjwvJSYQ/viewform?embedded=true"
+                    width="100%"
+                    height="900"
+                    frameBorder="0"
+                    marginHeight={0}
+                    marginWidth={0}
+                    className="rounded-xl"
+                  >
+                    Loading…
+                  </iframe>
+                </div>
               </div>
 
               <div className="rounded-2xl border border-border/50 bg-card p-4">
-                <h3 className="text-lg font-semibold text-foreground mb-4">
-                  Submit a Club Review
-                </h3>
-                <iframe
-                  src="https://docs.google.com/forms/d/e/1FAIpQLSdYa4JH_j5ZVemT8GNHV4GE9R86609gaWOkbxGw9NbjwvJSYQ/viewform?usp=sharing&ouid=109003824222569830188embedded=true"
-                  width="100%"
-                  height="900"
-                  frameBorder="0"
-                  marginHeight={0}
-                  marginWidth={0}
-                  className="rounded-xl"
+                <div className="flex items-center justify-between gap-4 mb-4">
+                  <h3 className="text-lg font-semibold text-foreground">
+                    Submit a Club Review
+                  </h3>
+                  <button
+                    type="button"
+                    onClick={() => setShowReviewForm((prev) => !prev)}
+                    className="px-4 py-2 rounded-xl bg-secondary/50 hover:bg-secondary/70 transition-colors text-sm font-medium"
+                  >
+                    {showReviewForm ? 'Hide Form' : 'Show Form'}
+                  </button>
+                </div>
+
+                <div
+                  className={cn(
+                    'overflow-hidden transition-all duration-300 ease-in-out',
+                    showReviewForm ? 'max-h-[1000px] opacity-100' : 'max-h-0 opacity-0'
+                  )}
                 >
-                  Loading…
-                </iframe>
+                  <iframe
+                    src="https://docs.google.com/forms/d/e/1FAIpQLSdYa4JH_j5ZVemT8GNHV4GE9R86609gaWOkbxGw9NbjwvJSYQ/viewform?embedded=true"
+                    width="100%"
+                    height="900"
+                    frameBorder="0"
+                    marginHeight={0}
+                    marginWidth={0}
+                    className="rounded-xl"
+                  >
+                    Loading…
+                  </iframe>
+                </div>
               </div>
             </div>
           </section>
