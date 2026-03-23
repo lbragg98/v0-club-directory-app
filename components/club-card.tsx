@@ -12,12 +12,15 @@ import {
   Phone,
   ShieldCheck,
   Clock,
+  Heart,
 } from 'lucide-react'
 import type { Club } from '@/lib/types'
 
 interface ClubCardProps {
   club: Club
   onClick?: () => void
+  isFavorite?: boolean
+  onToggleFavorite?: () => void
 }
 
 const typeIcons = {
@@ -26,7 +29,7 @@ const typeIcons = {
   Hybrid: Users,
 }
 
-export function ClubCard({ club, onClick }: ClubCardProps) {
+export function ClubCard({ club, onClick, isFavorite, onToggleFavorite }: ClubCardProps) {
   const TypeIcon = typeIcons[club.type] || Users
 
   return (
@@ -48,16 +51,35 @@ export function ClubCard({ club, onClick }: ClubCardProps) {
             </h3>
           </div>
 
-          <Badge
-            className={cn(
-              'shrink-0 rounded-lg px-2.5 py-0.5 border-0 font-medium',
-              club.status === 'Open'
-                ? 'bg-green-500/15 text-green-400'
-                : 'bg-muted/70 text-muted-foreground'
-            )}
-          >
-            {club.status}
-          </Badge>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation()
+                onToggleFavorite?.()
+              }}
+              className="shrink-0 p-2 rounded-lg hover:bg-secondary/50 transition-colors"
+              aria-label={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+            >
+              <Heart
+                className={cn(
+                  'h-4 w-4',
+                  isFavorite ? 'fill-white text-white' : 'text-muted-foreground'
+                )}
+              />
+            </button>
+
+            <Badge
+              className={cn(
+                'shrink-0 rounded-lg px-2.5 py-0.5 border-0 font-medium',
+                club.status === 'Open'
+                  ? 'bg-green-500/15 text-green-400'
+                  : 'bg-muted/70 text-muted-foreground'
+              )}
+            >
+              {club.status}
+            </Badge>
+          </div>
         </div>
 
         {/* Overall rating */}
@@ -158,15 +180,13 @@ export function ClubCard({ club, onClick }: ClubCardProps) {
               <p>{club.sfwFriendly === 'yes' ? 'Friendly' : club.sfwFriendly === 'cbc' ? 'Case By Case' : 'Not Friendly'}</p>
             </div>
           </div>
-          {(
-            <div className="pt-1">
-              <span className="text-xs uppercase tracking-wide text-foreground font-medium">
-                Click To See More
-              </span>
-            </div>
-          )}
+          <div className="pt-1">
+            <span className="text-xs uppercase tracking-wide text-foreground font-medium">
+              Click To See More
+            </span>
+          </div>
         </div>
       </div>
-    </button >
+    </button>
   )
 }

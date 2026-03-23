@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import useSWR from 'swr'
 import { ClubCard } from '@/components/club-card'
 import { ClubCardSkeleton } from '@/components/club-card-skeleton'
@@ -28,10 +28,34 @@ export default function HomePage() {
   const [filters, setFilters] = useState<ClubFilters>(defaultFilters)
   const [selectedClub, setSelectedClub] = useState<Club | null>(null)
   const [modalOpen, setModalOpen] = useState(false)
+  const [favoriteIds, setFavoriteIds] = useState<string[]>([])
   const { data, error, isLoading, mutate } = useSWR<{ clubs: Club[]; debug?: Record<string, unknown> }>(
     '/api/clubs',
     fetcher
   )
+
+  useEffect(() => {
+    const saved = localStorage.getItem('favoriteClubIds')
+    if (saved) {
+      try {
+        setFavoriteIds(JSON.parse(saved))
+      } catch {
+        setFavoriteIds([])
+      }
+    }
+  }, [])
+
+  useEffect(() => {
+    localStorage.setItem('favoriteClubIds', JSON.stringify(favoriteIds))
+  }, [favoriteIds])
+
+  function toggleFavorite(clubId: string) {
+    setFavoriteIds((prev) =>
+      prev.includes(clubId)
+        ? prev.filter((id) => id !== clubId)
+        : [...prev, clubId]
+    )
+  }
 
   const clubs = useMemo(() => {
     return [...(data?.clubs ?? [])].sort((a, b) => b.overallRating - a.overallRating)
@@ -93,6 +117,14 @@ export default function HomePage() {
       return true
     })
   }, [clubs, filters])
+
+  const favoriteClubs = useMemo(() => {
+    return filteredClubs.filter((club) => favoriteIds.includes(club.id))
+  }, [filteredClubs, favoriteIds])
+
+  const nonFavoriteFilteredClubs = useMemo(() => {
+    return filteredClubs.filter((club) => !favoriteIds.includes(club.id))
+  }, [filteredClubs, favoriteIds])
 
   const stats = useMemo(() => {
     const totalClubs = clubs.length
@@ -185,6 +217,29 @@ export default function HomePage() {
           </div>
         )}
 
+        {!isLoading && !error && favoriteClubs.length > 0 && (
+          <section className="mb-10">
+            <div className="mb-4">
+              <h2 className="text-2xl font-semibold text-foreground">Favorites</h2>
+              <p className="text-sm text-muted-foreground">
+                Your saved clubs on this device
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {favoriteClubs.map((club) => (
+                <ClubCard
+                  key={`favorite-${club.id}`}
+                  club={club}
+                  onClick={() => handleClubClick(club)}
+                  isFavorite={favoriteIds.includes(club.id)}
+                  onToggleFavorite={() => toggleFavorite(club.id)}
+                />
+              ))}
+            </div>
+          </section>
+        )}
+
         {!isLoading && !error && filteredClubs.length === 0 && (
           <div className="flex flex-col items-center justify-center py-20 text-center">
             <div className="p-4 rounded-2xl bg-muted ring-1 ring-border mb-6">
@@ -200,10 +255,16 @@ export default function HomePage() {
           </div>
         )}
 
-        {!isLoading && !error && filteredClubs.length > 0 && (
+        {!isLoading && !error && nonFavoriteFilteredClubs.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {filteredClubs.map((club) => (
-              <ClubCard key={club.id} club={club} onClick={() => handleClubClick(club)} />
+            {nonFavoriteFilteredClubs.map((club) => (
+              <ClubCard
+                key={club.id}
+                club={club}
+                onClick={() => handleClubClick(club)}
+                isFavorite={favoriteIds.includes(club.id)}
+                onToggleFavorite={() => toggleFavorite(club.id)}
+              />
             ))}
           </div>
         )}
