@@ -12,7 +12,7 @@ import {
   Phone,
   ShieldCheck,
   Clock,
-  Heart,
+  Star,
 } from 'lucide-react'
 import type { Club } from '@/lib/types'
 
@@ -61,7 +61,7 @@ export function ClubCard({ club, onClick, isFavorite, onToggleFavorite }: ClubCa
               className="shrink-0 p-2 rounded-lg hover:bg-secondary/50 transition-colors"
               aria-label={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
             >
-              <Heart
+              <Star
                 className={cn(
                   'h-4 w-4',
                   isFavorite ? 'fill-white text-white' : 'text-muted-foreground'
