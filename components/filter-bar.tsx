@@ -229,7 +229,7 @@ export function FilterBar({ filters, onFiltersChange, className }: FilterBarProp
                   className="data-[state=checked]:bg-white data-[state=unchecked]:bg-white/20"
                 />
                 <Label htmlFor="parties-only" className="text-sm cursor-pointer text-foreground/80 hover:text-foreground transition-colors">
-                  Invite Parties
+                  Invite Sessions
                 </Label>
               </div>
 
