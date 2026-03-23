@@ -30,7 +30,7 @@ export default function HomePage() {
   const [selectedClub, setSelectedClub] = useState<Club | null>(null)
   const [modalOpen, setModalOpen] = useState(false)
   const [favoriteIds, setFavoriteIds] = useState<string[]>([])
-  const [activeTab, setActiveTab] = useState<'all' | 'favorites'>('all')
+  const [activeTab, setActiveTab] = useState<'all' | 'favorites' | 'forms'>('all')
   const { data, error, isLoading, mutate } = useSWR<{ clubs: Club[]; debug?: Record<string, unknown> }>(
     '/api/clubs',
     fetcher
@@ -233,6 +233,18 @@ export default function HomePage() {
                 )}
               >
                 Favorites
+              </button>
+              <button
+                type="button"
+                onClick={() => setActiveTab('forms')}
+                className={cn(
+                  'px-4 py-2 rounded-xl text-sm font-medium transition-colors',
+                  activeTab === 'forms'
+                    ? 'bg-white text-black'
+                    : 'bg-secondary/50 text-foreground hover:bg-secondary/70'
+                )}
+              >
+                Forms
               </button>
             </div>
 
