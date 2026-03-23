@@ -148,6 +148,19 @@ export default function HomePage() {
 
       <section className="relative border-b border-border/40">
         <div className="container mx-auto px-4 py-16 md:py-20">
+          <div className="flex justify-end mb-4">
+            <p className="text-xs text-muted-foreground/70 max-w-md text-right leading-relaxed">
+              <span className="font-medium text-muted-foreground">Disclaimer:</span> These ratings are solely based on the three features needed for club hopping and last bar chasing. These ratings do not reflect the club environment and the people there or their sfw policies. To request updated information/re-evaluation, use this{' '}
+              <a href="https://omfgdogs.com" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground transition-colors">
+                Google Form
+              </a>
+              . To submit a review for a club to be taken under consideration, use this{' '}
+              <a href="https://omfgdogs.com" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground transition-colors">
+                Google Form
+              </a>
+              .
+            </p>
+          </div>
           <div className="max-w-3xl space-y-6">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-foreground">
               EC Club Database
