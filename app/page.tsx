@@ -286,7 +286,7 @@ export default function HomePage() {
               <div className="rounded-2xl border border-border/50 bg-card p-4">
                 <div className="flex flex-col items-start gap-4 mb-4 sm:flex-row sm:items-center sm:justify-between">
                   <h3 className="text-lg font-semibold text-foreground">
-                    Request Updated Information / Re-evaluation
+                    Request Updated Information / Re-Evaluation
                   </h3>
                   <button
                     type="button"
