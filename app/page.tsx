@@ -284,14 +284,14 @@ export default function HomePage() {
 
             <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
               <div className="rounded-2xl border border-border/50 bg-card p-4">
-                <div className="flex items-center justify-between gap-4 mb-4">
+                <div className="flex flex-col items-start gap-4 mb-4 sm:flex-row sm:items-center sm:justify-between">
                   <h3 className="text-lg font-semibold text-foreground">
                     Request Updated Information / Re-evaluation
                   </h3>
                   <button
                     type="button"
                     onClick={() => setShowUpdateForm((prev) => !prev)}
-                    className="px-4 py-2 rounded-xl bg-secondary/50 hover:bg-secondary/70 transition-colors text-sm font-medium"
+                    className="w-full sm:w-auto px-4 py-2 rounded-xl bg-secondary/50 hover:bg-secondary/70 transition-colors text-sm font-medium"
                   >
                     {showUpdateForm ? 'Hide Form' : 'Show Form'}
                   </button>
@@ -318,14 +318,14 @@ export default function HomePage() {
               </div>
 
               <div className="rounded-2xl border border-border/50 bg-card p-4">
-                <div className="flex items-center justify-between gap-4 mb-4">
+                <div className="flex flex-col items-start gap-4 mb-4 sm:flex-row sm:items-center sm:justify-between">
                   <h3 className="text-lg font-semibold text-foreground">
                     Submit a Club Review
                   </h3>
                   <button
                     type="button"
                     onClick={() => setShowReviewForm((prev) => !prev)}
-                    className="px-4 py-2 rounded-xl bg-secondary/50 hover:bg-secondary/70 transition-colors text-sm font-medium"
+                    className="w-full sm:w-auto px-4 py-2 rounded-xl bg-secondary/50 hover:bg-secondary/70 transition-colors text-sm font-medium"
                   >
                     {showReviewForm ? 'Hide Form' : 'Show Form'}
                   </button>
