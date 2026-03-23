@@ -200,9 +200,9 @@ export function FilterBar({ filters, onFiltersChange, className }: FilterBarProp
                   <SelectValue placeholder="SFW Friendly" />
                 </SelectTrigger>
                 <SelectContent className="rounded-xl border-border/50">
-                  <SelectItem value="All Clubs">All Clubs</SelectItem>
-                  <SelectItem value="SFW Friendly">SFW Friendly</SelectItem>
-                  <SelectItem value="Not Friendly">Not SFW Friendly</SelectItem>
+                  <SelectItem value="All Clubs">SFW Friendly</SelectItem>
+                  <SelectItem value="SFW Friendly">Friendly</SelectItem>
+                  <SelectItem value="Not Friendly">Not Friendly</SelectItem>
                   <SelectItem value="Case by Case">Case By Case</SelectItem>
                 </SelectContent>
               </Select>
