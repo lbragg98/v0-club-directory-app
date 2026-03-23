@@ -149,14 +149,14 @@ export default function HomePage() {
       <div className="fixed inset-0 bg-gradient-to-br from-primary/[0.02] via-transparent to-[var(--gold)]/[0.02] pointer-events-none" />
 
       <section className="relative border-b border-border/40">
-        <div className="container mx-auto px-4 py-16 md:py-20">
+        <div className="container mx-auto px-4 py-10 md:py-20">
           <div className="max-w-3xl space-y-6">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-foreground">
               EC Club Database
             </h1>
 
             <p className="text-sm text-muted-foreground/80 leading-relaxed max-w-2xl">
-              <span className="font-medium text-muted-foreground">Disclaimer:</span> Disclaimer: These ratings are based on the features needed for club/last bar hopping and do not reflect the club environment, members, or SFW policies.
+              <span className="font-medium text-muted-foreground">Disclaimer:</span> These ratings are based on the features needed for club/last bar hopping and do not reflect the club environment, members, or SFW policies.
             </p>
 
             <p className="text-sm text-muted-foreground/80 leading-relaxed max-w-2xl">
@@ -164,7 +164,7 @@ export default function HomePage() {
             </p>
 
             {!isLoading && !error && (
-              <div className="flex flex-wrap gap-8 pt-4">
+              <div className="flex flex-wrap gap-8 pt-2">
                 <div className="flex items-center gap-3">
                   <div className="p-2.5 rounded-xl bg-primary/10 ring-1 ring-primary/20">
                     <Users className="h-5 w-5 text-primary" />
@@ -189,7 +189,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="relative container mx-auto px-4 py-8">
+      <section className="relative container mx-auto px-4 py-4 md:py-8">
         <div className="sticky top-0 z-10 -mx-4 px-4 py-4 bg-background/80 backdrop-blur-xl">
           <FilterBar filters={filters} onFiltersChange={setFilters} />
         </div>
