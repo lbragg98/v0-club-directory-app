@@ -148,7 +148,7 @@ export function ClubDetailModal({
             <div className="grid grid-cols-2 gap-4 text-muted-foreground">
               <div className="space-y-1">
                 <span className="font-medium text-foreground text-xs uppercase tracking-wide">SFW Friendly</span>
-                <p>{club.sfwFriendly ? 'Yes' : 'No'}</p>
+                <p>{club.sfwFriendly === 'yes' ? 'Yes' : club.sfwFriendly === 'cbc' ? 'Case By Case' : 'No'}</p>
               </div>
               {club.breakTime && (
                 <div className="space-y-1">

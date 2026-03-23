@@ -181,10 +181,10 @@ export function FilterBar({ filters, onFiltersChange, className }: FilterBarProp
                 }
               >
                 <SelectTrigger className="w-full sm:w-[150px] h-10 bg-secondary/50 border-border/50 rounded-xl hover:bg-secondary/70 transition-colors">
-                  <SelectValue />
+                  <SelectValue placeholder="SFW Status" />
                 </SelectTrigger>
                 <SelectContent className="rounded-xl border-border/50">
-                  <SelectItem value="All Clubs">SFW Status</SelectItem>
+                  <SelectItem value="All Clubs">All Clubs</SelectItem>
                   <SelectItem value="Active SFW">Active SFW</SelectItem>
                   <SelectItem value="No Active SFW">No Active SFW</SelectItem>
                 </SelectContent>
@@ -197,13 +197,13 @@ export function FilterBar({ filters, onFiltersChange, className }: FilterBarProp
                 }
               >
                 <SelectTrigger className="w-full sm:w-[160px] h-10 bg-secondary/50 border-border/50 rounded-xl hover:bg-secondary/70 transition-colors">
-                  <SelectValue />
+                  <SelectValue placeholder="SFW Friendly" />
                 </SelectTrigger>
                 <SelectContent className="rounded-xl border-border/50">
-                  <SelectItem value="All Clubs">SFW Friendly?</SelectItem>
-                  <SelectItem value="SFW Friendly">Friendly</SelectItem>
-                  <SelectItem value="Not Friendly">Not Friendly</SelectItem>
-                  <SelectItem value="Case by Case">Case by Case</SelectItem>
+                  <SelectItem value="All Clubs">All Clubs</SelectItem>
+                  <SelectItem value="SFW Friendly">SFW Friendly</SelectItem>
+                  <SelectItem value="Not Friendly">Not SFW Friendly</SelectItem>
+                  <SelectItem value="Case by Case">Case By Case</SelectItem>
                 </SelectContent>
               </Select>
             </div>

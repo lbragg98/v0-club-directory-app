@@ -18,6 +18,7 @@ const defaultFilters: ClubFilters = {
   platform: 'All',
   breakFilter: 'All',
   sfwFilter: 'All Clubs',
+  sfwFriendlyFilter: 'All Clubs',
   ratingFilter: 'All Clubs',
   openOnly: false,
   invitePartiesOnly: false,
@@ -63,6 +64,15 @@ export default function HomePage() {
         return false
       }
       if (filters.invitePartiesOnly && !club.inviteParties) {
+        return false
+      }
+      if (filters.sfwFriendlyFilter === 'SFW Friendly' && club.sfwFriendly !== 'yes') {
+        return false
+      }
+      if (filters.sfwFriendlyFilter === 'Not Friendly' && club.sfwFriendly !== 'no') {
+        return false
+      }
+      if (filters.sfwFriendlyFilter === 'Case by Case' && club.sfwFriendly !== 'cbc') {
         return false
       }
       if (filters.ratingFilter === '1+' && club.overallRating < 1) {

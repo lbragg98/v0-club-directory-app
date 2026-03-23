@@ -88,7 +88,7 @@ export function ClubCard({ club, onClick }: ClubCardProps) {
             {club.platform}
           </Badge>
 
-          {club.sfwFriendly && (
+          {club.sfwFriendly === 'yes' && (
             <Badge
               variant="outline"
               className="rounded-lg border bg-secondary/70 border-border text-secondary-foreground"
@@ -155,7 +155,7 @@ export function ClubCard({ club, onClick }: ClubCardProps) {
               <span className="text-xs uppercase tracking-wide text-foreground font-medium">
                 SFW
               </span>
-              <p>{club.sfwFriendly ? 'Friendly' : 'Not Friendly'}</p>
+              <p>{club.sfwFriendly === 'yes' ? 'Friendly' : club.sfwFriendly === 'cbc' ? 'Case By Case' : 'Not Friendly'}</p>
             </div>
           </div>
           {(
