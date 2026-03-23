@@ -35,6 +35,8 @@ export default function HomePage() {
     '/api/clubs',
     fetcher
   )
+  const [showUpdateForm, setShowUpdateForm] = useState(false)
+  const [showReviewForm, setShowReviewForm] = useState(false)
 
   useEffect(() => {
     const saved = localStorage.getItem('favoriteClubIds')
