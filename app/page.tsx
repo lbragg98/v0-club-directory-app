@@ -156,7 +156,7 @@ export default function HomePage() {
             </h1>
 
             <p className="text-sm text-muted-foreground/80 leading-relaxed max-w-2xl">
-              <span className="font-medium text-muted-foreground">Disclaimer:</span> These ratings are solely based on the three features needed for club hopping and last bar chasing. These ratings do not reflect the club environment and the people there or their SFW policies.
+              <span className="font-medium text-muted-foreground">Disclaimer:</span> Disclaimer: These ratings are based on the features needed for club/last bar hopping and do not reflect the club environment, members, or SFW policies.
             </p>
 
             <p className="text-sm text-muted-foreground/80 leading-relaxed max-w-2xl">
