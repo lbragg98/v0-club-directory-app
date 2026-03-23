@@ -79,6 +79,14 @@ function parseBreakState(value: string | undefined): 'yes' | 'no' | null {
   return null
 }
 
+function parseSfwFriendly(value: string | undefined): 'yes' | 'no' | 'cbc' {
+  if (!value) return 'no'
+  const v = value.toString().toLowerCase().trim()
+  if (v === 'cbc' || v === 'case by case' || v.includes('case')) return 'cbc'
+  if (['yes', 'true', '1', 'y'].includes(v)) return 'yes'
+  return 'no'
+}
+
 function rowToClub(row: Record<string, string>, index: number): Club {
   const breakState = parseBreakState(row.break)
 
@@ -119,7 +127,7 @@ function rowToClub(row: Record<string, string>, index: number): Club {
     type,
     platform,
     status,
-    sfwFriendly: parseBoolean(row.sfw_friendly),
+    sfwFriendly: parseSfwFriendly(row.sfw_friendly),
     sfwActive: parseBoolean(row.sfw_active),
     inviteParties: parseBoolean(row.invite_parties),
     overallRating,

@@ -191,7 +191,7 @@ export function FilterBar({ filters, onFiltersChange, className }: FilterBarProp
               </Select>
 
               <Select
-                value={filters.sfwFriendlyFilter}
+                value={filters.sfwFriendlyFilter || 'All Clubs'}
                 onValueChange={(value) =>
                   updateFilter('sfwFriendlyFilter', value as ClubFilters['sfwFriendlyFilter'])
                 }
