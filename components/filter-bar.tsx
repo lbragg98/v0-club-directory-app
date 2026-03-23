@@ -184,7 +184,7 @@ export function FilterBar({ filters, onFiltersChange, className }: FilterBarProp
                   <SelectValue placeholder="SFW Status" />
                 </SelectTrigger>
                 <SelectContent className="rounded-xl border-border/50">
-                  <SelectItem value="All Clubs">All Clubs</SelectItem>
+                  <SelectItem value="All Clubs">SFW Status</SelectItem>
                   <SelectItem value="Active SFW">Active SFW</SelectItem>
                   <SelectItem value="No Active SFW">No Active SFW</SelectItem>
                 </SelectContent>
