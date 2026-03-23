@@ -156,25 +156,11 @@ export default function HomePage() {
             </h1>
 
             <p className="text-sm text-muted-foreground/80 leading-relaxed max-w-2xl">
-              <span className="font-medium text-muted-foreground">Disclaimer:</span> These ratings are solely based on the three features needed for club hopping and last bar chasing. These ratings do not reflect the club environment and the people there or their SFW policies. To request updated information/re-evaluation, use this{' '}
-              <a
-                href="https://www.youtube.com/watch?v=Aq5WXmQQooo"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="underline hover:text-foreground transition-colors"
-              >
-                Google Form
-              </a>
-              . To submit a review for a club to be taken under consideration, use this{' '}
-              <a
-                href="https://www.youtube.com/watch?v=Aq5WXmQQooo"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="underline hover:text-foreground transition-colors"
-              >
-                Google Form
-              </a>
-              .
+              <span className="font-medium text-muted-foreground">Disclaimer:</span> These ratings are solely based on the three features needed for club hopping and last bar chasing. These ratings do not reflect the club environment and the people there or their SFW policies.
+            </p>
+
+            <p className="text-sm text-muted-foreground/80 leading-relaxed max-w-2xl">
+              To request a re-evaluation or updated information, or to submit a review for a club, please click the <span className="font-medium text-muted-foreground">Forms</span> tab.
             </p>
 
             {!isLoading && !error && (
