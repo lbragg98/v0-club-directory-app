@@ -8,6 +8,7 @@ import { FilterBar } from '@/components/filter-bar'
 import { ClubDetailModal } from '@/components/club-detail-modal'
 import { Button } from '@/components/ui/button'
 import { AlertCircle, RefreshCw, Users, Sparkles } from 'lucide-react'
+import { cn } from '@/lib/utils'
 import type { Club, ClubFilters } from '@/lib/types'
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json())
@@ -29,6 +30,7 @@ export default function HomePage() {
   const [selectedClub, setSelectedClub] = useState<Club | null>(null)
   const [modalOpen, setModalOpen] = useState(false)
   const [favoriteIds, setFavoriteIds] = useState<string[]>([])
+  const [activeTab, setActiveTab] = useState<'all' | 'favorites'>('all')
   const { data, error, isLoading, mutate } = useSWR<{ clubs: Club[]; debug?: Record<string, unknown> }>(
     '/api/clubs',
     fetcher
@@ -118,13 +120,12 @@ export default function HomePage() {
     })
   }, [clubs, filters])
 
-  const favoriteClubs = useMemo(() => {
-    return filteredClubs.filter((club) => favoriteIds.includes(club.id))
-  }, [filteredClubs, favoriteIds])
-
-  const nonFavoriteFilteredClubs = useMemo(() => {
-    return filteredClubs.filter((club) => !favoriteIds.includes(club.id))
-  }, [filteredClubs, favoriteIds])
+  const displayedClubs = useMemo(() => {
+    if (activeTab === 'favorites') {
+      return filteredClubs.filter((club) => favoriteIds.includes(club.id))
+    }
+    return filteredClubs
+  }, [activeTab, filteredClubs, favoriteIds])
 
   const stats = useMemo(() => {
     const totalClubs = clubs.length
@@ -187,10 +188,43 @@ export default function HomePage() {
         </div>
 
         {!isLoading && !error && (
-          <p className="text-sm text-muted-foreground mt-6 mb-8">
-            Showing <span className="text-foreground font-medium">{filteredClubs.length}</span> of{' '}
-            <span className="text-foreground font-medium">{clubs.length}</span> clubs
-          </p>
+          <>
+            <div className="flex gap-2 mt-6 mb-4">
+              <button
+                type="button"
+                onClick={() => setActiveTab('all')}
+                className={cn(
+                  'px-4 py-2 rounded-xl text-sm font-medium transition-colors',
+                  activeTab === 'all'
+                    ? 'bg-white text-black'
+                    : 'bg-secondary/50 text-foreground hover:bg-secondary/70'
+                )}
+              >
+                All Clubs
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setActiveTab('favorites')}
+                className={cn(
+                  'px-4 py-2 rounded-xl text-sm font-medium transition-colors',
+                  activeTab === 'favorites'
+                    ? 'bg-white text-black'
+                    : 'bg-secondary/50 text-foreground hover:bg-secondary/70'
+                )}
+              >
+                Favorites
+              </button>
+            </div>
+
+            <p className="text-sm text-muted-foreground mb-8">
+              Showing <span className="text-foreground font-medium">{displayedClubs.length}</span> of{' '}
+              <span className="text-foreground font-medium">
+                {activeTab === 'favorites' ? favoriteIds.length : clubs.length}
+              </span>{' '}
+              {activeTab === 'favorites' ? 'favorite clubs' : 'clubs'}
+            </p>
+          </>
         )}
 
         {isLoading && (
@@ -217,37 +251,18 @@ export default function HomePage() {
           </div>
         )}
 
-        {!isLoading && !error && favoriteClubs.length > 0 && (
-          <section className="mb-10">
-            <div className="mb-4">
-              <h2 className="text-2xl font-semibold text-foreground">Favorites</h2>
-              <p className="text-sm text-muted-foreground">
-                Your saved clubs on this device
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {favoriteClubs.map((club) => (
-                <ClubCard
-                  key={`favorite-${club.id}`}
-                  club={club}
-                  onClick={() => handleClubClick(club)}
-                  isFavorite={favoriteIds.includes(club.id)}
-                  onToggleFavorite={() => toggleFavorite(club.id)}
-                />
-              ))}
-            </div>
-          </section>
-        )}
-
-        {!isLoading && !error && filteredClubs.length === 0 && (
+        {!isLoading && !error && displayedClubs.length === 0 && (
           <div className="flex flex-col items-center justify-center py-20 text-center">
             <div className="p-4 rounded-2xl bg-muted ring-1 ring-border mb-6">
               <Users className="h-10 w-10 text-muted-foreground" />
             </div>
-            <h3 className="text-xl font-semibold text-foreground">No clubs found</h3>
+            <h3 className="text-xl font-semibold text-foreground">
+              {activeTab === 'favorites' ? 'No favorite clubs yet' : 'No clubs found'}
+            </h3>
             <p className="text-muted-foreground mt-2 mb-6 max-w-sm">
-              Try adjusting your filters to find more clubs.
+              {activeTab === 'favorites'
+                ? 'Save clubs to favorites to see them here.'
+                : 'Try adjusting your filters to find more clubs.'}
             </p>
             <Button onClick={() => setFilters(defaultFilters)} variant="outline">
               Clear Filters
@@ -255,9 +270,9 @@ export default function HomePage() {
           </div>
         )}
 
-        {!isLoading && !error && nonFavoriteFilteredClubs.length > 0 && (
+        {!isLoading && !error && displayedClubs.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {nonFavoriteFilteredClubs.map((club) => (
+            {displayedClubs.map((club) => (
               <ClubCard
                 key={club.id}
                 club={club}
