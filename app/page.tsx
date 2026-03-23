@@ -160,7 +160,7 @@ export default function HomePage() {
             </p>
 
             <p className="text-sm text-muted-foreground/80 leading-relaxed max-w-2xl">
-              To request a re-evaluation or updated information, or to submit a review for a club, please click the <span className="font-medium text-muted-foreground">Forms</span> tab.
+              To request a re-evaluation, update information, or submit a review, please select the <span className="font-medium text-muted-foreground">Forms</span> tab.
             </p>
 
             {!isLoading && !error && (
