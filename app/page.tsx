@@ -304,7 +304,7 @@ export default function HomePage() {
                   )}
                 >
                   <iframe
-                    src="https://docs.google.com/forms/d/e/1FAIpQLSd1y4fEerDt3SbbNJRw4oQCZ0jLVlW7-xioAnnVSioIHhIIFQ/viewform?embedded=true"
+                    src="https://docs.google.com/forms/d/e/1FAIpQLSccFqJyWX_K_HUwlZyiSa4vVbeje84icuIko5gAYdtwWK46Ww/viewform?embedded=true"
                     width="100%"
                     height="900"
                     frameBorder="0"
@@ -338,7 +338,7 @@ export default function HomePage() {
                   )}
                 >
                   <iframe
-                    src="https://https://docs.google.com/forms/d/e/1FAIpQLSd1y4fEerDt3SbbNJRw4oQCZ0jLVlW7-xioAnnVSioIHhIIFQ/viewform?embedded=true"
+                    src="https://docs.google.com/forms/d/e/1FAIpQLSd1y4fEerDt3SbbNJRw4oQCZ0jLVlW7-xioAnnVSioIHhIIFQ/viewform?embedded=true"
                     width="100%"
                     height="900"
                     frameBorder="0"
