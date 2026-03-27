@@ -119,7 +119,7 @@ function rowToClub(row: Record<string, string>, index: number): Club {
   }
 
   const rawBreakTime = (row.break_time || '').trim()
-  const breakTime = rawBreakTime && rawBreakTime.toLowerCase() !== 'n/a' ? rawBreakTime : ''
+  const breakTime = rawBreakTime
 
   return {
     id: `club-${index}`,
