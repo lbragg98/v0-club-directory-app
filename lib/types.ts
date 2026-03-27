@@ -12,7 +12,7 @@ export interface Club {
   doorScore: number
   callsScore: number
   notes: string
-  break: 'yes' | 'no' | null
+  break: 'yes' | 'no' | 'na'
   breakTime: string
   quickLink: string
   avgLbSpeed: string
