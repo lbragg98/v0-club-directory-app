@@ -129,28 +129,27 @@ export function ClubCard({ club, onClick, isFavorite, onToggleFavorite }: ClubCa
             </Badge>
           )}
 
-          {club.break === 'yes' && (
-            <Badge
-              variant="outline"
-              className="gap-1.5 rounded-lg bg-secondary/70 border-border text-secondary-foreground"
-            >
-              <Clock className="h-3 w-3" />
-              Break
-            </Badge>
-          )}
+          {/* UPDATED BREAK BADGE */}
+          <Badge
+            variant="outline"
+            className={cn(
+              'gap-1.5 rounded-lg border',
+              club.break === 'yes'
+                ? 'bg-yellow-500/15 border-yellow-500/30 text-yellow-400'
+                : 'bg-secondary/70 border-border text-muted-foreground'
+            )}
+          >
+            <Clock className="h-3 w-3" />
+            {club.break === 'yes' ? 'Break' : 'No Break'}
+          </Badge>
         </div>
 
         {/* Description */}
         <div className="space-y-2 text-sm">
           <div className="grid grid-cols-2 gap-3 text-muted-foreground">
-            <div>
-              <span className="text-xs uppercase tracking-wide text-foreground font-medium">
-                Break
-              </span>
-              <p>{club.break === 'yes' ? 'Yes' : 'No'}</p>
-            </div>
+            {/* BREAK FIELD REMOVED */}
 
-            {club.breakTime && (
+            {club.break === 'yes' && club.breakTime && (
               <div>
                 <span className="text-xs uppercase tracking-wide text-foreground font-medium">
                   Break Time
