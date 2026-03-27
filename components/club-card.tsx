@@ -129,7 +129,6 @@ export function ClubCard({ club, onClick, isFavorite, onToggleFavorite }: ClubCa
             </Badge>
           )}
 
-          {/* UPDATED BREAK BADGE */}
           <Badge
             variant="outline"
             className={cn(
@@ -147,14 +146,12 @@ export function ClubCard({ club, onClick, isFavorite, onToggleFavorite }: ClubCa
         {/* Description */}
         <div className="space-y-2 text-sm">
           <div className="grid grid-cols-2 gap-3 text-muted-foreground">
-            {/* BREAK FIELD REMOVED */}
-
             {club.break === 'yes' && club.breakTime && (
               <div>
                 <span className="text-xs uppercase tracking-wide text-foreground font-medium">
                   Break Time
                 </span>
-                <p>{club.breakTime}</p>
+                <p>{club.breakTime.toLowerCase() === 'na' ? 'N/A' : club.breakTime}</p>
               </div>
             )}
 
