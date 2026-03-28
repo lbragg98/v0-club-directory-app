@@ -372,13 +372,13 @@ export default function HomePage() {
           <section className="space-y-8">
             <div className="max-w-3xl space-y-6">
               <div className="space-y-2">
-                <h2 className="text-2xl font-semibold text-foreground">Info</h2>
-                <p className="text-sm text-muted-foreground">
+                <h2 className="text-2xl font-semibold text-white">Info</h2>
+                <p className="text-sm text-white/80">
                   How this database was created and how to interpret the ratings.
                 </p>
               </div>
 
-              <div className="space-y-5 text-sm text-muted-foreground/80 leading-relaxed">
+              <div className="space-y-5 text-sm text-white/90 leading-relaxed">
                 <p>
                   Our team created a spreadsheet full of most active PIMD EC clubs pulling from the club leaderboard. To make it on the list, clubs had to host cats, dogs, or invites during open hours and charge bookers set rates. Clubs also should be established for two to four hunts before joining the list to provide time for testing.
                 </p>
@@ -396,11 +396,11 @@ export default function HomePage() {
                 </p>
 
                 <p>
-                  <span className="font-semibold text-foreground">No ratings are final.</span> We encourage opinions and growth. If you'd like to submit your experience to the team for review, please use the <span className="font-semibold text-foreground">Forms</span> tab for feedback.
+                  <span className="font-semibold text-white">No ratings are final.</span> We encourage opinions and growth. If you'd like to submit your experience to the team for review, please use the <span className="font-semibold text-white">Forms</span> tab for feedback.
                 </p>
 
                 <p>
-                  Some specifics, like lb speed, may be subject to change on popular hunts. This is a loose guide, not the gospel truth. If you feel a club is changing rapidly and would like it reassessed, please use the <span className="font-semibold text-foreground">Forms</span> tab for feedback.
+                  Some specifics, like lb speed, may be subject to change on popular hunts. This is a loose guide, not the gospel truth. If you feel a club is changing rapidly and would like it reassessed, please use the <span className="font-semibold text-white">Forms</span> tab for feedback.
                 </p>
               </div>
             </div>
