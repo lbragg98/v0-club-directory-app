@@ -156,7 +156,7 @@ export default function HomePage() {
             </h1>
 
             <p className="text-sm text-muted-foreground/80 leading-relaxed max-w-2xl">
-              <span className="font-medium text-muted-foreground">Disclaimer:</span> These ratings are based on the features needed for club/last bar hopping and do not reflect the club environment, members, or SFW policies. Hi im a placeholder.
+              <span className="font-medium text-muted-foreground">Disclaimer:</span> These ratings are based on the features needed for club/last bar hopping and do not reflect the club environment, members, or SFW policies. For more information on the creation and collaboration of this app, click the Info tab below.
             </p>
 
             <p className="text-sm text-muted-foreground/80 leading-relaxed max-w-2xl">
