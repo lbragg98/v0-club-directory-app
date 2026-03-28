@@ -140,7 +140,7 @@ function rowToClub(row: Record<string, string>, index: number): Club {
     breakTime,
     quickLink: (row.quick_link || '').trim(),
     avgLbSpeed: (row.avg_lb_speed || '').trim(),
-    clubAge: (row.club_age || '').trim(),
+    clubAge: (row.club_age || '').trim() || 'Age: NA',
     lastUpdated: new Date().toISOString(),
   }
 }
