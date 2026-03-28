@@ -146,7 +146,7 @@ export function ClubCard({ club, onClick, isFavorite, onToggleFavorite }: ClubCa
             variant="outline"
             className="rounded-lg border bg-secondary/70 border-border text-secondary-foreground"
           >
-            Age: {club.clubAge || 'NA'}
+            {club.clubAge}
           </Badge>
         </div>
 
