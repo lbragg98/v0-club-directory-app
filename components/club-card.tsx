@@ -142,14 +142,12 @@ export function ClubCard({ club, onClick, isFavorite, onToggleFavorite }: ClubCa
             {club.break === 'yes' ? 'Break' : 'No Break'}
           </Badge>
 
-          {club.clubAge && (
-            <Badge
-              variant="outline"
-              className="rounded-lg border bg-secondary/70 border-border text-secondary-foreground"
-            >
-              {club.clubAge}
-            </Badge>
-          )}
+          <Badge
+            variant="outline"
+            className="rounded-lg border bg-secondary/70 border-border text-secondary-foreground"
+          >
+            Age: {club.clubAge || 'NA'}
+          </Badge>
         </div>
 
         {/* Description */}

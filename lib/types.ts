@@ -16,6 +16,7 @@ export interface Club {
   breakTime: string
   quickLink: string
   avgLbSpeed: string
+  clubAge: string
   lastUpdated: string
 }
 
