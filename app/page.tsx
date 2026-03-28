@@ -372,7 +372,17 @@ export default function HomePage() {
             <div>
               <h2 className="text-2xl font-semibold text-foreground">Info</h2>
               <p className="text-sm text-muted-foreground mt-1">
-                hi luc im empty
+                Our team created a spreadsheet full of most active PIMD EC clubs pulling from the club leaderboard. To make it on the list, clubs had to host cats, dogs, or invites during open hours and charge bookers set rates. Clubs also should be established for 2-4 hunts before joining the list to provide time for testing.
+
+                All relevant information you see listed in the club snapshots was researched and documented in a secure spreadsheet and clubs were booked for testing. Once most clubs were tested, collaboration with several multi-time leaderboarders and club hoppers ensued. An app was made from the resulting data.
+
+                Please note that all club ratings are <span className="font-semibold text-foreground">exclusively</span> based on leaderboarding and last bar hopping. Invites, calls, and door are the three attributes needed for successful hopping.
+
+                All ratings were influenced and discussed by a team and many leaderboarders were provided early access to adjust and submit changes to the ratings prior to launch.
+
+                No ratings are final. We encourage opinions and growth. If you'd like to submit your experience to the team for review, please use the Form tab for feedback.
+
+                Some specifics, like lb speed, may be subject to change on popular hunts. This is a loose guide, not the gospel truth. If you feel a club is changing rapidly and would like it reassessed, please use the Forms tab for feedback.
               </p>
             </div>
           </section>
