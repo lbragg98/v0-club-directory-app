@@ -30,7 +30,7 @@ export default function HomePage() {
   const [selectedClub, setSelectedClub] = useState<Club | null>(null)
   const [modalOpen, setModalOpen] = useState(false)
   const [favoriteIds, setFavoriteIds] = useState<string[]>([])
-  const [activeTab, setActiveTab] = useState<'all' | 'favorites' | 'forms'>('all')
+  const [activeTab, setActiveTab] = useState<'all' | 'favorites' | 'forms' | 'info'>('all')
   const { data, error, isLoading, mutate } = useSWR<{ clubs: Club[]; debug?: Record<string, unknown> }>(
     '/api/clubs',
     fetcher
@@ -156,7 +156,7 @@ export default function HomePage() {
             </h1>
 
             <p className="text-sm text-muted-foreground/80 leading-relaxed max-w-2xl">
-              <span className="font-medium text-muted-foreground">Disclaimer:</span> These ratings are based on the features needed for club/last bar hopping and do not reflect the club environment, members, or SFW policies.
+              <span className="font-medium text-muted-foreground">Disclaimer:</span> These ratings are based on the features needed for club/last bar hopping and do not reflect the club environment, members, or SFW policies. Hi im a placeholder.
             </p>
 
             <p className="text-sm text-muted-foreground/80 leading-relaxed max-w-2xl">
@@ -235,9 +235,22 @@ export default function HomePage() {
               >
                 Forms
               </button>
+
+              <button
+                type="button"
+                onClick={() => setActiveTab('info')}
+                className={cn(
+                  'px-4 py-2 rounded-xl text-sm font-medium transition-colors',
+                  activeTab === 'info'
+                    ? 'bg-white text-black'
+                    : 'bg-secondary/50 text-foreground hover:bg-secondary/70'
+                )}
+              >
+                Info
+              </button>
             </div>
 
-            {activeTab !== 'forms' && (
+            {activeTab !== 'forms' && activeTab !== 'info' && (
               <p className="text-sm text-muted-foreground mb-8">
                 Showing <span className="text-foreground font-medium">{displayedClubs.length}</span> of{' '}
                 <span className="text-foreground font-medium">
@@ -354,7 +367,18 @@ export default function HomePage() {
           </section>
         )}
 
-        {!isLoading && !error && activeTab !== 'forms' && displayedClubs.length === 0 && (
+        {!isLoading && !error && activeTab === 'info' && (
+          <section className="space-y-8">
+            <div>
+              <h2 className="text-2xl font-semibold text-foreground">Info</h2>
+              <p className="text-sm text-muted-foreground mt-1">
+                hi luc im empty
+              </p>
+            </div>
+          </section>
+        )}
+
+        {!isLoading && !error && activeTab !== 'forms' && activeTab !== 'info' && displayedClubs.length === 0 && (
           <div className="flex flex-col items-center justify-center py-20 text-center">
             <div className="p-4 rounded-2xl bg-muted ring-1 ring-border mb-6">
               <Users className="h-10 w-10 text-muted-foreground" />
@@ -373,7 +397,7 @@ export default function HomePage() {
           </div>
         )}
 
-        {!isLoading && !error && activeTab !== 'forms' && displayedClubs.length > 0 && (
+        {!isLoading && !error && activeTab !== 'forms' && activeTab !== 'info' && displayedClubs.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {displayedClubs.map((club) => (
               <ClubCard
