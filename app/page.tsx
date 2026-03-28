@@ -380,7 +380,7 @@ export default function HomePage() {
 
               <div className="space-y-5 text-sm text-muted-foreground/80 leading-relaxed">
                 <p>
-                  Our team created a spreadsheet full of most active PIMD EC clubs pulling from the club leaderboard. To make it on the list, clubs had to host cats, dogs, or invites during open hours and charge bookers set rates. Clubs also should be established for 2-4 hunts before joining the list to provide time for testing.
+                  Our team created a spreadsheet full of most active PIMD EC clubs pulling from the club leaderboard. To make it on the list, clubs had to host cats, dogs, or invites during open hours and charge bookers set rates. Clubs also should be established for two to four hunts before joining the list to provide time for testing.
                 </p>
 
                 <p>
@@ -388,7 +388,7 @@ export default function HomePage() {
                 </p>
 
                 <p>
-                  Please note that all club ratings are exclusively based on leaderboarding and last bar hopping. <span className="font-semibold text-foreground">Invites, calls, and door</span> are the three attributes needed for successful hopping.
+                  Please note that all club ratings are exclusively based on leaderboarding and last bar hopping. Invites, calls, and door are the three attributes needed for successful hopping.
                 </p>
 
                 <p>
