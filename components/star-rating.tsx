@@ -30,35 +30,35 @@ export function StarRating({
 
   return (
     <div className={cn('flex items-center gap-0.5', className)}>
-      {/* Full stars - gold color */}
       {Array.from({ length: fullStars }).map((_, i) => (
         <Star
           key={`full-${i}`}
-          className={cn(sizeClasses[size], 'fill-[var(--gold)] text-[var(--gold)] drop-shadow-sm')}
+          className={cn(
+            sizeClasses[size],
+            'fill-white text-white drop-shadow-[0_0_6px_rgba(255,255,255,0.9)]'
+          )}
         />
       ))}
-      
-      {/* Half star */}
+
       {hasHalfStar && (
         <div className="relative">
           <Star className={cn(sizeClasses[size], 'text-border')} />
           <StarHalf
             className={cn(
               sizeClasses[size],
-              'absolute left-0 top-0 fill-[var(--gold)] text-[var(--gold)] drop-shadow-sm'
+              'absolute left-0 top-0 fill-white text-white drop-shadow-[0_0_6px_rgba(255,255,255,0.9)]'
             )}
           />
         </div>
       )}
-      
-      {/* Empty stars */}
+
       {Array.from({ length: emptyStars }).map((_, i) => (
         <Star
           key={`empty-${i}`}
           className={cn(sizeClasses[size], 'text-border')}
         />
       ))}
-      
+
       {showValue && (
         <span className="ml-1.5 text-sm font-medium text-[var(--gold)]">
           {rating.toFixed(1)}

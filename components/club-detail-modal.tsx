@@ -1,5 +1,7 @@
 'use client'
 
+import { useState } from 'react'
+
 import {
   Dialog,
   DialogContent,
@@ -22,6 +24,8 @@ import {
   Clock,
   Zap,
   User,
+  Copy,
+  Check,
 } from 'lucide-react'
 import type { Club } from '@/lib/types'
 
@@ -42,6 +46,23 @@ export function ClubDetailModal({
   open,
   onOpenChange,
 }: ClubDetailModalProps) {
+  const [copiedLink, setCopiedLink] = useState(false)
+
+  async function handleCopyLink() {
+    if (!club?.quickLink) return
+
+    try {
+      await navigator.clipboard.writeText(club.quickLink)
+      setCopiedLink(true)
+
+      setTimeout(() => {
+        setCopiedLink(false)
+      }, 1500)
+    } catch (error) {
+      console.error('Failed to copy link:', error)
+    }
+  }
+
   if (!club) return null
 
   const TypeIcon = typeIcons[club.type] || Users
@@ -63,9 +84,6 @@ export function ClubDetailModal({
               {club.status}
             </Badge>
           </div>
-          <DialogDescription className="text-muted-foreground">
-            {club.type} Club on {club.platform}
-          </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-6 pt-2">
@@ -80,15 +98,15 @@ export function ClubDetailModal({
 
           {/* Type / Platform badges */}
           <div className="flex flex-wrap gap-2">
-            <Badge 
-              variant="outline" 
+            <Badge
+              variant="outline"
               className="gap-1.5 text-sm rounded-lg bg-secondary/50 border-border/50 text-secondary-foreground"
             >
               <TypeIcon className="h-4 w-4" />
               {club.type}
             </Badge>
-            <Badge 
-              variant="outline" 
+            <Badge
+              variant="outline"
               className="gap-1.5 text-sm rounded-lg bg-secondary/50 border-border/50 text-secondary-foreground"
             >
               {club.platform === 'Line' && <MessageCircle className="h-4 w-4" />}
@@ -96,8 +114,8 @@ export function ClubDetailModal({
               {club.platform}
             </Badge>
             {club.sfwActive && (
-              <Badge 
-                variant="outline" 
+              <Badge
+                variant="outline"
                 className="gap-1.5 text-sm rounded-lg bg-primary/10 border-primary/20 text-primary"
               >
                 <ShieldCheck className="h-4 w-4" />
@@ -105,8 +123,8 @@ export function ClubDetailModal({
               </Badge>
             )}
             {club.break === 'yes' && (
-              <Badge 
-                variant="outline" 
+              <Badge
+                variant="outline"
                 className="gap-1.5 text-sm rounded-lg bg-[var(--gold)]/10 border-[var(--gold)]/20 text-[var(--gold)]"
               >
                 <Clock className="h-4 w-4" />
@@ -114,8 +132,8 @@ export function ClubDetailModal({
               </Badge>
             )}
             {club.break === 'no' && (
-              <Badge 
-                variant="outline" 
+              <Badge
+                variant="outline"
                 className="gap-1.5 text-sm rounded-lg bg-muted/50 border-border/50 text-muted-foreground"
               >
                 <Clock className="h-4 w-4" />
@@ -130,7 +148,7 @@ export function ClubDetailModal({
             <div className="grid grid-cols-2 gap-4 text-muted-foreground">
               <div className="space-y-1">
                 <span className="font-medium text-foreground text-xs uppercase tracking-wide">SFW Friendly</span>
-                <p>{club.sfwFriendly ? 'Yes' : 'No'}</p>
+                <p>{club.sfwFriendly === 'yes' ? 'Yes' : club.sfwFriendly === 'cbc' ? 'Case By Case' : 'No'}</p>
               </div>
               {club.breakTime && (
                 <div className="space-y-1">
@@ -156,7 +174,20 @@ export function ClubDetailModal({
                     <User className="h-3 w-3" />
                     Quick Link
                   </span>
-                  <p>{club.quickLink}</p>
+                  <div className="flex items-center gap-2">
+                    <p className="text-sm text-muted-foreground break-all">{club.quickLink}</p>
+                    <button
+                      onClick={handleCopyLink}
+                      className="shrink-0 flex items-center justify-center px-2 py-1 rounded-md bg-secondary/60 ring-1 ring-border/40 text-xs text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
+                      title="Copy to clipboard"
+                    >
+                      {copiedLink ? (
+                        <Check className="h-3 w-3 text-success" />
+                      ) : (
+                        <Copy className="h-3 w-3" />
+                      )}
+                    </button>
+                  </div>
                 </div>
               )}
             </div>

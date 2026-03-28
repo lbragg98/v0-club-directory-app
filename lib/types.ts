@@ -1,10 +1,10 @@
 export interface Club {
   id: string
   name: string
-  type: 'Cat' | 'Dog' | 'Hybrid'
+  type: 'Cat' | 'Dog' | 'Hybrid' | 'Invite'
   platform: 'Line' | 'Disc' | 'Both'
   status: 'Open' | 'Closed'
-  sfwFriendly: boolean
+  sfwFriendly: 'yes' | 'no' | 'cbc'
   sfwActive: boolean
   inviteParties: boolean
   overallRating: number
@@ -12,7 +12,7 @@ export interface Club {
   doorScore: number
   callsScore: number
   notes: string
-  break: 'yes' | 'no' | null
+  break: 'yes' | 'no' | 'na'
   breakTime: string
   quickLink: string
   avgLbSpeed: string
@@ -21,10 +21,13 @@ export interface Club {
 
 export interface ClubFilters {
   search: string
-  type: 'All' | 'Cat' | 'Dog' | 'Hybrid'
+  type: 'All' | 'Cat' | 'Dog' | 'Hybrid' | 'Invite'
   platform: 'All' | 'Line' | 'Disc' | 'Both'
+  breakFilter: 'All' | 'Has Break' | 'No Break'
   openOnly: boolean
-  sfwOnly: boolean
+  sfwOnly: 'All Clubs' | 'Active SFW' | 'No Active SFW'
+  sfwFriendlyFilter: 'All Clubs' | 'SFW Friendly' | 'Not Friendly' | 'Case by Case'
+  ratingFilter: 'All Clubs' | '1+' | '2+' | '3+' | '4+' | '5'
   invitePartiesOnly: boolean
 }
 
