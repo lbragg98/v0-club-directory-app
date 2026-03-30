@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Search, X } from 'lucide-react'
+import { Search, X, ArrowUp } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import {
@@ -43,6 +43,13 @@ export function FilterBar({ filters, onFiltersChange, className }: FilterBarProp
       sfwFriendlyFilter: 'All Clubs',
       openOnly: false,
       invitePartiesOnly: false,
+    })
+  }
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
     })
   }
 
@@ -91,14 +98,26 @@ export function FilterBar({ filters, onFiltersChange, className }: FilterBarProp
           )}
         </div>
 
-        <Button
-          type="button"
-          variant="outline"
-          onClick={() => setFiltersOpen((prev) => !prev)}
-          className="w-full sm:w-auto rounded-xl border-border/50 bg-secondary/50 hover:bg-secondary/70"
-        >
-          Filter Clubs
-        </Button>
+        <div className="grid grid-cols-1 gap-3 sm:flex sm:flex-wrap sm:items-center">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => setFiltersOpen((prev) => !prev)}
+            className="w-full sm:w-auto rounded-x1 border-border/50 bg-secondary/50 hover:bg-secondary/70"
+          >
+            Filter Clubs
+          </Button>
+
+          <Button
+            type="button"
+            variant="outline"
+            onClick={scrollToTop}
+            className="w-full sm:w-auto rounded-x1 border-border/50 bg-secondary/50 hover:bg-secondary/70"
+          >
+            <ArrowUp className="h-4 w-4" />
+            Back to Top
+          </Button>
+        </div>
 
         <div
           className={cn(
