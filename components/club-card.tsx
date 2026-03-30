@@ -8,8 +8,6 @@ import {
   Cat,
   Dog,
   Users,
-  MessageCircle,
-  Phone,
   ShieldCheck,
   Clock,
   Heart,
@@ -30,8 +28,6 @@ const typeIcons = {
 }
 
 export function ClubCard({ club, onClick, isFavorite, onToggleFavorite }: ClubCardProps) {
-  const TypeIcon = typeIcons[club.type] || Users
-
   return (
     <button
       onClick={onClick}
@@ -93,39 +89,13 @@ export function ClubCard({ club, onClick, isFavorite, onToggleFavorite }: ClubCa
 
         {/* Badges */}
         <div className="flex flex-wrap gap-2">
-          <Badge
-            variant="outline"
-            className="gap-1.5 rounded-lg bg-secondary/70 border-border text-secondary-foreground"
-          >
-            <TypeIcon className="h-3 w-3" />
-            {club.type}
-          </Badge>
-
-          <Badge
-            variant="outline"
-            className="gap-1.5 rounded-lg bg-secondary/70 border-border text-secondary-foreground"
-          >
-            {club.platform === 'Line' && <MessageCircle className="h-3 w-3" />}
-            {club.platform === 'Disc' && <Phone className="h-3 w-3" />}
-            {club.platform}
-          </Badge>
-
-          {club.sfwFriendly === 'yes' && (
-            <Badge
-              variant="outline"
-              className="rounded-lg border bg-secondary/70 border-border text-secondary-foreground"
-            >
-              SFW Friendly
-            </Badge>
-          )}
-
           {club.sfwActive && (
             <Badge
               variant="outline"
               className="gap-1.5 rounded-lg bg-primary/10 border-primary/20 text-primary"
             >
               <ShieldCheck className="h-3 w-3" />
-              Active SFW
+              SFW Active
             </Badge>
           )}
 
@@ -139,7 +109,7 @@ export function ClubCard({ club, onClick, isFavorite, onToggleFavorite }: ClubCa
             )}
           >
             <Clock className="h-3 w-3" />
-            {club.break === 'yes' ? 'Break' : 'No Break'}
+            {club.break === 'yes' ? 'Has Break' : 'No Break'}
           </Badge>
 
           <Badge
