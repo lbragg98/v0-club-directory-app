@@ -109,7 +109,7 @@ export function ClubCard({ club, onClick, isFavorite, onToggleFavorite }: ClubCa
             )}
           >
             <Clock className="h-3 w-3" />
-            {club.break === 'yes' ? 'Break' : 'No Break'}
+            {club.break === 'yes' ? 'Has Break' : 'No Break'}
           </Badge>
 
           <Badge
