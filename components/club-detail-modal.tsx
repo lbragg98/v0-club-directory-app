@@ -96,7 +96,7 @@ export function ClubDetailModal({
             <span className="text-muted-foreground">/ 5.0</span>
           </div>
 
-          {/* Type / Platform badges */}
+          {/* Top badges */}
           <div className="flex flex-wrap gap-2">
             <Badge
               variant="outline"
@@ -105,6 +105,7 @@ export function ClubDetailModal({
               <TypeIcon className="h-4 w-4" />
               {club.type}
             </Badge>
+
             <Badge
               variant="outline"
               className="gap-1.5 text-sm rounded-lg bg-secondary/50 border-border/50 text-secondary-foreground"
@@ -113,6 +114,7 @@ export function ClubDetailModal({
               {club.platform === 'Disc' && <Phone className="h-4 w-4" />}
               {club.platform}
             </Badge>
+
             {club.sfwActive && (
               <Badge
                 variant="outline"
@@ -122,24 +124,26 @@ export function ClubDetailModal({
                 SFW Active
               </Badge>
             )}
-            {club.break === 'yes' && (
-              <Badge
-                variant="outline"
-                className="gap-1.5 text-sm rounded-lg bg-[var(--gold)]/10 border-[var(--gold)]/20 text-[var(--gold)]"
-              >
-                <Clock className="h-4 w-4" />
-                Has Break
-              </Badge>
-            )}
-            {club.break === 'no' && (
-              <Badge
-                variant="outline"
-                className="gap-1.5 text-sm rounded-lg bg-muted/50 border-border/50 text-muted-foreground"
-              >
-                <Clock className="h-4 w-4" />
-                No Break
-              </Badge>
-            )}
+
+            <Badge
+              variant="outline"
+              className={cn(
+                'gap-1.5 text-sm rounded-lg border',
+                club.break === 'yes'
+                  ? 'bg-[var(--gold)]/10 border-[var(--gold)]/20 text-[var(--gold)]'
+                  : 'bg-muted/50 border-border/50 text-muted-foreground'
+              )}
+            >
+              <Clock className="h-4 w-4" />
+              {club.break === 'yes' ? 'Break' : 'No Break'}
+            </Badge>
+
+            <Badge
+              variant="outline"
+              className="text-sm rounded-lg bg-secondary/50 border-border/50 text-secondary-foreground"
+            >
+              {club.clubAge}
+            </Badge>
           </div>
 
           {/* Details */}
@@ -147,18 +151,46 @@ export function ClubDetailModal({
             <h4 className="font-semibold text-foreground">Details</h4>
             <div className="grid grid-cols-2 gap-4 text-muted-foreground">
               <div className="space-y-1">
-                <span className="font-medium text-foreground text-xs uppercase tracking-wide">SFW Friendly</span>
-                <p>{club.sfwFriendly === 'yes' ? 'Yes' : club.sfwFriendly === 'cbc' ? 'Case By Case' : 'No'}</p>
+                <span className="font-medium text-foreground text-xs uppercase tracking-wide">
+                  Club Type
+                </span>
+                <p>{club.type}</p>
               </div>
+
+              <div className="space-y-1">
+                <span className="font-medium text-foreground text-xs uppercase tracking-wide">
+                  LBGC
+                </span>
+                <p>{club.platform}</p>
+              </div>
+
+              <div className="space-y-1">
+                <span className="font-medium text-foreground text-xs uppercase tracking-wide">
+                  SFW Friendly
+                </span>
+                <p>
+                  {club.sfwFriendly === 'yes'
+                    ? 'Yes'
+                    : club.sfwFriendly === 'cbc'
+                      ? 'Case By Case'
+                      : 'No'}
+                </p>
+              </div>
+
               {club.breakTime && (
                 <div className="space-y-1">
                   <span className="font-medium text-foreground text-xs uppercase tracking-wide flex items-center gap-1">
                     <Clock className="h-3 w-3" />
                     Break Time
                   </span>
-                  <p>{club.breakTime}</p>
+                  <p>
+                    {['na', 'n/a'].includes(club.breakTime.trim().toLowerCase())
+                      ? 'N/A'
+                      : club.breakTime}
+                  </p>
                 </div>
               )}
+
               {club.avgLbSpeed && (
                 <div className="space-y-1">
                   <span className="font-medium text-foreground text-xs uppercase tracking-wide flex items-center gap-1">
@@ -168,8 +200,9 @@ export function ClubDetailModal({
                   <p>{club.avgLbSpeed}</p>
                 </div>
               )}
+
               {club.quickLink && (
-                <div className="space-y-1">
+                <div className="space-y-1 col-span-2">
                   <span className="font-medium text-foreground text-xs uppercase tracking-wide flex items-center gap-1">
                     <User className="h-3 w-3" />
                     Quick Link
