@@ -69,11 +69,11 @@ export function FilterBar({ filters, onFiltersChange, className }: FilterBarProp
       className={cn(
         'bg-[#2f3136] sm:bg-card backdrop-blur-xl',
         'border border-border/50 rounded-2xl',
-        'p-5 shadow-lg shadow-black/5',
+        'p-3 sm:p-4 shadow-lg shadow-black/5',
         className
       )}
     >
-      <div className="flex flex-col gap-5">
+      <div className="flex flex-col gap-3">
         <div className="relative">
           <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
@@ -81,7 +81,7 @@ export function FilterBar({ filters, onFiltersChange, className }: FilterBarProp
             value={filters.search}
             onChange={(e) => updateFilter('search', e.target.value)}
             className={cn(
-              'pl-10 h-11 bg-secondary/50 border-border/50',
+              'pl-10 h-10 bg-secondary/50 border-border/50',
               'rounded-xl',
               'placeholder:text-muted-foreground/60',
               'focus:bg-secondary/80 focus:border-primary/30',
