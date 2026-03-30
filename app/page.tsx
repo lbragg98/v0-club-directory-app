@@ -369,7 +369,7 @@ export default function HomePage() {
 
         {/* INFO TAB */}
         {!isLoading && !error && activeTab === 'info' && (
-          <section className="space-y-8">
+          <section className="space-y-8 pb-32 sm:pb-12">
             <div className="max-w-3xl space-y-6">
               <div className="space-y-2">
                 <h2 className="text-2xl font-semibold text-white">Info</h2>
