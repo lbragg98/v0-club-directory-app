@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Search, X, ArrowUp } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
@@ -24,6 +24,28 @@ interface FilterBarProps {
 
 export function FilterBar({ filters, onFiltersChange, className }: FilterBarProps) {
   const [filtersOpen, setFiltersOpen] = useState(false)
+  const [isCollapsed, setIsCollapsed] = useState(false)
+  const [lastScrollY, setLastScrollY] = useState(0)
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY
+
+      if (currentScrollY > lastScrollY && currentScrollY > 100) {
+        // Scrolling down
+        setIsCollapsed(true)
+        setFiltersOpen(false)
+      } else {
+        // Scrolling up
+        setIsCollapsed(false)
+      }
+
+      setLastScrollY(currentScrollY)
+    }
+
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [lastScrollY])
 
   const updateFilter = <K extends keyof ClubFilters>(
     key: K,
@@ -70,6 +92,8 @@ export function FilterBar({ filters, onFiltersChange, className }: FilterBarProp
         'bg-[#2f3136] sm:bg-card backdrop-blur-xl',
         'border border-border/50 rounded-2xl',
         'p-3 sm:p-4 shadow-lg shadow-black/5',
+        'transition-all duration-300 ease-in-out overflow-hidden',
+        isCollapsed ? 'max-h-16 opacity-50' : 'max-h-none opacity-100',
         className
       )}
     >
