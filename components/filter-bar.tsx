@@ -30,14 +30,18 @@ export function FilterBar({ filters, onFiltersChange, className }: FilterBarProp
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY
+      const isMobile = window.innerWidth < 768
 
-      if (currentScrollY > lastScrollY && currentScrollY > 100) {
-        // Scrolling down
-        setIsCollapsed(true)
-        setFiltersOpen(false)
-      } else {
-        // Scrolling up
-        setIsCollapsed(false)
+      // Only collapse on desktop/tablet (md and up)
+      if (!isMobile) {
+        if (currentScrollY > lastScrollY && currentScrollY > 100) {
+          // Scrolling down
+          setIsCollapsed(true)
+          setFiltersOpen(false)
+        } else {
+          // Scrolling up
+          setIsCollapsed(false)
+        }
       }
 
       setLastScrollY(currentScrollY)
@@ -93,7 +97,7 @@ export function FilterBar({ filters, onFiltersChange, className }: FilterBarProp
         'border border-border/50 rounded-2xl',
         'p-3 sm:p-4 shadow-lg shadow-black/5',
         'transition-all duration-300 ease-in-out overflow-hidden',
-        isCollapsed ? 'max-h-16 opacity-50' : 'max-h-none opacity-100',
+        isCollapsed ? 'md:max-h-14 md:opacity-60' : 'max-h-none opacity-100',
         className
       )}
     >
